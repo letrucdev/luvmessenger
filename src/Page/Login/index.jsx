@@ -25,6 +25,7 @@ function Login() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
+      
     }, 2000);
   }, []);
 
