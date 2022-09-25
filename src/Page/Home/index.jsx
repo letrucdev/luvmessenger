@@ -1,6 +1,7 @@
 import "../Home/home.css";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import React from "react";
+import { useState } from "react";
+
 import {
   faGear,
   faImage,
@@ -21,6 +22,8 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 
 import Tippy from "@tippyjs/react/headless";
+
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 import {
@@ -29,11 +32,10 @@ import {
   faAddressBook as farFaAddressBook,
 } from "@fortawesome/free-regular-svg-icons";
 
-import { useState } from "react";
-
 import UserChat from "../../components/Chat/UserChat";
 import NavItem from "../../components/Nav/NavItem";
 import Modal from "../../components/Modal";
+import Cloud from "../../components/Cloud";
 
 library.add(farFaBell, fasFaBell, farFaMessage);
 
@@ -42,7 +44,10 @@ export default function Home() {
   const [menuSelected, setMenuItemSelected] = useState(1);
   const [previewProfile, showPreview] = useState(false);
   const [detailChat, showDetail] = useState(false);
+  const [listImg, showListImg] = useState(false);
+  const [listFile, showListFile] = useState(false);
   const [modal, showModal] = useState(false);
+  const [cloud, showCloud] = useState(false);
 
   return (
     <div className="dark w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center main">
@@ -50,6 +55,14 @@ export default function Home() {
         <Modal
           exit={() => {
             showModal(!modal);
+          }}
+        />
+      ) : null}
+
+      {cloud ? (
+        <Cloud
+          exit={() => {
+            showCloud(!cloud);
           }}
         />
       ) : null}
@@ -248,7 +261,12 @@ export default function Home() {
                 </div>
               )}
             >
-              <div className="w-full h-14 flex items-center justify-center hover:bg-slate-900 duration-500">
+              <div
+                className="w-full h-14 flex items-center justify-center hover:bg-slate-900 duration-500"
+                onClick={() => {
+                  showCloud(!cloud);
+                }}
+              >
                 <FontAwesomeIcon
                   icon={faCloud}
                   className="w-14 h-14 text-xl cursor-pointer "
@@ -495,90 +513,123 @@ export default function Home() {
               <h2 className="text-white font-semibold">Lê Trực</h2>
 
               <div className="flex items-center justify-center gap-9 my-3">
-                <div className="flex flex-col text-white items-center justify-center w-14">
-                  <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2">
+                <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
+                  <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
                     <FontAwesomeIcon icon={fasFaBell} fixedWidth />
                   </div>
-                  <h2 className="text-sm text-center">Turn off notify</h2>
+                  <h2 className="text-sm text-center select-none">
+                    Turn off notify
+                  </h2>
                 </div>
 
-                <div className="flex flex-col text-white items-center justify-center w-14">
-                  <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2">
+                <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
+                  <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
                     <FontAwesomeIcon icon={faPeopleGroup} fixedWidth />
                   </div>
-                  <h2 className="text-sm text-center">Create group</h2>
+                  <h2 className="text-sm text-center select-none">
+                    Create group
+                  </h2>
                 </div>
 
-                <div className="flex flex-col text-white items-center justify-center w-14">
-                  <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2">
+                <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
+                  <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
                     <FontAwesomeIcon icon={faSearch} fixedWidth />
                   </div>
-                  <h2 className="text-sm text-center">Find message</h2>
+                  <h2 className="text-sm text-center select-none">
+                    Find message
+                  </h2>
                 </div>
               </div>
 
               <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
-                <div className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer">
+                <div
+                  className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer select-none"
+                  onClick={() => {
+                    showListImg(!listImg);
+                  }}
+                >
                   <h2>Image / Video</h2>
-                  <FontAwesomeIcon icon={faCaretDown} />
-                </div>
-                <div className="flex w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
-                  <img
-                    src={require("../../image/bg.jpg")}
-                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                    alt=""
-                  />
-                  <img
-                    src={require("../../image/bg.jpg")}
-                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                    alt=""
-                  />
-                  <img
-                    src={require("../../image/bg.jpg")}
-                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                    alt=""
-                  />
-                  <img
-                    src={require("../../image/bg.jpg")}
-                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                    alt=""
-                  />
-                  <img
-                    src={require("../../image/bg.jpg")}
-                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                    alt=""
-                  />
-                  <img
-                    src={require("../../image/bg.jpg")}
-                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                    alt=""
-                  />
-                  <img
-                    src={require("../../image/bg.jpg")}
-                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                    alt=""
-                  />
-                  <img
-                    src={require("../../image/bg.jpg")}
-                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                    alt=""
+                  <FontAwesomeIcon
+                    icon={faCaretDown}
+                    className={`${listImg ? "" : "-rotate-90"} duration-300`}
                   />
                 </div>
+
+                {listImg ? (
+                  <div className="flex w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
+                    <img
+                      src={require("../../image/bg.jpg")}
+                      className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                      alt=""
+                    />
+                    <img
+                      src={require("../../image/bg.jpg")}
+                      className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                      alt=""
+                    />
+                    <img
+                      src={require("../../image/bg.jpg")}
+                      className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                      alt=""
+                    />
+                    <img
+                      src={require("../../image/bg.jpg")}
+                      className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                      alt=""
+                    />
+                    <img
+                      src={require("../../image/bg.jpg")}
+                      className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                      alt=""
+                    />
+                    <img
+                      src={require("../../image/bg.jpg")}
+                      className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                      alt=""
+                    />
+                    <img
+                      src={require("../../image/bg.jpg")}
+                      className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                      alt=""
+                    />
+                    <img
+                      src={require("../../image/bg.jpg")}
+                      className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                      alt=""
+                    />
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
 
               <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
-                <div className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer">
+                <div
+                  className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer select-none"
+                  onClick={() => {
+                    showListFile(!listFile);
+                  }}
+                >
                   <h2>File</h2>
-                  <FontAwesomeIcon icon={faCaretDown} />
+                  <FontAwesomeIcon
+                    icon={faCaretDown}
+                    className={`${listFile ? "" : "-rotate-90"} duration-300`}
+                  />
                 </div>
-                <div className="flex flex-col w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
-                  <h2 className="text-slate-600">No files shared yet</h2>
-                </div>
+                {listFile ? (
+                  <div className="flex flex-col w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
+                    <h2 className="text-slate-600 select-none">
+                      No files shared yet
+                    </h2>
+                  </div>
+                ) : (
+                  ""
+                )}
               </div>
 
               <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
                 <div className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer group">
-                  <h2 className="group-hover:text-red-600 duration-300">
+                  <h2 className="group-hover:text-red-600 duration-300 select-none">
                     Delete this chat
                   </h2>
                 </div>

@@ -19,7 +19,7 @@ export default function Modal(props) {
   const [selectMenu, setMenu] = useState("General");
 
   return (
-    <div className=" w-screen h-screen bg-slate-900 dark:bg-opacity-20 backdrop-blur-lg absolute z-50 flex items-center justify-center modalMain">
+    <div className="w-screen h-screen bg-slate-900 dark:bg-opacity-20 backdrop-blur-lg absolute z-50 flex items-center justify-center modalMain">
       <div className="flex bg-slate-900 rounded-3xl text-white w-[90%] h-[90%] bg-opacity-60 ">
         <div className="bg-slate-900 w-[20%] h-full rounded-l-3xl bg-opacity-60 flex flex-col p-6">
           <div className="flex flex-col gap-2">
