@@ -1,0 +1,4 @@
+.inputCheck:checked  ~ .wrapper .ball {
+  transform: translateX(1.3rem);
+  background-color: white;
+}

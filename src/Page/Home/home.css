@@ -1,0 +1,10 @@
+.main {
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-image: url("./image/bg2.jpg");
+}
+
+.profilePreview {
+  animation: show 0.25s;
+  transition: all 0.25s;
+}

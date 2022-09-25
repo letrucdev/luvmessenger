@@ -1,0 +1,12 @@
+.theme-purple {
+  background-image: url("../../../../Page/Home/image/bg.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+
+.theme-galaxy {
+    background-image: url("../../../../Page/Home/image/bg2.jpg");
+    background-size: cover;
+    background-repeat: no-repeat;
+  }

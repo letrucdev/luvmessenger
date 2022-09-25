@@ -1,0 +1,40 @@
+@keyframes show {
+  0% {
+    opacity: 0%;
+  }
+  10% {
+    opacity: 10%;
+  }
+  100% {
+    opacity: 100%;
+  }
+}
+.general {
+  animation: show 0.25s;
+  transition: all 0.25s;
+}
+
+.theme {
+  animation: show 0.25s;
+  transition: all 0.25s;
+}
+
+.privacy {
+  animation: show 0.25s;
+  transition: all 0.25s;
+}
+
+.notification {
+  animation: show 0.25s;
+  transition: all 0.25s;
+}
+
+.message {
+  animation: show 0.25s;
+  transition: all 0.25s;
+}
+
+.modalMain {
+  transition: all 0.25s;
+  animation: show 0.25s;
+}
