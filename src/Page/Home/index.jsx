@@ -13,18 +13,14 @@ import {
   faCloud,
   faTools,
   faMessage,
-  faAddressBook,
   faPeopleGroup,
   faEnvelope,
   faBell as fasFaBell,
   faUserPlus,
+  faCaretDown,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Tippy from "@tippyjs/react/headless";
-import "tippy.js/animations/scale.css";
-
-/* import { useSpring, motion } from "framer-motion"; */
-
 import { library } from "@fortawesome/fontawesome-svg-core";
 
 import {
@@ -33,7 +29,7 @@ import {
   faAddressBook as farFaAddressBook,
 } from "@fortawesome/free-regular-svg-icons";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import UserChat from "../../components/Chat/UserChat";
 import NavItem from "../../components/Nav/NavItem";
@@ -44,34 +40,9 @@ library.add(farFaBell, fasFaBell, farFaMessage);
 export default function Home() {
   const [userChat, setUserChat] = useState(1);
   const [menuSelected, setMenuItemSelected] = useState(1);
+  const [previewProfile, showPreview] = useState(false);
+  const [detailChat, showDetail] = useState(false);
   const [modal, showModal] = useState(false);
-
-  /* const springConfig = { damping: 15, stiffness: 300 };
-  const initialScale = 0.5;
-  const opacity = useSpring(0, springConfig);
-  const scale = useSpring(initialScale, springConfig);
-
-  function onMount() {
-    setTimeout(() => {
-      scale.set(1);
-      opacity.set(1);
-    }, 200);
-  }
-
-  function onHide({ unmount }) {
-    const cleanup = scale.onChange((value) => {
-      if (value <= initialScale) {
-        cleanup();
-        unmount();
-      }
-    });
-    scale.set(initialScale);
-    opacity.set(0);
-  } */
-
-  /*   const [visible, setVisible] = useState(false);
-  const show = () => setVisible(true);
-  const hide = () => setVisible(false); */
 
   return (
     <div className="dark w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center main">
@@ -82,20 +53,26 @@ export default function Home() {
           }}
         />
       ) : null}
+
       <div className="flex items-center p-5 w-full h-full justify-center">
         <div className="flex flex-col w-24 h-full max-w-[5rem] min-w-[5rem] dark:bg-slate-900 dark:bg-opacity-75 backdrop-blur-lg rounded-3xl rounded-r-none items-center  justify-between">
+          {/* top nav */}
           <div className="flex flex-col w-full text-white items-center">
             <Tippy
+              onClickOutside={() => {
+                showPreview(false);
+              }}
+              visible={previewProfile}
               appendTo={document.body}
               interactive="true"
               placement={"right-start"}
               render={(attrs) => (
                 <div
-                  className="flex items-center flex-col-reverse text-white rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600  min-h-[16rem]  h-80  w-72 ml-4 relative bg-opacity-40 profilePreview"
+                  className="flex items-center flex-col-reverse text-white rounded-3xl  bg-slate-900 min-h-[16rem]  h-80  w-72 ml-4 relative bg-opacity-25 backdrop-blur-lg profilePreview"
                   {...attrs}
                 >
-                  <div className=" bg-slate-900 w-full h-[80%]  rounded-b-3xl bg-opacity-60 dark:bg-opacity-60 backdrop-blur-lg flex flex-col items-center">
-                    <div className="flex flex-col items-center justify-center bg-gradient-to-r from-purple-800 to-indigo-600 rounded-full w-24 h-24 -translate-y-12 p-2">
+                  <div className="w-full h-[80%]  rounded-b-3xl bg-opacity-90 dark:bg-opacity-90 backdrop-blur-lg flex flex-col items-center">
+                    <div className="flex flex-col items-center justify-center bg-slate-900 bg-opacity-40 rounded-full w-24 h-24 -translate-y-12 p-2">
                       <img
                         src={require("./image/ava.jpg")}
                         className="rounded-full object-cover w-20 h-20 cursor-pointer"
@@ -136,11 +113,26 @@ export default function Home() {
                 </div>
               )}
             >
-              <img
-                src={require("./image/ava.jpg")}
-                className="rounded-full object-cover w-14 h-14 my-4 cursor-pointer"
-                alt=""
-              />
+              <Tippy
+                placement="right-end"
+                render={(attrs) => (
+                  <div
+                    {...attrs}
+                    className="h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600  tooltip"
+                  >
+                    <p>Lê Trực</p>
+                  </div>
+                )}
+              >
+                <img
+                  src={require("./image/ava.jpg")}
+                  className="rounded-full object-cover w-14 h-14 my-4 cursor-pointer"
+                  alt=""
+                  onClick={() => {
+                    showPreview(!previewProfile);
+                  }}
+                />
+              </Tippy>
             </Tippy>
 
             <NavItem
@@ -153,7 +145,9 @@ export default function Home() {
             />
 
             <Tippy
-              onClickOutside={() => {setMenuItemSelected(1)}}
+              onClickOutside={() => {
+                setMenuItemSelected(1);
+              }}
               visible={menuSelected === 2 ? true : false}
               appendTo={document.body}
               interactive="true"
@@ -241,13 +235,14 @@ export default function Home() {
             />
           </div>
 
+          {/* bottom nav */}
           <div className="flex flex-col w-full items-center text-white">
             <Tippy
               placement="right"
               render={(attrs) => (
                 <div
                   {...attrs}
-                  className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600 "
+                  className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600 tooltip"
                 >
                   <p>Cloud Data</p>
                 </div>
@@ -267,7 +262,7 @@ export default function Home() {
               render={(attrs) => (
                 <div
                   {...attrs}
-                  className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600"
+                  className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600 tooltip"
                 >
                   <p>Tools</p>
                 </div>
@@ -287,7 +282,7 @@ export default function Home() {
               render={(attrs) => (
                 <div
                   {...attrs}
-                  className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600 "
+                  className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600 tooltip"
                 >
                   <p>Settings</p>
                 </div>
@@ -326,7 +321,7 @@ export default function Home() {
               <Tippy
                 placement={"bottom"}
                 render={(attrs) => (
-                  <div className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600">
+                  <div className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600 tooltip">
                     <p>Add friend</p>
                   </div>
                 )}
@@ -342,7 +337,7 @@ export default function Home() {
               <Tippy
                 placement={"bottom-end"}
                 render={(attrs) => (
-                  <div className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600">
+                  <div className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600 tooltip">
                     <p>Create group</p>
                   </div>
                 )}
@@ -369,114 +364,227 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col w-full h-full">
-          <div className="dark:bg-slate-900 w-full h-[93%] min-w-[50rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 rounded-l-none rounded-b-none">
-            <div className=" w-full h-20  flex items-center gap-3 justify-between">
-              <div className="flex items-center gap-3">
-                <img
-                  alt=""
-                  className=" rounded-full object-cover w-16 h-16"
-                  src={require("./image/ava.jpg")}
+        <div className="flex w-full h-full gap-3">
+          <div className="flex-col w-full h-full">
+            {/* Chat Body */}
+            <div className="dark:bg-slate-900 w-full h-[93%] min-w-[50rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 rounded-l-none rounded-b-none">
+              <div className=" w-full h-20  flex items-center gap-3 justify-between">
+                <div className="flex items-center gap-3">
+                  <img
+                    alt=""
+                    className=" rounded-full object-cover w-16 h-16"
+                    src={require("./image/ava.jpg")}
+                  />
+                  <div className="flex flex-col text-white">
+                    <h4 className="leading-none">Lê Trực</h4>
+                    <small className="text-slate-300">Đang hoạt động</small>
+                  </div>
+                </div>
+
+                <div className="flex text-white gap-3 text-xl items-center">
+                  <FontAwesomeIcon
+                    icon={faPhone}
+                    fixedWidth
+                    className="cursor-pointer hover:text-indigo-600 duration-300"
+                  />
+
+                  <FontAwesomeIcon
+                    icon={faVideo}
+                    fixedWidth
+                    className="cursor-pointer hover:text-indigo-600 duration-300"
+                  />
+
+                  <FontAwesomeIcon
+                    icon={faBars}
+                    fixedWidth
+                    className="cursor-pointer hover:text-indigo-600 duration-300"
+                    onClick={() => {
+                      showDetail(!detailChat);
+                    }}
+                  />
+                </div>
+              </div>
+              <div className="w-full flex flex-col mt-3 gap-2 overflow-hidden hover:overflow-auto">
+                <div className="w-fit max-w-sm rounded-3xl rounded-bl-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-recived">
+                  <p className="max-w-sm break-all p-4 w-auto">
+                    Paragraphs are the building blocks of papers. Many students
+                    define paragraphs in terms of length: a paragraph is a group
+                    of at least five sentences, a paragraph is half a page long,
+                    etc. In reality, though, the unity and coherence of ideas
+                    among sentences is what constitutes a paragraph. A paragraph
+                    is defined as “a group of sentences or a single sentence
+                    that forms a unit” (Lunsford and Connors 116). Length and
+                    appearance do not determine whether a section in a paper is
+                    a paragraph. For instance, in some styles of writing,
+                    particularly journalistic styles, a paragraph can be just
+                    one sentence long. Ultimately, a paragraph is a sentence or
+                    group of sentences that support one main idea. In this
+                    handout, we will refer to this as the “controlling idea,”
+                    because it controls what happens in the rest of the
+                    paragraph.
+                  </p>
+                </div>
+                <div className="w-fit max-w-sm rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-send self-end">
+                  <p className="max-w-sm break-all p-4 w-auto">
+                    There are many different ways to organize a paragraph. The
+                    organization you choose will depend on the controlling idea
+                    of the paragraph. Below are a few possibilities for
+                    organization, with links to brief examples: Narration: Tell
+                    a story.
+                  </p>
+                </div>
+                <div className="w-fit max-w-sm rounded-3xl rounded-bl-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-recived">
+                  <p className="max-w-sm break-all p-4 w-auto">
+                    Paragraphs are the building blocks of papers. Many students
+                    define paragraphs in terms of length: a paragraph is a group
+                    of at least five sentences, a paragraph is half a page long,
+                    etc. In reality, though, the unity and coherence of ideas
+                    among sentences is what constitutes a paragraph. A paragraph
+                    is defined as “a group of sentences or a single sentence
+                    that forms a unit” (Lunsford and Connors 116). Length and
+                    appearance do not determine whether a section in a paper is
+                    a paragraph. For instance, in some styles of writing,
+                    particularly journalistic styles, a paragraph can be just
+                    one sentence long. Ultimately, a paragraph is a sentence or
+                    group of sentences that support one main idea. In this
+                    handout, we will refer to this as the “controlling idea,”
+                    because it controls what happens in the rest of the
+                    paragraph.
+                  </p>
+                </div>
+                <div className="w-fit max-w-sm rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-send self-end">
+                  <p className="max-w-sm break-all p-4 w-auto">
+                    There are many different ways to organize a paragraph. The
+                    organization you choose will depend on the controlling idea
+                    of the paragraph. Below are a few possibilities for
+                    organization, with links to brief examples: Narration: Tell
+                    a story.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Chat Footer */}
+            <div className="dark:bg-slate-900 w-full  h-[7%] max-h-[7%] dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5 relative rounded-t-none rounded-bl-none">
+              <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 hover:bg-indigo-500 duration-300">
+                <FontAwesomeIcon icon={faImage} fixedWidth />
+              </div>
+              <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl  h-10 w-10 hover:bg-indigo-500 duration-300">
+                <FontAwesomeIcon icon={faSmile} fixedWidth />
+              </div>
+              <div className="w-full  flex items-center h-10 py-1 duration-300">
+                <input
+                  className="bg-transparent w-full outline-none text-white"
+                  placeholder="Type your message..."
                 />
-                <div className="flex flex-col text-white">
-                  <h4 className="leading-none">Lê Trực</h4>
-                  <small className="text-slate-300">Đang hoạt động</small>
+              </div>
+              <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10 hover:bg-indigo-500 duration-300">
+                <FontAwesomeIcon icon={faPaperPlane} fixedWidth />
+              </div>
+            </div>
+          </div>
+
+          {/* Detail chat */}
+          {detailChat ? (
+            <div className="flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat">
+              <img
+                src={require("./image/ava.jpg")}
+                className="rounded-full object-cover w-20 h-20 cursor-pointer"
+                alt=""
+              />
+              <h2 className="text-white font-semibold">Lê Trực</h2>
+
+              <div className="flex items-center justify-center gap-9 my-3">
+                <div className="flex flex-col text-white items-center justify-center w-14">
+                  <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2">
+                    <FontAwesomeIcon icon={fasFaBell} fixedWidth />
+                  </div>
+                  <h2 className="text-sm text-center">Turn off notify</h2>
+                </div>
+
+                <div className="flex flex-col text-white items-center justify-center w-14">
+                  <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2">
+                    <FontAwesomeIcon icon={faPeopleGroup} fixedWidth />
+                  </div>
+                  <h2 className="text-sm text-center">Create group</h2>
+                </div>
+
+                <div className="flex flex-col text-white items-center justify-center w-14">
+                  <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2">
+                    <FontAwesomeIcon icon={faSearch} fixedWidth />
+                  </div>
+                  <h2 className="text-sm text-center">Find message</h2>
                 </div>
               </div>
 
-              <div className="flex text-white gap-3 text-xl items-center">
-                <FontAwesomeIcon
-                  icon={faPhone}
-                  fixedWidth
-                  className="cursor-pointer hover:text-indigo-600 duration-300"
-                />
+              <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
+                <div className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer">
+                  <h2>Image / Video</h2>
+                  <FontAwesomeIcon icon={faCaretDown} />
+                </div>
+                <div className="flex w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
+                  <img
+                    src={require("../../image/bg.jpg")}
+                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                    alt=""
+                  />
+                  <img
+                    src={require("../../image/bg.jpg")}
+                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                    alt=""
+                  />
+                  <img
+                    src={require("../../image/bg.jpg")}
+                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                    alt=""
+                  />
+                  <img
+                    src={require("../../image/bg.jpg")}
+                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                    alt=""
+                  />
+                  <img
+                    src={require("../../image/bg.jpg")}
+                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                    alt=""
+                  />
+                  <img
+                    src={require("../../image/bg.jpg")}
+                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                    alt=""
+                  />
+                  <img
+                    src={require("../../image/bg.jpg")}
+                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                    alt=""
+                  />
+                  <img
+                    src={require("../../image/bg.jpg")}
+                    className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                    alt=""
+                  />
+                </div>
+              </div>
 
-                <FontAwesomeIcon
-                  icon={faVideo}
-                  fixedWidth
-                  className="cursor-pointer hover:text-indigo-600 duration-300"
-                />
+              <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
+                <div className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer">
+                  <h2>File</h2>
+                  <FontAwesomeIcon icon={faCaretDown} />
+                </div>
+                <div className="flex flex-col w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
+                  <h2 className="text-slate-600">No files shared yet</h2>
+                </div>
+              </div>
 
-                <FontAwesomeIcon
-                  icon={faBars}
-                  fixedWidth
-                  className="cursor-pointer hover:text-indigo-600 duration-300"
-                />
+              <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
+                <div className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer group">
+                  <h2 className="group-hover:text-red-600 duration-300">
+                    Delete this chat
+                  </h2>
+                </div>
               </div>
             </div>
-            <div className="w-full flex flex-col mt-3 gap-2 overflow-hidden hover:overflow-auto">
-              <div className="w-fit max-w-sm rounded-3xl rounded-bl-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-recived">
-                <p className="max-w-sm break-all p-4 w-auto">
-                  Paragraphs are the building blocks of papers. Many students
-                  define paragraphs in terms of length: a paragraph is a group
-                  of at least five sentences, a paragraph is half a page long,
-                  etc. In reality, though, the unity and coherence of ideas
-                  among sentences is what constitutes a paragraph. A paragraph
-                  is defined as “a group of sentences or a single sentence that
-                  forms a unit” (Lunsford and Connors 116). Length and
-                  appearance do not determine whether a section in a paper is a
-                  paragraph. For instance, in some styles of writing,
-                  particularly journalistic styles, a paragraph can be just one
-                  sentence long. Ultimately, a paragraph is a sentence or group
-                  of sentences that support one main idea. In this handout, we
-                  will refer to this as the “controlling idea,” because it
-                  controls what happens in the rest of the paragraph.
-                </p>
-              </div>
-              <div className="w-fit max-w-sm rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-send self-end">
-                <p className="max-w-sm break-all p-4 w-auto">
-                  There are many different ways to organize a paragraph. The
-                  organization you choose will depend on the controlling idea of
-                  the paragraph. Below are a few possibilities for organization,
-                  with links to brief examples: Narration: Tell a story.
-                </p>
-              </div>
-              <div className="w-fit max-w-sm rounded-3xl rounded-bl-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-recived">
-                <p className="max-w-sm break-all p-4 w-auto">
-                  Paragraphs are the building blocks of papers. Many students
-                  define paragraphs in terms of length: a paragraph is a group
-                  of at least five sentences, a paragraph is half a page long,
-                  etc. In reality, though, the unity and coherence of ideas
-                  among sentences is what constitutes a paragraph. A paragraph
-                  is defined as “a group of sentences or a single sentence that
-                  forms a unit” (Lunsford and Connors 116). Length and
-                  appearance do not determine whether a section in a paper is a
-                  paragraph. For instance, in some styles of writing,
-                  particularly journalistic styles, a paragraph can be just one
-                  sentence long. Ultimately, a paragraph is a sentence or group
-                  of sentences that support one main idea. In this handout, we
-                  will refer to this as the “controlling idea,” because it
-                  controls what happens in the rest of the paragraph.
-                </p>
-              </div>
-              <div className="w-fit max-w-sm rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-send self-end">
-                <p className="max-w-sm break-all p-4 w-auto">
-                  There are many different ways to organize a paragraph. The
-                  organization you choose will depend on the controlling idea of
-                  the paragraph. Below are a few possibilities for organization,
-                  with links to brief examples: Narration: Tell a story.
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="dark:bg-slate-900 w-full  h-[7%] max-h-[7%] dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5 relative rounded-t-none rounded-bl-none">
-            <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 hover:bg-indigo-500 duration-300">
-              <FontAwesomeIcon icon={faImage} fixedWidth />
-            </div>
-            <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl  h-10 w-10 hover:bg-indigo-500 duration-300">
-              <FontAwesomeIcon icon={faSmile} fixedWidth />
-            </div>
-            <div className="w-full  flex items-center h-10 py-1 duration-300">
-              <input
-                className="bg-transparent w-full outline-none text-white"
-                placeholder="Type your message..."
-              />
-            </div>
-            <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10 hover:bg-indigo-500 duration-300">
-              <FontAwesomeIcon icon={faPaperPlane} fixedWidth />
-            </div>
-          </div>
+          ) : null}
         </div>
       </div>
     </div>

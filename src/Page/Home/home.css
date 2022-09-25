@@ -8,3 +8,13 @@
   animation: show 0.25s;
   transition: all 0.25s;
 }
+
+.tooltip {
+  animation: show 0.25s;
+  transition: all 0.25s;
+}
+
+.detailChat{
+  animation: show 0.25s;
+  transition: all 0.25s;
+}
