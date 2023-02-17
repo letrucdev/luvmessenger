@@ -4,10 +4,10 @@ import { useState } from "react";
 import avatar from "../../../Page/Home/image/ava.jpg";
 
 export default function AddFriend(props) {
-  const [result] = useState(null);
+  const [result] = useState("null");
   return (
     <div className="w-screen h-screen bg-slate-900 dark:bg-opacity-20 backdrop-blur-lg absolute z-50 flex items-center justify-center modalMain">
-      <div className="flex bg-slate-900 rounded-3xl text-white w-[25rem] h-[35rem] bg-opacity-60 ">
+      <div className="flex bg-slate-900 rounded-3xl text-white w-[25rem] h-[35rem] bg-opacity-60 select-none">
         <div className="flex flex-col p-5 w-full">
           <h2 className="font-semibold text-2xl mb-5">Add Friend</h2>
           <div className="rounded-3xl w-full h-10 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-lg p-4 flex items-center text-white group">
@@ -34,9 +34,7 @@ export default function AddFriend(props) {
                   />
                   <div className="flex text-white flex-col flex-1">
                     <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
+                    <p className="text-slate-500 text-sm">I Luv U Bae 💞💞</p>
                   </div>
                   <FontAwesomeIcon
                     icon={faUserPlus}

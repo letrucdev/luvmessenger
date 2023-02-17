@@ -506,7 +506,7 @@ export default function Home() {
             </div>
 
             {/* List User Message */}
-            <div className="flex flex-col mt-3 w-full gap-2 overflow-hidden hover:overflow-auto relative ">
+            <div className="flex flex-col mt-3 w-full gap-2 overflow-hidden hover:overflow-auto relative select-none">
               <UserChat
                 class={userChat === 1 ? "bg-slate-900" : ""}
                 id={1}
@@ -622,7 +622,7 @@ export default function Home() {
 
           {/* Detail chat */}
           {detailChat ? (
-            <div className="absolute right-0 2xl:relative flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat overflow-y-auto">
+            <div className="absolute right-0 2xl:relative flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat overflow-y-auto select-none">
               <FontAwesomeIcon
                 icon={faClose}
                 fixedWidth
