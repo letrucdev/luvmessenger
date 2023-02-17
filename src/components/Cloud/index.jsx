@@ -29,7 +29,8 @@ export default function Cloud(props) {
         <small className="text-slate-400 my-1">
           Save anything you want here
         </small>
-        <div className="flex flex-wrap mt-7 cursor-pointer">
+        <div className="flex flex-wrap mt-7 cursor-pointer overflow-hidden hover:overflow-auto gap-3">
+          
           <div className="flex flex-col w-44 h-44 bg-slate-900 rounded-xl bg-opacity-40 items-center">
             <FontAwesomeIcon
               icon={faFile}
@@ -41,6 +42,56 @@ export default function Cloud(props) {
               <small className="text-xs text-slate-400">1 kb</small>
             </div>
           </div>
+
+          <div className="flex flex-col w-44 h-44 bg-slate-900 rounded-xl bg-opacity-40 items-center">
+            <FontAwesomeIcon
+              icon={faFile}
+              className="text-5xl flex-1"
+              fixedWidth
+            />
+            <div className=" bg-slate-900 w-full h-14 rounded-b-xl bg-opacity-60 flex flex-col p-2">
+              <h2 className="line-clamp-1">File name asdasd adsd dasdasda</h2>
+              <small className="text-xs text-slate-400">1 kb</small>
+            </div>
+          </div>
+
+          <div className="flex flex-col w-44 h-44 bg-slate-900 rounded-xl bg-opacity-40 items-center">
+            <FontAwesomeIcon
+              icon={faFile}
+              className="text-5xl flex-1"
+              fixedWidth
+            />
+            <div className=" bg-slate-900 w-full h-14 rounded-b-xl bg-opacity-60 flex flex-col p-2">
+              <h2 className="line-clamp-1">File name asdasd adsd dasdasda</h2>
+              <small className="text-xs text-slate-400">1 kb</small>
+            </div>
+          </div>
+
+          <div className="flex flex-col w-44 h-44 bg-slate-900 rounded-xl bg-opacity-40 items-center">
+            <FontAwesomeIcon
+              icon={faFile}
+              className="text-5xl flex-1"
+              fixedWidth
+            />
+            <div className=" bg-slate-900 w-full h-14 rounded-b-xl bg-opacity-60 flex flex-col p-2">
+              <h2 className="line-clamp-1">File name asdasd adsd dasdasda</h2>
+              <small className="text-xs text-slate-400">1 kb</small>
+            </div>
+          </div>
+
+          <div className="flex flex-col w-44 h-44 bg-slate-900 rounded-xl bg-opacity-40 items-center">
+            <FontAwesomeIcon
+              icon={faFile}
+              className="text-5xl flex-1"
+              fixedWidth
+            />
+            <div className=" bg-slate-900 w-full h-14 rounded-b-xl bg-opacity-60 flex flex-col p-2">
+              <h2 className="line-clamp-1">File name asdasd adsd dasdasda</h2>
+              <small className="text-xs text-slate-400">1 kb</small>
+            </div>
+          </div>
+
+         
         </div>
       </div>
     </div>

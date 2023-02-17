@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import './index.css'
 
 export default function General() {
-  let myPhone = "+84123456789";
+  let phoneNumber = "+84123456789";
 
   const [eye, setEye] = useState(faEye);
 
@@ -14,13 +14,13 @@ export default function General() {
 
   useEffect(() => {
     if (phone === true) {
-      setPhone(myPhone.replace(myPhone.substring(0, 8), "*******"));
+      setPhone(phoneNumber.replace(phoneNumber.substring(0, 8), "*******"));
       setEye(faEye);
     } else {
-      setPhone(myPhone);
+      setPhone(phoneNumber);
       setEye(faEyeSlash);
     }
-  }, [phone]);
+  }, [phone, phoneNumber]);
 
   return (
     <div className="w-full h-full flex flex-col gap-3 px-3 overflow-auto general">
@@ -97,7 +97,7 @@ export default function General() {
         
       </div>
 
-      <div className="flex-col">
+     {/*  <div className="flex-col">
         <h2 className="text-bold text-3xl mb-6">Language</h2>
         <small className="font-semibold">Select a language</small>
 
@@ -148,7 +148,7 @@ export default function General() {
             <img src={require("./german.png")} alt="" className="w-10 h-10" />
           </span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

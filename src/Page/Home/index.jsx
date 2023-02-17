@@ -1,6 +1,6 @@
 import "../Home/home.css";
 import React from "react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 
 import {
   faGear,
@@ -8,6 +8,7 @@ import {
   faSmile,
   faPaperPlane,
   faSearch,
+  faArrowDown,
   faBars,
   faPhone,
   faVideo,
@@ -19,6 +20,7 @@ import {
   faBell as fasFaBell,
   faUserPlus,
   faCaretDown,
+  faClose,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Tippy from "@tippyjs/react/headless";
@@ -34,28 +36,46 @@ import {
 
 import UserChat from "../../components/Chat/UserChat";
 import NavItem from "../../components/Nav/NavItem";
-import Modal from "../../components/Modal";
+import Setting from "../../components/Setting";
 import Cloud from "../../components/Cloud";
+import Message from "../../components/Chat/Message";
+import AddFriend from "../../components/Popup/Friend";
 
 library.add(farFaBell, fasFaBell, farFaMessage);
 
 export default function Home() {
-  
   const [userChat, setUserChat] = useState(1);
   const [menuSelected, setMenuItemSelected] = useState(1);
   const [previewProfile, showPreview] = useState(false);
   const [detailChat, showDetail] = useState(false);
   const [listImg, showListImg] = useState(false);
   const [listFile, showListFile] = useState(false);
-  const [modal, showModal] = useState(false);
+  const [setting, showSetting] = useState(false);
+  const [addFriend, showaddFriend] = useState(false);
   const [cloud, showCloud] = useState(false);
+
+  const [scrollDown, showScrollButton] = useState(false);
+  const bodyChatRef = useRef(null);
+
+  const scrolltoBottom = () => {
+    bodyChatRef.current?.scrollTo({
+      behavior: "smooth",
+      top: bodyChatRef.current?.scrollHeight,
+    });
+  };
+
+  useEffect(() => {
+    if (bodyChatRef.current) {
+      bodyChatRef.current.scrollTop = bodyChatRef.current.scrollHeight;
+    }
+  }, [bodyChatRef]);
 
   return (
     <div className="dark w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center main">
-      {modal ? (
-        <Modal
+      {setting ? (
+        <Setting
           exit={() => {
-            showModal(!modal);
+            showSetting(!setting);
           }}
         />
       ) : null}
@@ -68,8 +88,15 @@ export default function Home() {
         />
       ) : null}
 
+      {addFriend ? (
+        <AddFriend
+          exit={() => {
+            showaddFriend(!addFriend);
+          }}
+        />
+      ) : null}
       <div className="flex items-center p-5 w-full h-full justify-center">
-        <div className="flex flex-col w-24 h-full max-w-[5rem] min-w-[5rem] dark:bg-slate-900 dark:bg-opacity-75 backdrop-blur-lg rounded-3xl rounded-r-none items-center  justify-between">
+        <div className="flex flex-col w-24 h-full max-w-[5rem] min-w-[5rem] bg-gradient-to-l from-purple-800 to-indigo-600 rounded-3xl rounded-r-none items-center  justify-between">
           {/* top nav */}
           <div className="flex flex-col w-full text-white items-center">
             <Tippy
@@ -150,7 +177,7 @@ export default function Home() {
             </Tippy>
 
             <NavItem
-              Class={menuSelected === 1 ? "bg-slate-900" : ""}
+              Class={menuSelected === 1 ? "bg-slate-900 bg-opacity-50" : ""}
               id={1}
               icon={farFaMessage}
               Click={(e) => {
@@ -174,15 +201,15 @@ export default function Home() {
                   <h2 className="text-2xl font-semibold mb-2 px-2">
                     Notification
                   </h2>
-                  <div className="flex-col hover:overflow-auto overflow-hidden max-h-96 max-w-[28rem] w-96">
-                    <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer">
+                  <div className="flex-col hover:overflow-auto overflow-hidden  max-w-[28rem] w-96 max-h-80">
+                    <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
                       <div className="flex min-w-[4rem] h-16 justify-end">
                         <img
                           src={require("./image/ava.jpg")}
-                          className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer absolute"
+                          className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
                           alt=""
                         />
-                        <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg">
+                        <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
                           <FontAwesomeIcon
                             icon={faMessage}
                             className="text-xs rounded-full text-indigo-500"
@@ -200,14 +227,119 @@ export default function Home() {
                         </small>
                       </div>
                     </div>
-                    <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer">
+
+                    <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
                       <div className="flex min-w-[4rem] h-16 justify-end">
                         <img
                           src={require("./image/ava.jpg")}
-                          className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer absolute"
+                          className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
                           alt=""
                         />
-                        <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg">
+                        <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
+                          <FontAwesomeIcon
+                            icon={faMessage}
+                            className="text-xs rounded-full text-indigo-500"
+                            fixedWidth
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex-col overflow-hidden ">
+                        <h2 className=" line-clamp-3 leading-tight">
+                          <b>Lê Trực</b> sent you a new message
+                        </h2>
+                        <small className="text-indigo-400">
+                          30 minutes ago
+                        </small>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
+                      <div className="flex min-w-[4rem] h-16 justify-end">
+                        <img
+                          src={require("./image/ava.jpg")}
+                          className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
+                          alt=""
+                        />
+                        <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
+                          <FontAwesomeIcon
+                            icon={faMessage}
+                            className="text-xs rounded-full text-indigo-500"
+                            fixedWidth
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex-col overflow-hidden ">
+                        <h2 className=" line-clamp-3 leading-tight">
+                          <b>Lê Trực</b> sent you a new message
+                        </h2>
+                        <small className="text-indigo-400">
+                          30 minutes ago
+                        </small>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
+                      <div className="flex min-w-[4rem] h-16 justify-end">
+                        <img
+                          src={require("./image/ava.jpg")}
+                          className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
+                          alt=""
+                        />
+                        <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
+                          <FontAwesomeIcon
+                            icon={faMessage}
+                            className="text-xs rounded-full text-indigo-500"
+                            fixedWidth
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex-col overflow-hidden ">
+                        <h2 className=" line-clamp-3 leading-tight">
+                          <b>Lê Trực</b> sent you a new message
+                        </h2>
+                        <small className="text-indigo-400">
+                          30 minutes ago
+                        </small>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
+                      <div className="flex min-w-[4rem] h-16 justify-end">
+                        <img
+                          src={require("./image/ava.jpg")}
+                          className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
+                          alt=""
+                        />
+                        <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
+                          <FontAwesomeIcon
+                            icon={faMessage}
+                            className="text-xs rounded-full text-indigo-500"
+                            fixedWidth
+                          />
+                        </div>
+                      </div>
+
+                      <div className="flex-col overflow-hidden ">
+                        <h2 className=" line-clamp-3 leading-tight">
+                          <b>Lê Trực</b> sent you a new message
+                        </h2>
+                        <small className="text-indigo-400">
+                          30 minutes ago
+                        </small>
+                      </div>
+                    </div>
+
+                    <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
+                      <div className="flex min-w-[4rem] h-16 justify-end">
+                        <img
+                          src={require("./image/ava.jpg")}
+                          className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
+                          alt=""
+                        />
+                        <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
                           <FontAwesomeIcon
                             icon={faMessage}
                             className="text-xs rounded-full text-indigo-500"
@@ -230,7 +362,7 @@ export default function Home() {
               )}
             >
               <NavItem
-                Class={menuSelected === 2 ? "bg-slate-900" : ""}
+                Class={menuSelected === 2 ? "bg-slate-900 bg-opacity-50" : ""}
                 id={2}
                 icon={farFaBell}
                 Click={(e) => {
@@ -240,7 +372,7 @@ export default function Home() {
             </Tippy>
 
             <NavItem
-              Class={menuSelected === 3 ? "bg-slate-900" : ""}
+              Class={menuSelected === 3 ? "bg-slate-900 bg-opacity-50" : ""}
               id={3}
               icon={farFaAddressBook}
               Click={(e) => {
@@ -310,7 +442,7 @@ export default function Home() {
               <div
                 className="w-full h-14 flex items-center justify-center hover:bg-slate-900 rounded-bl-3xl duration-500"
                 onClick={() => {
-                  showModal(true);
+                  showSetting(true);
                 }}
               >
                 <FontAwesomeIcon
@@ -323,8 +455,8 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex flex-col w-96 h-full">
-          <div className=" w-96 min-h-full dark:bg-slate-900 dark:bg-opacity-40 bg-opacity-40 backdrop-blur-lg p-4 flex flex-col rounded-none">
+        <div className="hidden flex-col w-96 h-full xl:flex ">
+          <div className=" w-96 min-h-full dark:bg-slate-900 dark:bg-opacity-70 backdrop-blur-lg p-4 flex flex-col rounded-none">
             {/*  Search Box */}
             <div className="flex items-center gap-3">
               <div className="rounded-3xl w-full h-10 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-lg flex items-center p-4 text-white group">
@@ -349,6 +481,9 @@ export default function Home() {
                   <FontAwesomeIcon
                     icon={faUserPlus}
                     className="text-lg cursor-pointer hover:text-indigo-500 duration-500"
+                    onClick={() => {
+                      showaddFriend(!addFriend);
+                    }}
                   />
                 </div>
               </Tippy>
@@ -370,7 +505,7 @@ export default function Home() {
               </Tippy>
             </div>
 
-            {/* List Message */}
+            {/* List User Message */}
             <div className="flex flex-col mt-3 w-full gap-2 overflow-hidden hover:overflow-auto relative ">
               <UserChat
                 class={userChat === 1 ? "bg-slate-900" : ""}
@@ -383,11 +518,11 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="flex w-full h-full gap-3">
+        <div className="flex w-full h-full gap-3 relative">
           <div className="flex-col w-full h-full">
             {/* Chat Body */}
-            <div className="dark:bg-slate-900 w-full h-[93%] min-w-[50rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 rounded-l-none rounded-b-none">
-              <div className=" w-full h-20  flex items-center gap-3 justify-between">
+            <div className="dark:bg-slate-900 w-full h-[93%] min-w-[40rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 rounded-l-none rounded-b-none">
+              <div className=" w-full h-20  flex items-center gap-3 justify-between z-50">
                 <div className="flex items-center gap-3">
                   <img
                     alt=""
@@ -423,89 +558,79 @@ export default function Home() {
                   />
                 </div>
               </div>
-              <div className="w-full flex flex-col mt-3 gap-2 overflow-hidden hover:overflow-auto">
-                <div className="w-fit max-w-sm rounded-3xl rounded-bl-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-recived">
-                  <p className="max-w-sm break-all p-4 w-auto">
-                    Paragraphs are the building blocks of papers. Many students
-                    define paragraphs in terms of length: a paragraph is a group
-                    of at least five sentences, a paragraph is half a page long,
-                    etc. In reality, though, the unity and coherence of ideas
-                    among sentences is what constitutes a paragraph. A paragraph
-                    is defined as “a group of sentences or a single sentence
-                    that forms a unit” (Lunsford and Connors 116). Length and
-                    appearance do not determine whether a section in a paper is
-                    a paragraph. For instance, in some styles of writing,
-                    particularly journalistic styles, a paragraph can be just
-                    one sentence long. Ultimately, a paragraph is a sentence or
-                    group of sentences that support one main idea. In this
-                    handout, we will refer to this as the “controlling idea,”
-                    because it controls what happens in the rest of the
-                    paragraph.
-                  </p>
-                </div>
-                <div className="w-fit max-w-sm rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-send self-end">
-                  <p className="max-w-sm break-all p-4 w-auto">
-                    There are many different ways to organize a paragraph. The
-                    organization you choose will depend on the controlling idea
-                    of the paragraph. Below are a few possibilities for
-                    organization, with links to brief examples: Narration: Tell
-                    a story.
-                  </p>
-                </div>
-                <div className="w-fit max-w-sm rounded-3xl rounded-bl-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-recived">
-                  <p className="max-w-sm break-all p-4 w-auto">
-                    Paragraphs are the building blocks of papers. Many students
-                    define paragraphs in terms of length: a paragraph is a group
-                    of at least five sentences, a paragraph is half a page long,
-                    etc. In reality, though, the unity and coherence of ideas
-                    among sentences is what constitutes a paragraph. A paragraph
-                    is defined as “a group of sentences or a single sentence
-                    that forms a unit” (Lunsford and Connors 116). Length and
-                    appearance do not determine whether a section in a paper is
-                    a paragraph. For instance, in some styles of writing,
-                    particularly journalistic styles, a paragraph can be just
-                    one sentence long. Ultimately, a paragraph is a sentence or
-                    group of sentences that support one main idea. In this
-                    handout, we will refer to this as the “controlling idea,”
-                    because it controls what happens in the rest of the
-                    paragraph.
-                  </p>
-                </div>
-                <div className="w-fit max-w-sm rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message-send self-end">
-                  <p className="max-w-sm break-all p-4 w-auto">
-                    There are many different ways to organize a paragraph. The
-                    organization you choose will depend on the controlling idea
-                    of the paragraph. Below are a few possibilities for
-                    organization, with links to brief examples: Narration: Tell
-                    a story.
-                  </p>
-                </div>
+
+              <div
+                className="w-full h-full flex flex-col mt-3 gap-2 overflow-hidden hover:overflow-auto"
+                onScroll={(e) => {
+                  if (e.currentTarget.scrollTop === 0) {
+                    showScrollButton(true);
+                  } else {
+                    showScrollButton(false);
+                  }
+                }}
+                ref={bodyChatRef}
+              >
+                {scrollDown ? (
+                  <div className="flex absolute w-full items-center justify-center bottom-0 mb-5 duration-300 transition-all">
+                    <div
+                      className="h-10 w-10 text-white z-30 bg-slate-900 justify-center items-center flex rounded-full self-center hover:cursor-pointer transition-all duration-300 hover:opacity-70 animate-bounce"
+                      onClick={() => scrolltoBottom()}
+                    >
+                      <FontAwesomeIcon icon={faArrowDown} />
+                    </div>
+                  </div>
+                ) : null}
+                <Message type="recived" />
+                <Message type="recived" />
+                <Message type="recived" />
+                <Message type="send" />
+                <Message type="recived" />
               </div>
             </div>
 
             {/* Chat Footer */}
-            <div className="dark:bg-slate-900 w-full  h-[7%] max-h-[7%] dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5 relative rounded-t-none rounded-bl-none">
-              <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 hover:bg-indigo-500 duration-300">
-                <FontAwesomeIcon icon={faImage} fixedWidth />
+            <div className="dark:bg-slate-900 w-full  h-[7%] dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5 relative rounded-t-none rounded-bl-none">
+              <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 duration-300">
+                <FontAwesomeIcon
+                  icon={faImage}
+                  fixedWidth
+                  className="hover:text-indigo-600 duration-300"
+                />
               </div>
-              <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl  h-10 w-10 hover:bg-indigo-500 duration-300">
-                <FontAwesomeIcon icon={faSmile} fixedWidth />
+              <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl  h-10 w-10  duration-300">
+                <FontAwesomeIcon
+                  icon={faSmile}
+                  fixedWidth
+                  className="hover:text-indigo-600 duration-300"
+                />
               </div>
-              <div className="w-full  flex items-center h-10 py-1 duration-300">
+              <div className="w-full  flex items-center h-full py-1 duration-300">
                 <input
                   className="bg-transparent w-full outline-none text-white"
                   placeholder="Type your message..."
                 />
               </div>
-              <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10 hover:bg-indigo-500 duration-300">
-                <FontAwesomeIcon icon={faPaperPlane} fixedWidth />
+              <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10  duration-300">
+                <FontAwesomeIcon
+                  icon={faPaperPlane}
+                  fixedWidth
+                  className="hover:text-indigo-600 duration-300"
+                />
               </div>
             </div>
           </div>
 
           {/* Detail chat */}
           {detailChat ? (
-            <div className="flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat">
+            <div className="absolute right-0 2xl:relative flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat overflow-y-auto">
+              <FontAwesomeIcon
+                icon={faClose}
+                fixedWidth
+                className="text-white absolute left-0 p-4 hover:text-red-600 cursor-pointer transition-all duration-300 2xl:hidden"
+                onClick={() => {
+                  showDetail(!detailChat);
+                }}
+              />
               <img
                 src={require("./image/ava.jpg")}
                 className="rounded-full object-cover w-20 h-20 cursor-pointer"

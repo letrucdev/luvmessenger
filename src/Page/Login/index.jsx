@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import "./App.css";
 import { useEffect, useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -25,16 +26,18 @@ function Login() {
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);
-      
-    }, 2000);
+    }, 1000);
   }, []);
 
-  return ( 
+  return (
     <div className=" w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center">
+      <h1 className="absolute text-white text-2xl sm:hidden">
+        Your device is not support 😥😥
+      </h1>
       {isLoading ? (
         <img alt="" src={require("../../image/loading.gif")} />
       ) : (
-        <>
+        <div className="hidden sm:flex transition-all duration-300">
           <div className="theme-option flex items-center absolute z-10 top-0 left-0 bg-white dark:bg-slate-900 w-14 h-9 m-5 rounded-2xl">
             <input
               type={"checkbox"}
@@ -114,7 +117,7 @@ function Login() {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
     </div>
   );
