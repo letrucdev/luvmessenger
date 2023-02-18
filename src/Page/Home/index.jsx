@@ -41,7 +41,7 @@ import Message from "../../components/Chat/Message";
 import AddFriend from "../../components/Popup/Friend";
 import LoadingUserChat from "../../components/Chat/LoadingUserChat";
 
-const UserChat = React.lazy(() => import("../../components/Chat/UserChat"));
+const UserChat = lazy(() => import("../../components/Chat/UserChat"));
 
 library.add(farFaBell, fasFaBell, farFaMessage);
 
