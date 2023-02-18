@@ -4,6 +4,23 @@
   background-image: url("./image/bg2.jpg");
 }
 
+@keyframes loadingLazy {
+  0% {
+    opacity: 70%;
+  }
+  50% {
+    opacity: 50%;
+  }
+  100% {
+    opacity: 30%;
+  }
+}
+
+.item-user-load {
+  animation: loadingLazy infinite 1.5s;
+  transition: all 0.25s;
+}
+
 .cloudMain {
   animation: show 0.25s;
   transition: all 0.25s;

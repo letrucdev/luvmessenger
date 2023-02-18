@@ -1,6 +1,5 @@
 import "../Home/home.css";
-import React from "react";
-import { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
 
 import {
   faGear,
@@ -35,12 +34,14 @@ import {
   faAddressBook as farFaAddressBook,
 } from "@fortawesome/free-regular-svg-icons";
 
-import UserChat from "../../components/Chat/UserChat";
 import NavItem from "../../components/Nav/NavItem";
 import Setting from "../../components/Setting";
 import Cloud from "../../components/Cloud";
 import Message from "../../components/Chat/Message";
 import AddFriend from "../../components/Popup/Friend";
+import LoadingUserChat from "../../components/Chat/LoadingUserChat";
+
+const UserChat = React.lazy(() => import("../../components/Chat/UserChat"));
 
 library.add(farFaBell, fasFaBell, farFaMessage);
 
@@ -525,111 +526,167 @@ export default function Home() {
             </div>
 
             {/* List User Message */}
-            <div className="flex flex-col mt-3 w-full gap-2 overflow-hidden hover:overflow-auto relative select-none">
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
-              <UserChat
-                class={userChat === 1 ? "bg-slate-900" : ""}
-                id={1}
-                Click={(e) => {
-                  setShowChat(true);
-                  setUserChat(e);
-                }}
-              />
+            <div className="flex flex-col mt-3 w-full h-full gap-2 overflow-hidden hover:overflow-auto relative select-none">
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
+              <Suspense fallback={<LoadingUserChat />}>
+                <UserChat
+                  class={userChat === 1 ? "bg-slate-900" : ""}
+                  id={1}
+                  Click={(e) => {
+                    setShowChat(true);
+                    setUserChat(e);
+                  }}
+                />
+              </Suspense>
             </div>
 
             <div className="flex self-end w-full  bg-slate-800 bg-opacity-10 backdrop-blur-xl rounded-3xl mt-5 justify-between px-8 sm:hidden items-center">
