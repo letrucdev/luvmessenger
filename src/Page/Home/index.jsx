@@ -21,6 +21,7 @@ import {
   faUserPlus,
   faCaretDown,
   faClose,
+  faArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Tippy from "@tippyjs/react/headless";
@@ -55,13 +56,25 @@ export default function Home() {
   const [cloud, showCloud] = useState(false);
 
   const [scrollDown, showScrollButton] = useState(false);
+  const [showChat, setShowChat] = useState(true);
   const bodyChatRef = useRef(null);
+  const listUserChatRef = useRef(null);
 
   const scrolltoBottom = () => {
     bodyChatRef.current?.scrollTo({
       behavior: "smooth",
       top: bodyChatRef.current?.scrollHeight,
     });
+  };
+
+  const closeChat = () => {
+    const styless = window
+      .getComputedStyle(listUserChatRef.current)
+      .getPropertyValue("display");
+    if (styless === "none") {
+      setUserChat(0);
+      setShowChat(!showChat);
+    }
   };
 
   useEffect(() => {
@@ -96,7 +109,7 @@ export default function Home() {
         />
       ) : null}
       <div className="flex items-center p-5 w-full h-full justify-center">
-        <div className="flex flex-col w-24 h-full max-w-[5rem] min-w-[5rem] bg-gradient-to-l from-purple-800 to-indigo-600 rounded-3xl rounded-r-none items-center  justify-between">
+        <div className=" flex-col w-24 h-full max-w-[5rem] min-w-[5rem] bg-gradient-to-l from-purple-800 to-indigo-600 rounded-3xl rounded-r-none items-center  justify-between hidden sm:flex">
           {/* top nav */}
           <div className="flex flex-col w-full text-white items-center">
             <Tippy
@@ -182,6 +195,7 @@ export default function Home() {
               icon={farFaMessage}
               Click={(e) => {
                 setMenuItemSelected(e);
+                closeChat();
               }}
             />
 
@@ -195,7 +209,7 @@ export default function Home() {
               placement={"right-start"}
               render={(attrs) => (
                 <div
-                  className="p-3 flex-col text-white bg-slate-900 rounded-3xl bg-opacity-60 backdrop-blur-lg notification"
+                  className="p-3 flex-col text-white bg-slate-900 rounded-3xl bg-opacity-60 backdrop-blur-lg notification hidden sm:flex"
                   {...attrs}
                 >
                   <h2 className="text-2xl font-semibold mb-2 px-2">
@@ -455,8 +469,13 @@ export default function Home() {
           </div>
         </div>
 
-        <div className="hidden flex-col w-96 h-full xl:flex ">
-          <div className=" w-96 min-h-full dark:bg-slate-900 dark:bg-opacity-70 backdrop-blur-lg p-4 flex flex-col rounded-none">
+        <div
+          className={`duration-300 flex-col w-full h-full xl:flex xl:w-96 ${
+            showChat ? `hidden` : `flex`
+          }`}
+          ref={listUserChatRef}
+        >
+          <div className="w-full xl:w-96 min-h-full dark:bg-slate-900 dark:bg-opacity-70 backdrop-blur-lg p-4 flex flex-col xl:rounded-none sm:rounded-l-none rounded-3xl">
             {/*  Search Box */}
             <div className="flex items-center gap-3">
               <div className="rounded-3xl w-full h-10 dark:bg-slate-900 dark:bg-opacity-20 backdrop-blur-lg flex items-center p-4 text-white group">
@@ -511,19 +530,159 @@ export default function Home() {
                 class={userChat === 1 ? "bg-slate-900" : ""}
                 id={1}
                 Click={(e) => {
+                  setShowChat(true);
                   setUserChat(e);
                 }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+              <UserChat
+                class={userChat === 1 ? "bg-slate-900" : ""}
+                id={1}
+                Click={(e) => {
+                  setShowChat(true);
+                  setUserChat(e);
+                }}
+              />
+            </div>
+
+            <div className="flex self-end w-full  bg-slate-800 bg-opacity-10 backdrop-blur-xl rounded-3xl mt-5 justify-between px-8 sm:hidden items-center">
+              <FontAwesomeIcon
+                icon={farFaMessage}
+                className="w-14 h-14 text-lg text-white "
+                fixedWidth
+              />
+              <FontAwesomeIcon
+                icon={farFaBell}
+                className="w-14 h-14 text-lg text-white "
+                fixedWidth
+              />
+              <div className="flex w-16 h-16 -translate-y-5 justify-center bg-slate-900 bg-opacity-60 backdrop-blur-3xl items-center rounded-full">
+                <img
+                  src={require("./image/ava.jpg")}
+                  className="rounded-full object-cover w-14 h-14 cursor-pointer  p-1 drop-shadow-2xl"
+                  alt=""
+                />
+              </div>
+              <FontAwesomeIcon
+                icon={faCloud}
+                className="w-14 h-14 text-lg text-white "
+                fixedWidth
+              />
+              <FontAwesomeIcon
+                icon={faTools}
+                className="w-14 h-14 text-lg text-white "
+                fixedWidth
               />
             </div>
           </div>
         </div>
 
-        <div className="flex w-full h-full gap-3 relative">
+        <div
+          className={`w-full h-full gap-3 relative ${
+            showChat ? `flex` : `hidden`
+          }`}
+        >
           <div className="flex-col w-full h-full">
             {/* Chat Body */}
-            <div className="dark:bg-slate-900 w-full h-[93%] min-w-[40rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 rounded-l-none rounded-b-none">
+            <div className="dark:bg-slate-900 w-full h-[93%] md:min-w-[35rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 sm:rounded-l-none rounded-b-none duration-300">
               <div className=" w-full h-20  flex items-center gap-3 justify-between z-50">
                 <div className="flex items-center gap-3">
+                  <FontAwesomeIcon
+                    icon={faArrowLeft}
+                    fixedWidth
+                    className="text-white text-xl cursor-pointer duration-300 hover:text-indigo-600 sm:hidden"
+                    onClick={() => {
+                      setShowChat(false);
+                      setUserChat(0);
+                    }}
+                  />
                   <img
                     alt=""
                     className=" rounded-full object-cover w-16 h-16"
@@ -589,7 +748,7 @@ export default function Home() {
             </div>
 
             {/* Chat Footer */}
-            <div className="dark:bg-slate-900 w-full  h-[7%] dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5 relative rounded-t-none rounded-bl-none">
+            <div className="dark:bg-slate-900 w-full  h-[7%] dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5 relative rounded-t-none sm:rounded-bl-none duration-300">
               <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 duration-300">
                 <FontAwesomeIcon
                   icon={faImage}
@@ -619,7 +778,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-
           {/* Detail chat */}
           {detailChat ? (
             <div className="absolute right-0 2xl:relative flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat overflow-y-auto select-none">
@@ -762,6 +920,26 @@ export default function Home() {
               </div>
             </div>
           ) : null}
+        </div>
+
+        <div
+          className={`select-none w-full h-full gap-3 relative ${
+            showChat ? `!hidden` : ``
+          } hidden xl:flex duration-300`}
+        >
+          <div className="dark:bg-slate-900 w-full h-full md:min-w-[35rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 sm:rounded-l-none duration-300 justify-center items-center">
+            <div className="flex flex-col justify-center items-center ">
+              <img
+                src={require("../../image/chat3d.png")}
+                alt=""
+                className="w-96"
+              />
+              <p className="font-bold text-transparent text-xl bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-400 text-center">
+                Free and secure messaging <br /> with RSA end-to-end encryption
+                technology
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
