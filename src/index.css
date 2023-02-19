@@ -13,8 +13,6 @@ body {
 /* width */
 ::-webkit-scrollbar {
   width: 6px;
-  
-
 }
 
 /* Track */
@@ -25,7 +23,7 @@ body {
 /* Handle */
 ::-webkit-scrollbar-thumb {
   border-radius: 25px;
-  background:#37338a ;
+  background: #37338a;
 }
 
 /* Handle on hover */
@@ -36,4 +34,13 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+@keyframes show {
+  0% {
+    opacity: 0% ;
+  }
+  100% {
+    opacity: 100%;
+  }
 }

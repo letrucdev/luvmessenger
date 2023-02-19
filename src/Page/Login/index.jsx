@@ -1,27 +1,23 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import "./App.css";
-import { useEffect, useState } from "react";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faEnvelope,
-  faLock,
-  faArrowRight,
-  faSun,
-  faMoon,
-} from "@fortawesome/free-solid-svg-icons";
+import { useEffect, useState, lazy, Suspense } from "react";
+
+const LoginUI = lazy(() => import("./components/Login"));
+const RegisterUI = lazy(() => import("./components/Register"));
 
 function Login() {
-  const [theme, setTheme] = useState(true);
+  /* const [theme, setTheme] = useState(true); */
   const [isLoading, setLoading] = useState(true);
+  const [isLoginUI, setLoginUI] = useState(true);
 
-  useEffect(() => {
+  /*   useEffect(() => {
     const root = window.document.documentElement;
     if (theme) {
       root.classList.add("dark");
     } else {
       root.classList.remove("dark");
     }
-  }, [theme]);
+  }, [theme]); */
 
   useEffect(() => {
     setTimeout(() => {
@@ -30,7 +26,7 @@ function Login() {
   }, []);
 
   return (
-    <div className=" w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center">
+    <div className="dark w-screen h-screen bg-bgLogin flex justify-center items-center bg-cover">
       {isLoading ? (
         <img alt="" src={require("../../image/loading.gif")} />
       ) : (
@@ -57,7 +53,7 @@ function Login() {
               <div className="ball rounded-full absolute  bg-slate-800 w-5 h-5 transition-all duration-300 -translate-x-0"></div>
             </div>
           </div> */}
-          <div className="bg-slate-50 dark:bg-slate-900 xl:w-[65rem] p-10 rounded-2xl flex transition-all duration-500">
+          <div className="bg-slate-50 dark:bg-slate-900 xl:w-[65rem] p-10 rounded-2xl flex transition-all duration-300 dark:bg-opacity-60 dark:backdrop-blur-md">
             <div className=" hidden sm:flex flex-1 items-center justify-center">
               <img
                 alt=""
@@ -65,54 +61,21 @@ function Login() {
                 className="object-contain w-[20rem]"
               />
             </div>
-            <div className="flex flex-1 flex-col items-center justify-center dark:text-white">
-              <h1 className="font-bold text-2xl mb-6 text-black dark:text-white">
-                WELCOME BACK!
-              </h1>
-              <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-2 w-3/4 flex items-center group">
-                <FontAwesomeIcon
-                  icon={faEnvelope}
-                  className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
+            <Suspense>
+              {isLoginUI ? (
+                <LoginUI
+                  registerAccount={() => {
+                    setLoginUI(!isLoginUI);
+                  }}
                 />
-                <input
-                  type={"email"}
-                  placeholder="Email"
-                  className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
+              ) : (
+                <RegisterUI
+                  loginAccount={() => {
+                    setLoginUI(!isLoginUI);
+                  }}
                 />
-              </div>
-              <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-3 w-3/4 flex items-center group">
-                <FontAwesomeIcon
-                  icon={faLock}
-                  className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
-                />
-                <input
-                  type={"password"}
-                  placeholder="Password"
-                  className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
-                />
-              </div>
-              <div className="wrap-button mt-6 font-bold w-3/4 text-white ">
-                <button className="bg-indigo-600 p-3 w-full rounded-3xl hover:bg-indigo-800 duration-300">
-                  LOGIN
-                </button>
-              </div>
-              <div className="text-center m-3">
-                <span className="text-slate-900 dark:text-slate-300">
-                  Forgot{" "}
-                  <a
-                    href="#"
-                    className="text-slate-500 hover:text-indigo-700 duration-300"
-                  >
-                    Username / Password?
-                  </a>
-                </span>
-              </div>
-              <div className="text-center text-slate-500 mt-10 hover:text-indigo-700 duration-300">
-                <a href="#">
-                  Create your account <FontAwesomeIcon icon={faArrowRight} />
-                </a>
-              </div>
-            </div>
+              )}
+            </Suspense>
           </div>
         </div>
       )}

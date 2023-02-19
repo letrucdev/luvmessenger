@@ -2,3 +2,8 @@
   transform: translateX(1.3rem);
   background-color: white;
 }
+
+.registerForm{
+  animation: show 0.25s;
+  transition: all 0.25s;
+}

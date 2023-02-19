@@ -3,7 +3,11 @@ module.exports = {
   darkMode: "class",
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        bgLogin: "url('./image/bg.jpg')",
+      },
+    },
   },
   plugins: [
     require("tailwindcss"),
