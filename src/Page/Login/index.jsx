@@ -26,7 +26,7 @@ function Login() {
   }, []);
 
   return (
-    <div className="dark w-screen h-screen bg-bgLogin flex justify-center items-center bg-cover">
+    <div className="dark w-screen h-screen bg-bgLogin flex justify-center items-center bg-cover select-none">
       {isLoading ? (
         <img alt="" src={require("../../image/loading.gif")} />
       ) : (
