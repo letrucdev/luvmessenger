@@ -9,7 +9,7 @@ root.render(
   <React.StrictMode>
     {
       /*  localStorage.getItem("account") ? <Home /> : <Login /> */
-      <Home />
+      <Login />
       /* <App /> */
     }
   </React.StrictMode>

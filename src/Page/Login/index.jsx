@@ -31,14 +31,11 @@ function Login() {
 
   return (
     <div className=" w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center">
-      <h1 className="absolute text-white text-2xl sm:hidden">
-        Your device is not support 😥😥
-      </h1>
       {isLoading ? (
         <img alt="" src={require("../../image/loading.gif")} />
       ) : (
-        <div className="hidden sm:flex transition-all duration-300">
-          <div className="theme-option flex items-center absolute z-10 top-0 left-0 bg-white dark:bg-slate-900 w-14 h-9 m-5 rounded-2xl">
+        <div className="flex transition-all duration-300">
+          {/* <div className="theme-option flex items-center absolute z-10 top-0 left-0 bg-white dark:bg-slate-900 w-14 h-9 m-5 rounded-2xl">
             <input
               type={"checkbox"}
               className="opacity-0 absolute inputCheck z-30 w-full cursor-pointer"
@@ -59,9 +56,9 @@ function Login() {
               />
               <div className="ball rounded-full absolute  bg-slate-800 w-5 h-5 transition-all duration-300 -translate-x-0"></div>
             </div>
-          </div>
-          <div className="bg-slate-50 dark:bg-slate-900 w-[65rem] p-10 rounded-2xl flex transition-all duration-500">
-            <div className="flex flex-1 items-center justify-center">
+          </div> */}
+          <div className="bg-slate-50 dark:bg-slate-900 xl:w-[65rem] p-10 rounded-2xl flex transition-all duration-500">
+            <div className=" hidden sm:flex flex-1 items-center justify-center">
               <img
                 alt=""
                 src={require("../../image/Wavy_Gen-01_Single-07.png")}
@@ -72,10 +69,10 @@ function Login() {
               <h1 className="font-bold text-2xl mb-6 text-black dark:text-white">
                 WELCOME BACK!
               </h1>
-              <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-2 w-3/4 flex items-center">
+              <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-2 w-3/4 flex items-center group">
                 <FontAwesomeIcon
                   icon={faEnvelope}
-                  className="ml-3 text-slate-600"
+                  className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
                 />
                 <input
                   type={"email"}
@@ -83,10 +80,10 @@ function Login() {
                   className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
                 />
               </div>
-              <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-3 w-3/4 flex items-center">
+              <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-3 w-3/4 flex items-center group">
                 <FontAwesomeIcon
                   icon={faLock}
-                  className="ml-3 text-slate-600"
+                  className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
                 />
                 <input
                   type={"password"}
