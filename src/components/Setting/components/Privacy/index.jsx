@@ -13,7 +13,7 @@ export default function Privacy() {
               People can see you online when turn it on
             </small>
           </div>
-          <div className="theme-option flex items-center  bg-white dark:bg-slate-900 w-14 h-9 m-5 rounded-2xl">
+          <div className="theme-option flex items-center  bg-white dark:bg-slate-900 min-w-[3.5rem] h-9 sm:m-5 rounded-2xl relative">
             <input
               type={"checkbox"}
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
@@ -35,7 +35,7 @@ export default function Privacy() {
               Anyone can send me a friend request
             </small>
           </div>
-          <div className="theme-option flex items-center  bg-white dark:bg-slate-900 w-14 h-9 m-5 rounded-2xl">
+          <div className="theme-option flex items-center  bg-white dark:bg-slate-900 min-w-[3.5rem] h-9 sm:m-5 rounded-2xl relative">
             <input
               type={"checkbox"}
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
@@ -57,7 +57,7 @@ export default function Privacy() {
               Auto lock app after 10 minutes when you leave
             </small>
           </div>
-          <div className="theme-option flex items-center  bg-white dark:bg-slate-900 w-14 h-9 m-5 rounded-2xl">
+          <div className="theme-option flex items-center  bg-white dark:bg-slate-900 min-w-[3.5rem] h-9 sm:m-5 rounded-2xl relative">
             <input
               type={"checkbox"}
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"

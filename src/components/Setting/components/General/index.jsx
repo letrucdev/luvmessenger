@@ -1,4 +1,4 @@
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
 import './index.css'
@@ -45,7 +45,7 @@ export default function General() {
           </div>
         </div>
 
-        <div className="w-full bg-slate-800 p-4 rounded-xl bg-opacity-50 flex justify-between items-center mt-4">
+        <div className="w-full bg-slate-800 p-4 rounded-xl bg-opacity-50 flex items-center mt-4 justify-between">
           <div className="flex-col">
             <h2 className="font-semibold mb-1 text-lg">Username</h2>
             <input
@@ -55,8 +55,9 @@ export default function General() {
               disabled
             />
           </div>
-          <div className="bg-slate-900 rounded-xl bg-opacity-75 hover:bg-opacity-30 duration-300">
-            <button className="p-2 w-24">Edit</button>
+          <div className="bg-slate-900 rounded-xl bg-opacity-75 hover:bg-opacity-30 duration-300 ">
+            <button className="p-2 w-24 hidden sm:block">Edit</button>
+            <FontAwesomeIcon icon={faEdit} fixedWidth className="text-xl p-2 sm:hidden"/>
           </div>
         </div>
 
@@ -71,7 +72,8 @@ export default function General() {
             />
           </div>
           <div className="bg-slate-900 rounded-xl bg-opacity-75 hover:bg-opacity-30 duration-300">
-            <button className="p-2 w-24">Edit</button>
+            <button className="p-2 w-24 hidden sm:block">Edit</button>
+            <FontAwesomeIcon icon={faEdit} fixedWidth className="text-xl p-2 sm:hidden"/>
           </div>
         </div>
 
@@ -91,7 +93,8 @@ export default function General() {
             </div>
           </div>
           <div className="bg-slate-900 rounded-xl bg-opacity-75 hover:bg-opacity-30 duration-300">
-            <button className="p-2 w-24">Edit</button>
+            <button className="p-2 w-24 hidden sm:block">Edit</button>
+            <FontAwesomeIcon icon={faEdit} fixedWidth className="text-xl p-2 sm:hidden"/>
           </div>
         </div>
         
