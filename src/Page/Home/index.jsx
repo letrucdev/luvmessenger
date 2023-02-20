@@ -2,7 +2,7 @@ import "../Home/home.css";
 import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
 import { createBrowserHistory } from "history";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
 
 import {
   faGear,
@@ -24,6 +24,7 @@ import {
   faCaretDown,
   faClose,
   faArrowLeft,
+  faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 
 import Tippy from "@tippyjs/react/headless";
@@ -50,7 +51,7 @@ const history = createBrowserHistory();
 library.add(farFaBell, fasFaBell, farFaMessage);
 
 export default function Home() {
-  const [userChat, setUserChat] = useState(1);
+  const [userChat, setUserChat] = useState();
   const [menuSelected, setMenuItemSelected] = useState(1);
   const [previewProfile, showPreview] = useState(false);
   const [detailChat, showDetail] = useState(false);
@@ -60,7 +61,7 @@ export default function Home() {
   const [addFriend, showaddFriend] = useState(false);
   const [cloud, showCloud] = useState(false);
   const [scrollDown, showScrollButton] = useState(false);
-  const [showChat, setShowChat] = useState(true);
+  const [showChat, setShowChat] = useState(false);
   const [isLoading, setLoading] = useState(true);
 
   const [infomation, setInfomation] = useState();
@@ -496,13 +497,37 @@ export default function Home() {
                   )}
                 >
                   <div
-                    className="w-full h-14 flex items-center justify-center hover:bg-slate-900 rounded-bl-3xl duration-500"
+                    className="w-full h-14 flex items-center justify-center hover:bg-slate-900 duration-500"
                     onClick={() => {
                       showSetting(true);
                     }}
                   >
                     <FontAwesomeIcon
                       icon={faGear}
+                      className="w-14 h-14 text-xl cursor-pointer"
+                      fixedWidth
+                    />
+                  </div>
+                </Tippy>
+                <Tippy
+                  placement="right"
+                  render={(attrs) => (
+                    <div
+                      {...attrs}
+                      className=" h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600 tooltip"
+                    >
+                      <p>Logout</p>
+                    </div>
+                  )}
+                >
+                  <div
+                    className="w-full h-14 flex items-center justify-center hover:bg-slate-900 rounded-bl-3xl duration-500"
+                    onClick={() => {
+                      navigate("/login");
+                    }}
+                  >
+                    <FontAwesomeIcon
+                      icon={faSignOut}
                       className="w-14 h-14 text-xl cursor-pointer"
                       fixedWidth
                     />
