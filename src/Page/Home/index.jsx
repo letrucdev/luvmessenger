@@ -2,7 +2,7 @@ import "../Home/home.css";
 import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
 import { createBrowserHistory } from "history";
 import axios from "axios";
-import { Navigate, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   faGear,
@@ -169,7 +169,7 @@ export default function Home() {
                       <div className="w-full h-[80%]  rounded-b-3xl bg-opacity-90 dark:bg-opacity-90 backdrop-blur-lg flex flex-col items-center">
                         <div className="flex flex-col items-center justify-center bg-slate-900 bg-opacity-40 rounded-full w-24 h-24 -translate-y-12 p-2">
                           <img
-                            src={require("./image/ava.jpg")}
+                            src={require("./image/giphy.jpg")}
                             className="rounded-full object-cover w-20 h-20 cursor-pointer"
                             alt=""
                           />
@@ -220,7 +220,7 @@ export default function Home() {
                     )}
                   >
                     <img
-                      src={require("./image/ava.jpg")}
+                      src={require("./image/giphy.jpg")}
                       className="rounded-full object-cover w-14 h-14 my-4 cursor-pointer"
                       alt=""
                       onClick={() => {
@@ -658,7 +658,7 @@ export default function Home() {
                       <img
                         alt=""
                         className=" rounded-full object-cover w-16 h-16"
-                        src={require("./image/ava.jpg")}
+                        src={require("./image/giphy.jpg")}
                       />
                       <div className="flex flex-col text-white">
                         <h4 className="leading-none">Lê Trực</h4>

@@ -1,4 +1,4 @@
-import avatar from "../../Page/Home/image/ava.jpg";
+import avatar from "../../Page/Home/image/giphy.jpg";
 /* import { useState } from "react"; */
 
 export default function UserChat(props) {
