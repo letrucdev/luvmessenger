@@ -1,13 +1,44 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { useState } from "react";
 import {
   faEnvelope,
   faLock,
   faArrowRight,
 } from "@fortawesome/free-solid-svg-icons";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginUI(props) {
+  const navigate = useNavigate();
 
-  
+  const [email, setEmail] = useState(null);
+  const [password, setPassword] = useState(null);
+
+  const Login = (email, password) => {
+    const config = {
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    axios
+      .post(
+        "http://localhost:3333/login",
+        { account: email, password: password },
+        config
+      )
+      .then(function (response) {
+        if (response.data.auth === true) {
+          localStorage.setItem("accessToken", response.data.token);
+          navigate("/home");
+        } else {
+          alert("Wrong username or password!");
+        }
+      })
+      .catch(function (error) {
+        alert("Connect to server failed!");
+      });
+  };
+
   return (
     <div className="flex flex-1 flex-col items-center justify-center dark:text-white registerForm">
       <h1 className="font-bold text-2xl mb-6 text-black dark:text-white">
@@ -22,6 +53,9 @@ export default function LoginUI(props) {
           type={"email"}
           placeholder="Email"
           className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
+          onChange={(e) => {
+            setEmail(e.target.value);
+          }}
         />
       </div>
       <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-3 w-3/4 flex items-center group  backdrop-blur-xl">
@@ -33,10 +67,16 @@ export default function LoginUI(props) {
           type={"password"}
           placeholder="Password"
           className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
         />
       </div>
       <div className="wrap-button mt-6 font-bold w-3/4 text-white ">
-        <button className="bg-gradient-to-r from-violet-500 to-fuchsia-500 p-3 w-full rounded-3xl hover:opacity-50 hover:bg-gradient-to-l duration-300">
+        <button
+          className="bg-gradient-to-r from-violet-500 to-fuchsia-500 p-3 w-full rounded-3xl hover:opacity-50 hover:bg-gradient-to-l duration-300"
+          onClick={() => Login(email, password)}
+        >
           LOGIN
         </button>
       </div>

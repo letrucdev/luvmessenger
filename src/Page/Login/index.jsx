@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import "./App.css";
 import { useEffect, useState, lazy, Suspense } from "react";
+import { createBrowserHistory } from "history";
 
 const LoginUI = lazy(() => import("./components/Login"));
 const RegisterUI = lazy(() => import("./components/Register"));
@@ -9,6 +10,7 @@ function Login() {
   /* const [theme, setTheme] = useState(true); */
   const [isLoading, setLoading] = useState(true);
   const [isLoginUI, setLoginUI] = useState(true);
+
 
   /*   useEffect(() => {
     const root = window.document.documentElement;

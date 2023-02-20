@@ -1,5 +1,8 @@
 import "../Home/home.css";
 import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
+import { createBrowserHistory } from "history";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 import {
   faGear,
@@ -42,6 +45,7 @@ import AddFriend from "../../components/Popup/Friend";
 import LoadingUserChat from "../../components/Chat/LoadingUserChat";
 
 const UserChat = lazy(() => import("../../components/Chat/UserChat"));
+const history = createBrowserHistory();
 
 library.add(farFaBell, fasFaBell, farFaMessage);
 
@@ -55,11 +59,15 @@ export default function Home() {
   const [setting, showSetting] = useState(false);
   const [addFriend, showaddFriend] = useState(false);
   const [cloud, showCloud] = useState(false);
-
   const [scrollDown, showScrollButton] = useState(false);
   const [showChat, setShowChat] = useState(true);
+
+  const [infomation, setInfomation] = useState();
+
   const bodyChatRef = useRef(null);
   const listUserChatRef = useRef(null);
+
+  const navigate = useNavigate();
 
   const scrolltoBottom = () => {
     bodyChatRef.current?.scrollTo({
@@ -78,11 +86,35 @@ export default function Home() {
     }
   };
 
+  const verifyToken = (token) => {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios
+      .get("http://localhost:3333/myInfomation", config)
+      .then(function (response) {
+        setInfomation(response.data);
+      })
+      .catch(function (error) {
+        localStorage.clear();
+        navigate("/login");
+      });
+  };
+
   useEffect(() => {
     if (bodyChatRef.current) {
       bodyChatRef.current.scrollTop = bodyChatRef.current.scrollHeight;
     }
   }, [bodyChatRef]);
+
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken");
+    history.replace("/");
+    verifyToken(token);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   return (
     <div className="dark w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center main">
@@ -537,7 +569,6 @@ export default function Home() {
                   }}
                 />
               </Suspense>
-             
             </div>
 
             <div className="flex self-end w-full  bg-slate-800 bg-opacity-10 backdrop-blur-xl rounded-3xl mt-5 justify-between px-8 sm:hidden items-center">
