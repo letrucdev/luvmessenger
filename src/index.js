@@ -3,22 +3,29 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import Login from "./Page/Login";
 import Home from "./Page/Home";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+/* import axios from "axios"; */
+import {
+  BrowserRouter as Router,
+  Route,
+  Routes,
+} from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-const verifyLogin = () => {
+
+
+/* const verifyLogin = () => {
   if (localStorage.getItem("accessToken")) {
     return true;
   }
   return false;
-};
+}; */
 
 root.render(
   /*  localStorage.getItem("account") ? <Home /> : <Login /> */
 
   <Router>
     <Routes>
-      <Route element={verifyLogin() ? <Home /> : <Login />} path="*" />
+      <Route element={<Home />} path="*" />
       <Route element={<Home />} path="/home" />
       <Route element={<Login />} path="/login" />
     </Routes>
