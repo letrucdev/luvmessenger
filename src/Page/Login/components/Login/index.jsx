@@ -11,32 +11,39 @@ import { useNavigate } from "react-router-dom";
 export default function LoginUI(props) {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState(null);
-  const [password, setPassword] = useState(null);
+  const [isLogin, setLogin] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
-  const Login = (email, password) => {
+  const Login = async (email, password) => {
     const config = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     };
-    axios
-      .post(
-        "http://localhost:3333/login",
-        { account: email, password: password },
-        config
-      )
-      .then(function (response) {
-        if (response.data.auth === true) {
-          localStorage.setItem("accessToken", response.data.token);
-          navigate("/home");
-        } else {
-          alert("Wrong username or password!");
-        }
-      })
-      .catch(function (error) {
-        alert("Connect to server failed!");
-      });
+
+    if (email?.trim().length > 0 && password?.trim().length > 0) {
+      await axios
+        .post(
+          "http://localhost:3333/login",
+          { account: email, password: password },
+          config
+        )
+        .then(function (response) {
+          if (response.data.auth === true) {
+            localStorage.setItem("accessToken", response.data.token);
+            navigate("/home");
+          } else {
+            alert("Wrong username or password!");
+          }
+        })
+        .catch(function (error) {
+          alert("Connect to server failed!");
+        });
+    } else {
+      alert("Please enter email and password!");
+    }
+    setLogin(false);
   };
 
   return (
@@ -74,8 +81,12 @@ export default function LoginUI(props) {
       </div>
       <div className="wrap-button mt-6 font-bold w-3/4 text-white ">
         <button
-          className="bg-gradient-to-r from-violet-500 to-fuchsia-500 p-3 w-full rounded-3xl hover:opacity-50 hover:bg-gradient-to-l duration-300"
-          onClick={() => Login(email, password)}
+          disabled={isLogin}
+          className="bg-gradient-to-r from-violet-500 to-fuchsia-500 p-3 w-full rounded-3xl hover:opacity-50 hover:bg-gradient-to-l duration-300 disabled:opacity-25 disabled:cursor-wait"
+          onClick={() => {
+            setLogin(!isLogin);
+            Login(email, password);
+          }}
         >
           LOGIN
         </button>

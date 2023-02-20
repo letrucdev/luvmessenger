@@ -88,7 +88,8 @@ export default function Home() {
     }
   };
 
-  const verifyToken = (token) => {
+  const verifyToken = () => {
+    const token = localStorage.getItem("accessToken");
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -113,9 +114,8 @@ export default function Home() {
   }, [bodyChatRef]);
 
   useEffect(() => {
-    const token = localStorage.getItem("accessToken");
     history.replace("/");
-    verifyToken(token);
+    verifyToken();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
