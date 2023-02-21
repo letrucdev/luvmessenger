@@ -1,10 +1,12 @@
 import { faEdit, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
-import './index.css'
+import "./index.css";
 
 export default function General() {
   let phoneNumber = "+84123456789";
+  const userData = JSON.parse(localStorage.getItem("user_data"));
+  const userSetting = JSON.parse(atob(userData.setting));
 
   const [eye, setEye] = useState(faEye);
 
@@ -28,19 +30,40 @@ export default function General() {
         <h2 className="text-bold text-3xl mb-6">Account</h2>
         <div className="flex items-center gap-2">
           <img
-            src={require("../../../../Page/Home/image/ava.jpg")}
+            src={`${process.env.REACT_APP_CDN_URL}/images${userSetting.backgroundUrl}`}
             alt=""
             className=" object-cover w-20 h-20 rounded-full"
           />
           <div className="flex-col">
-            <h2 className="text-lg font-semibold ">Lê Trực</h2>
+            <h2 className="text-lg font-semibold ">{userData.username}</h2>
             <div className="bg-gradient-to-l flex rounded-xl items-center justify-center">
-              {/* <small className="text-slate-200 font-semibold  px-2">🥈 Silver</small> */}
-               {/* <small className="text-amber-300 font-semibold leading-5 px-2">🪙 Gold</small> */}
-
-              <small className="text-cyan-200 font-semibold leading-5 px-2">
-                💎 Diamond
-              </small>
+              {(function () {
+                switch (userData.account_type) {
+                  case 0:
+                    return (
+                      <small className="text-slate-200 font-semibold  px-2">
+                        🥈 Silver
+                      </small>
+                    );
+                    break;
+                  case 1:
+                    return (
+                      <small className="text-amber-300 font-semibold leading-5 px-2">
+                        🪙 Gold
+                      </small>
+                    );
+                    break;
+                  case 2:
+                    return (
+                      <small className="text-cyan-200 font-semibold leading-5 px-2">
+                        💎 Diamond
+                      </small>
+                    );
+                    break;
+                  default:
+                    break;
+                }
+              })()}
             </div>
           </div>
         </div>
@@ -51,13 +74,17 @@ export default function General() {
             <input
               type={"text"}
               className="bg-transparent outline-none border-none focus-within:border-none focus:border-none focus:ring-0 p-0"
-              value={"Lê Trực"}
+              value={userData.username}
               disabled
             />
           </div>
           <div className="bg-slate-900 rounded-xl bg-opacity-75 hover:bg-opacity-30 duration-300 ">
             <button className="p-2 w-24 hidden sm:block">Edit</button>
-            <FontAwesomeIcon icon={faEdit} fixedWidth className="text-xl p-2 sm:hidden"/>
+            <FontAwesomeIcon
+              icon={faEdit}
+              fixedWidth
+              className="text-xl p-2 sm:hidden"
+            />
           </div>
         </div>
 
@@ -67,13 +94,17 @@ export default function General() {
             <input
               type={"email"}
               className="bg-transparent outline-none border-none focus-within:border-none focus:border-none focus:ring-0 p-0"
-              value={"test@gmail.com"}
+              value={userData.email}
               disabled
             />
           </div>
           <div className="bg-slate-900 rounded-xl bg-opacity-75 hover:bg-opacity-30 duration-300">
             <button className="p-2 w-24 hidden sm:block">Edit</button>
-            <FontAwesomeIcon icon={faEdit} fixedWidth className="text-xl p-2 sm:hidden"/>
+            <FontAwesomeIcon
+              icon={faEdit}
+              fixedWidth
+              className="text-xl p-2 sm:hidden"
+            />
           </div>
         </div>
 
@@ -94,13 +125,16 @@ export default function General() {
           </div>
           <div className="bg-slate-900 rounded-xl bg-opacity-75 hover:bg-opacity-30 duration-300">
             <button className="p-2 w-24 hidden sm:block">Edit</button>
-            <FontAwesomeIcon icon={faEdit} fixedWidth className="text-xl p-2 sm:hidden"/>
+            <FontAwesomeIcon
+              icon={faEdit}
+              fixedWidth
+              className="text-xl p-2 sm:hidden"
+            />
           </div>
         </div>
-        
       </div>
 
-     {/*  <div className="flex-col">
+      {/*  <div className="flex-col">
         <h2 className="text-bold text-3xl mb-6">Language</h2>
         <small className="font-semibold">Select a language</small>
 

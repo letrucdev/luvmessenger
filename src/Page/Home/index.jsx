@@ -64,7 +64,7 @@ export default function Home() {
   const [showChat, setShowChat] = useState(false);
   const [isLoading, setLoading] = useState(true);
 
-  const [infomation, setInfomation] = useState();
+  const [userData, setUserData] = useState({});
 
   const bodyChatRef = useRef(null);
   const listUserChatRef = useRef(null);
@@ -88,21 +88,21 @@ export default function Home() {
     }
   };
 
-  const verifyToken = () => {
+  const loadUserData = async () => {
     const token = localStorage.getItem("accessToken");
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     };
-    axios
-      .get(`${process.env.REACT_APP_API_ENDPOINT}/myInfomation`, config)
+    await axios
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/getUserData`, config)
       .then(function (response) {
-        setInfomation(response.data);
-        setLoading(!isLoading);
+        localStorage.setItem("user_data", JSON.stringify(response.data));
+        setUserData(JSON.parse(localStorage.getItem("user_data")));
+        setLoading(false);
       })
       .catch(function (error) {
-        localStorage.clear();
         navigate("/login");
       });
   };
@@ -115,7 +115,7 @@ export default function Home() {
 
   useEffect(() => {
     history.replace("/");
-    verifyToken();
+    loadUserData();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -169,14 +169,16 @@ export default function Home() {
                       <div className="w-full h-[80%]  rounded-b-3xl bg-opacity-90 dark:bg-opacity-90 backdrop-blur-lg flex flex-col items-center">
                         <div className="flex flex-col items-center justify-center bg-slate-900 bg-opacity-40 rounded-full w-24 h-24 -translate-y-12 p-2">
                           <img
-                            src={require("./image/giphy.jpg")}
+                            src={`${process.env.REACT_APP_CDN_URL}/images${
+                              JSON.parse(atob(userData.setting)).backgroundUrl
+                            }`}
                             className="rounded-full object-cover w-20 h-20 cursor-pointer"
                             alt=""
                           />
                         </div>
                         <div className="flex flex-col justify-center -translate-y-12 w-[90%]">
                           <h4 className="text-lg mt-1 font-semibold text-center mb-3">
-                            Lê Trực
+                            {userData.username}
                           </h4>
                           <div className="flex flex-col justify-self-start text-slate-100 font-medium gap-1">
                             <h5>Contact</h5>
@@ -187,7 +189,7 @@ export default function Home() {
                                 className="text-2xl"
                               />
                               <div className="flex flex-col">
-                                <h6>test@gmail.com</h6>
+                                <h6>{userData.email}</h6>
                                 <small className="text-slate-300">Email</small>
                               </div>
                             </span>
@@ -220,7 +222,9 @@ export default function Home() {
                     )}
                   >
                     <img
-                      src={require("./image/giphy.jpg")}
+                      src={`${process.env.REACT_APP_CDN_URL}/images${
+                        JSON.parse(atob(userData.setting)).backgroundUrl
+                      }`}
                       className="rounded-full object-cover w-14 h-14 my-4 cursor-pointer"
                       alt=""
                       onClick={() => {
