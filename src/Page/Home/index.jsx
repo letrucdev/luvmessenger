@@ -2,7 +2,7 @@ import "../Home/home.css";
 import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
 import { createBrowserHistory } from "history";
 import axios from "axios";
-import { redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   faGear,
