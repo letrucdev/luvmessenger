@@ -31,6 +31,7 @@ import Tippy from "@tippyjs/react/headless";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
+import secureLocalStorage from "react-secure-storage";
 
 import {
   faBell as farFaBell,
@@ -89,7 +90,7 @@ export default function Home() {
   };
 
   const loadUserData = async () => {
-    const token = localStorage.getItem("accessToken");
+    const token = secureLocalStorage.getItem("accessToken");
     const config = {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -98,12 +99,12 @@ export default function Home() {
     await axios
       .get(`${process.env.REACT_APP_API_ENDPOINT}/getUserData`, config)
       .then(function (response) {
-        localStorage.setItem("user_data", JSON.stringify(response.data));
-        setUserData(JSON.parse(localStorage.getItem("user_data")));
+        secureLocalStorage.setItem("user_data", JSON.stringify(response.data));
+        setUserData(JSON.parse(secureLocalStorage.getItem("user_data")));
         setLoading(false);
       })
       .catch(function (error) {
-        redirect("/login");
+        navigate("/login");
       });
   };
 

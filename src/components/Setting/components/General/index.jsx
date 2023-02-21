@@ -1,11 +1,12 @@
 import { faEdit, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
+import secureLocalStorage from "react-secure-storage";
 import "./index.css";
 
 export default function General() {
   let phoneNumber = "+84123456789";
-  const userData = JSON.parse(localStorage.getItem("user_data"));
+  const userData = JSON.parse(secureLocalStorage.getItem("user_data"));
   const userSetting = JSON.parse(atob(userData.setting));
 
   const [eye, setEye] = useState(faEye);
@@ -45,23 +46,24 @@ export default function General() {
                         🥈 Silver
                       </small>
                     );
-                    break;
                   case 1:
                     return (
                       <small className="text-amber-300 font-semibold leading-5 px-2">
                         🪙 Gold
                       </small>
                     );
-                    break;
                   case 2:
                     return (
                       <small className="text-cyan-200 font-semibold leading-5 px-2">
                         💎 Diamond
                       </small>
                     );
-                    break;
                   default:
-                    break;
+                    return (
+                      <small className="text-slate-200 font-semibold  px-2">
+                        🥈 Silver
+                      </small>
+                    );
                 }
               })()}
             </div>

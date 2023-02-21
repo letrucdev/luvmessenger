@@ -7,6 +7,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import secureLocalStorage from "react-secure-storage";
 
 export default function LoginUI(props) {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ export default function LoginUI(props) {
         )
         .then(function (response) {
           if (response.data.auth === true) {
-            localStorage.setItem("accessToken", response.data.token);
+            secureLocalStorage.setItem("accessToken", response.data.token);
             navigate("/home");
           } else {
             alert("Wrong username or password!");

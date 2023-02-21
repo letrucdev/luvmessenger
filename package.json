@@ -24,6 +24,7 @@
     "react-router-dom": "^6.8.1",
     "react-scripts": "5.0.1",
     "react-scroll-to-bottom": "^4.2.0",
+    "react-secure-storage": "^1.1.0",
     "react-spring": "^9.5.4",
     "sort-by": "^1.2.0",
     "tippy.js": "^6.3.7",
