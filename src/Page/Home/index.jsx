@@ -2,7 +2,7 @@ import "../Home/home.css";
 import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
 import { createBrowserHistory } from "history";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { redirect, useNavigate } from "react-router-dom";
 
 import {
   faGear,
@@ -103,7 +103,7 @@ export default function Home() {
         setLoading(false);
       })
       .catch(function (error) {
-        navigate("/login");
+        redirect("/login");
       });
   };
 
