@@ -32,7 +32,7 @@ export default function RegisterUI(props) {
     ) {
       await axios
         .post(
-          "http://localhost:3333/register",
+          `${process.env.REACT_APP_API_ENDPOINT}/register`,
           {
             account: account,
             password: password,
@@ -46,7 +46,7 @@ export default function RegisterUI(props) {
             alert("Register account success!");
             props.loginAccount();
           } else {
-            alert("Account exits!");
+            alert("Register account failed!");
           }
         })
         .catch(function (error) {

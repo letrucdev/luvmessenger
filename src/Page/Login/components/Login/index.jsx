@@ -1,9 +1,9 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState } from "react";
 import {
-  faEnvelope,
   faLock,
   faArrowRight,
+  faUser,
 } from "@fortawesome/free-solid-svg-icons";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -12,21 +12,20 @@ export default function LoginUI(props) {
   const navigate = useNavigate();
 
   const [isLogin, setLogin] = useState(false);
-  const [email, setEmail] = useState("");
+  const [account, setAccount] = useState("");
   const [password, setPassword] = useState("");
 
-  const Login = async (email, password) => {
+  const Login = async (account, password) => {
     const config = {
       headers: {
         "Content-Type": "application/x-www-form-urlencoded",
       },
     };
-
-    if (email?.trim().length > 0 && password?.trim().length > 0) {
+    if (account?.trim().length > 0 && password?.trim().length > 0) {
       await axios
         .post(
-          "http://localhost:3333/login",
-          { account: email, password: password },
+          `${process.env.REACT_APP_API_ENDPOINT}/login`,
+          { account: account, password: password },
           config
         )
         .then(function (response) {
@@ -53,15 +52,15 @@ export default function LoginUI(props) {
       </h1>
       <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-2 w-3/4 flex items-center group  backdrop-blur-xl">
         <FontAwesomeIcon
-          icon={faEnvelope}
+          icon={faUser}
           className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
         />
         <input
-          type={"email"}
-          placeholder="Email"
+          type={"text"}
+          placeholder="Account"
           className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
           onChange={(e) => {
-            setEmail(e.target.value);
+            setAccount(e.target.value);
           }}
         />
       </div>
@@ -85,7 +84,7 @@ export default function LoginUI(props) {
           className="bg-gradient-to-r from-violet-500 to-fuchsia-500 p-3 w-full rounded-3xl hover:opacity-50 hover:bg-gradient-to-l duration-300 disabled:opacity-25 disabled:cursor-wait"
           onClick={() => {
             setLogin(!isLogin);
-            Login(email, password);
+            Login(account, password);
           }}
         >
           LOGIN

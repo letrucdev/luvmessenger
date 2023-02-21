@@ -96,7 +96,7 @@ export default function Home() {
       },
     };
     axios
-      .get("http://localhost:3333/myInfomation", config)
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/myInfomation`, config)
       .then(function (response) {
         setInfomation(response.data);
         setLoading(!isLoading);
