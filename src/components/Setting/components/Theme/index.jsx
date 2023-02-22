@@ -1,6 +1,13 @@
 import "./index.css";
+import { useState, useEffect } from "react";
 
-export default function Theme() {
+export default function Theme(props) {
+  const [currentBackground, setBackground] = useState(`${props.setting.theme}`);
+
+  useEffect(() => {
+    props.setting.theme = currentBackground;
+    localStorage.setItem("user_setting", JSON.stringify(props.setting));
+  }, [currentBackground, props.setting]);
   return (
     <div className="w-full h-full flex-col gap-3 px-3 overflow-auto theme">
       <div className="flex-col w-full mb-6">
@@ -8,7 +15,12 @@ export default function Theme() {
         <div className="flex flex-wrap gap-10">
           <div className="flex-col">
             <div className="w-72 h-40 bg-slate-900 rounded-2xl theme-purple mb-2 cursor-pointer flex items-center justify-center group">
-              <div className="w-full h-full rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 bg-slate-900 bg-opacity-60 duration-300">
+              <div
+                className="w-full h-full rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 bg-slate-900 bg-opacity-60 duration-300"
+                onClick={() => {
+                  setBackground(`/bg.jpg`);
+                }}
+              >
                 <h2 className="font-semibold text-xl  duration-300">
                   Apply theme
                 </h2>
@@ -19,7 +31,12 @@ export default function Theme() {
 
           <div className="flex-col">
             <div className="w-72 h-40 bg-slate-900 rounded-2xl theme-galaxy mb-2 cursor-pointer flex items-center justify-center group">
-              <div className="w-full h-full rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 bg-slate-900 bg-opacity-60 duration-300">
+              <div
+                className="w-full h-full rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 bg-slate-900 bg-opacity-60 duration-300"
+                onClick={() => {
+                  setBackground(`/bg2.jpg`);
+                }}
+              >
                 <h2 className="font-semibold text-xl  duration-300">
                   Apply theme
                 </h2>
@@ -44,9 +61,8 @@ export default function Theme() {
       <div className="flex-col w-full">
         <h2 className="text-bold text-3xl mb-4">Wallpaper</h2>
         <small className="font-semibold">Current wallparper</small>
-
         <img
-          src={require("../../../../Page/Home/image/bg.jpg")}
+          src={`${process.env.REACT_APP_CDN_URL}/images/bg/${currentBackground}`}
           className="w-72 h-40 object-cover my-2 rounded-2xl"
           alt=""
         />

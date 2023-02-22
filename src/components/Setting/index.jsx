@@ -1,4 +1,5 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import secureLocalStorage from "react-secure-storage";
 import "./index.css";
 import {
   faGear,
@@ -10,13 +11,23 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import General from "./components/General";
 import Theme from "./components/Theme";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Privacy from "./components/Privacy";
 import Notification from "./components/Notification";
 import Message from "./components/Message";
 
 export default function Modal(props) {
   const [selectMenu, setMenu] = useState("General");
+
+  const userData = JSON.parse(secureLocalStorage.getItem("user_data"));
+  const userSetting = JSON.parse(localStorage.getItem("user_setting"));
+
+  useEffect(() => {
+    localStorage.setItem(
+      "prev_user_setting",
+      localStorage.getItem("user_setting")
+    );
+  }, []);
 
   return (
     <div className="w-screen h-screen bg-slate-900 dark:bg-opacity-20 backdrop-blur-lg absolute z-50 flex items-center justify-center modalMain">
@@ -109,15 +120,15 @@ export default function Modal(props) {
           </div>
 
           {selectMenu === "General" ? (
-            <General />
+            <General setting={userSetting} userdata={userData} />
           ) : null || selectMenu === "Theme" ? (
-            <Theme />
+            <Theme setting={userSetting} />
           ) : null || selectMenu === "Privacy" ? (
-            <Privacy />
+            <Privacy setting={userSetting} />
           ) : null || selectMenu === "Notifi" ? (
-            <Notification />
+            <Notification setting={userSetting} />
           ) : null || selectMenu === "Message" ? (
-            <Message />
+            <Message setting={userSetting} />
           ) : null}
 
           {/*  <Theme /> */}

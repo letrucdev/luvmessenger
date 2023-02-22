@@ -66,9 +66,11 @@ export default function Home() {
   const [isLoading, setLoading] = useState(true);
 
   const [userData, setUserData] = useState({});
+  const [background, setBackground] = useState();
 
   const bodyChatRef = useRef(null);
   const listUserChatRef = useRef(null);
+  const container = useRef(null);
 
   const navigate = useNavigate();
 
@@ -89,6 +91,17 @@ export default function Home() {
     }
   };
 
+  const loadSetting = () => {
+    const settingEncoded = JSON.parse(
+      secureLocalStorage.getItem("user_data")
+    ).setting;
+    const userSetting = atob(settingEncoded);
+    localStorage.setItem("user_setting", userSetting);
+    container.current.style.backgroundImage = `url('${
+      process.env.REACT_APP_CDN_URL
+    }/images/bg${JSON.parse(userSetting).theme}')`;
+  };
+
   const loadUserData = async () => {
     const token = secureLocalStorage.getItem("accessToken");
     const config = {
@@ -101,10 +114,33 @@ export default function Home() {
       .then(function (response) {
         secureLocalStorage.setItem("user_data", JSON.stringify(response.data));
         setUserData(JSON.parse(secureLocalStorage.getItem("user_data")));
+        loadSetting();
         setLoading(false);
       })
       .catch(function (error) {
         navigate("/login");
+      });
+  };
+
+  const SaveSetting = async () => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const setting = localStorage.getItem("user_setting");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await axios
+      .put(
+        `${process.env.REACT_APP_API_ENDPOINT}/updateSetting`,
+        { setting: setting },
+        config
+      )
+      .then((res) => {
+        return true;
+      })
+      .catch((err) => {
+        return false;
       });
   };
 
@@ -121,7 +157,10 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="dark w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center main">
+    <div
+      className={`dark w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center main`}
+      ref={container}
+    >
       {isLoading ? (
         <img alt="" src={require("../../image/loading.gif")} />
       ) : (
@@ -129,6 +168,16 @@ export default function Home() {
           {setting ? (
             <Setting
               exit={() => {
+                const prevSetting = localStorage.getItem("prev_user_setting");
+                const setting = localStorage.getItem("user_setting");
+                if (prevSetting !== setting) {
+                  SaveSetting().then((res) => {
+                    if (res) {
+                      localStorage.removeItem("prev_user_setting");
+                      navigate(0);
+                    }
+                  });
+                }
                 showSetting(!setting);
               }}
             />
@@ -171,7 +220,8 @@ export default function Home() {
                         <div className="flex flex-col items-center justify-center bg-slate-900 bg-opacity-40 rounded-full w-24 h-24 -translate-y-12 p-2">
                           <img
                             src={`${process.env.REACT_APP_CDN_URL}/images${
-                              JSON.parse(atob(userData.setting)).backgroundUrl
+                              JSON.parse(localStorage.getItem("user_setting"))
+                                .avatar
                             }`}
                             className="rounded-full object-cover w-20 h-20 cursor-pointer"
                             alt=""
@@ -224,7 +274,7 @@ export default function Home() {
                   >
                     <img
                       src={`${process.env.REACT_APP_CDN_URL}/images${
-                        JSON.parse(atob(userData.setting)).backgroundUrl
+                        JSON.parse(localStorage.getItem("user_setting")).avatar
                       }`}
                       className="rounded-full object-cover w-14 h-14 my-4 cursor-pointer"
                       alt=""

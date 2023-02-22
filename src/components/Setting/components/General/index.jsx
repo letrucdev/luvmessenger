@@ -1,13 +1,10 @@
 import { faEdit, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect } from "react";
-import secureLocalStorage from "react-secure-storage";
 import "./index.css";
 
-export default function General() {
+export default function General(props) {
   let phoneNumber = "+84123456789";
-  const userData = JSON.parse(secureLocalStorage.getItem("user_data"));
-  const userSetting = JSON.parse(atob(userData.setting));
 
   const [eye, setEye] = useState(faEye);
 
@@ -31,15 +28,15 @@ export default function General() {
         <h2 className="text-bold text-3xl mb-6">Account</h2>
         <div className="flex items-center gap-2">
           <img
-            src={`${process.env.REACT_APP_CDN_URL}/images${userSetting.backgroundUrl}`}
+            src={`${process.env.REACT_APP_CDN_URL}/images${props.setting.avatar}`}
             alt=""
             className=" object-cover w-20 h-20 rounded-full"
           />
           <div className="flex-col">
-            <h2 className="text-lg font-semibold ">{userData.username}</h2>
+            <h2 className="text-lg font-semibold ">{props.userdata.username}</h2>
             <div className="bg-gradient-to-l flex rounded-xl items-center justify-center">
               {(function () {
-                switch (userData.account_type) {
+                switch (props.userdata.account_type) {
                   case 0:
                     return (
                       <small className="text-slate-200 font-semibold  px-2">
@@ -76,7 +73,7 @@ export default function General() {
             <input
               type={"text"}
               className="bg-transparent outline-none border-none focus-within:border-none focus:border-none focus:ring-0 p-0"
-              value={userData.username}
+              value={props.userdata.username}
               disabled
             />
           </div>
@@ -96,7 +93,7 @@ export default function General() {
             <input
               type={"email"}
               className="bg-transparent outline-none border-none focus-within:border-none focus:border-none focus:ring-0 p-0"
-              value={userData.email}
+              value={props.userdata.email}
               disabled
             />
           </div>

@@ -1,4 +1,4 @@
-export default function Notification() {
+export default function Notification(props) {
   return (
     <div className="w-full h-full flex flex-col gap-3 px-3 overflow-auto notification">
       <div className="flex-col">
@@ -14,8 +14,16 @@ export default function Notification() {
             <input
               type={"checkbox"}
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
-              onClick={() => {}}
-              defaultChecked={true}
+              onClick={(e) => {
+                if (!e.target.checked) {
+                  props.setting.notification = 0;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                } else {
+                  props.setting.notification = 1;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                }
+              }}
+              defaultChecked={props.setting.notification === 1 ? true : false}
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>
@@ -36,8 +44,18 @@ export default function Notification() {
             <input
               type={"checkbox"}
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
-              onClick={() => {}}
-              defaultChecked={true}
+              onClick={(e) => {
+                if (!e.target.checked) {
+                  props.setting.notification_sounds = 0;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                } else {
+                  props.setting.notification_sounds = 1;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                }
+              }}
+              defaultChecked={
+                props.setting.notification_sounds === 1 ? true : false
+              }
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>
@@ -58,8 +76,18 @@ export default function Notification() {
             <input
               type={"checkbox"}
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
-              onClick={() => {}}
-              defaultChecked={false}
+              onClick={(e) => {
+                if (!e.target.checked) {
+                  props.setting.hide_notification_content = 0;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                } else {
+                  props.setting.hide_notification_content = 1;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                }
+              }}
+              defaultChecked={
+                props.setting.hide_notification_content === 1 ? true : false
+              }
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>

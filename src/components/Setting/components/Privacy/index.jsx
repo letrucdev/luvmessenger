@@ -1,4 +1,4 @@
-export default function Privacy() {
+export default function Privacy(props) {
   return (
     <div className="w-full h-full flex flex-col gap-3 px-3 overflow-auto privacy">
       <div className="flex-col">
@@ -17,8 +17,16 @@ export default function Privacy() {
             <input
               type={"checkbox"}
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
-              onClick={() => {}}
-              defaultChecked={true}
+              onClick={(e) => {
+                if (!e.target.checked) {
+                  props.setting.status = 0;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                } else {
+                  props.setting.status = 1;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                }
+              }}
+              defaultChecked={props.setting.status === 1 ? true : false}
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>
@@ -39,8 +47,16 @@ export default function Privacy() {
             <input
               type={"checkbox"}
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
-              onClick={() => {}}
-              defaultChecked={true}
+              onClick={(e) => {
+                if (!e.target.checked) {
+                  props.setting.friendrequest = 0;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                } else {
+                  props.setting.friendrequest = 1;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                }
+              }}
+              defaultChecked={props.setting.friendrequest === 1 ? true : false}
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>
@@ -61,15 +77,22 @@ export default function Privacy() {
             <input
               type={"checkbox"}
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
-              onClick={() => {}}
-              defaultChecked={false}
+              onClick={(e) => {
+                if (!e.target.checked) {
+                  props.setting.autolock = 0;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                } else {
+                  props.setting.autolock = 1;
+                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                }
+              }}
+              defaultChecked={props.setting.autolock === 1 ? true : false}
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>
             </div>
           </div>
-        </div> 
-        
+        </div>
       </div>
     </div>
   );
