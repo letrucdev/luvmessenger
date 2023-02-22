@@ -1,6 +1,12 @@
-import { faEdit, faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faCamera,
+  faEdit,
+  faEye,
+  faEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
+import axios from "axios";
 import "./index.css";
 
 export default function General(props) {
@@ -12,6 +18,14 @@ export default function General(props) {
 
   const [myphone, setPhone] = useState();
 
+  const [avatar, setAvatar] = useState(
+    `${process.env.REACT_APP_CDN_URL}/images/avatar/${props.setting.avatar}`
+  );
+
+  const [isUpload, setUpload] = useState(false);
+
+  const inputFile = useRef();
+
   useEffect(() => {
     if (phone === true) {
       setPhone(phoneNumber.replace(phoneNumber.substring(0, 8), "*******"));
@@ -22,18 +36,58 @@ export default function General(props) {
     }
   }, [phone, phoneNumber]);
 
+  const uploadImage = (image) => {
+    const formData = new FormData();
+    formData.append("upload_file", image);
+    axios
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/upload`, formData)
+      .then((res) => {
+        props.setting.avatar = `/${res.data.upload.filename}`;
+        localStorage.setItem("user_setting", JSON.stringify(props.setting));
+        setAvatar(
+          `${process.env.REACT_APP_CDN_URL}/images/avatar/${res.data.upload.filename}`
+        );
+        setUpload(false);
+      })
+      .catch((err) => alert("Upload image failed"));
+  };
+
   return (
     <div className="w-full h-full flex flex-col gap-3 px-3 overflow-auto general">
       <div className="flex-col ">
         <h2 className="text-bold text-3xl mb-6">Account</h2>
         <div className="flex items-center gap-2">
-          <img
-            src={`${process.env.REACT_APP_CDN_URL}/images${props.setting.avatar}`}
-            alt=""
-            className=" object-cover w-20 h-20 rounded-full"
-          />
+          <div className="flex cursor-pointer group relative">
+            <div
+              className="bg-slate-900  w-20 h-20 z-40 absolute rounded-full opacity-0 group-hover:opacity-60 duration-300 flex items-center justify-center text-xl"
+              onClick={() => {
+                inputFile.current.click();
+              }}
+            >
+              <input
+                type={"file"}
+                className="hidden"
+                ref={inputFile}
+                onChange={(e) => {
+                  if (e.target.files[0] !== undefined && !isUpload) {
+                    setUpload(true);
+                    uploadImage(e.target.files[0]);
+                  }
+                }}
+              />
+              <FontAwesomeIcon icon={faCamera} fixedWidth />
+            </div>
+            <img
+              src={avatar}
+              alt="Avatar"
+              className=" object-cover w-20 h-20 rounded-full"
+            />
+          </div>
+
           <div className="flex-col">
-            <h2 className="text-lg font-semibold ">{props.userdata.username}</h2>
+            <h2 className="text-lg font-semibold ">
+              {props.userdata.username}
+            </h2>
             <div className="bg-gradient-to-l flex rounded-xl items-center justify-center">
               {(function () {
                 switch (props.userdata.account_type) {

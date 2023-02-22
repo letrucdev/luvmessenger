@@ -66,7 +66,6 @@ export default function Home() {
   const [isLoading, setLoading] = useState(true);
 
   const [userData, setUserData] = useState({});
-  const [background, setBackground] = useState();
 
   const bodyChatRef = useRef(null);
   const listUserChatRef = useRef(null);
@@ -219,7 +218,9 @@ export default function Home() {
                       <div className="w-full h-[80%]  rounded-b-3xl bg-opacity-90 dark:bg-opacity-90 backdrop-blur-lg flex flex-col items-center">
                         <div className="flex flex-col items-center justify-center bg-slate-900 bg-opacity-40 rounded-full w-24 h-24 -translate-y-12 p-2">
                           <img
-                            src={`${process.env.REACT_APP_CDN_URL}/images${
+                            src={`${
+                              process.env.REACT_APP_CDN_URL
+                            }/images/avatar${
                               JSON.parse(localStorage.getItem("user_setting"))
                                 .avatar
                             }`}
@@ -273,7 +274,7 @@ export default function Home() {
                     )}
                   >
                     <img
-                      src={`${process.env.REACT_APP_CDN_URL}/images${
+                      src={`${process.env.REACT_APP_CDN_URL}/images/avatar${
                         JSON.parse(localStorage.getItem("user_setting")).avatar
                       }`}
                       className="rounded-full object-cover w-14 h-14 my-4 cursor-pointer"
