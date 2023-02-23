@@ -43,9 +43,7 @@ export default function General(props) {
       method: "post",
       url: `${process.env.REACT_APP_API_ENDPOINT}/upload`,
       data: formData,
-      headers: {
-        "Content-Type": "multipart/form-data",
-      },
+      timeout: 5000,
     };
     axios(config)
       .then((res) => {
@@ -55,7 +53,9 @@ export default function General(props) {
         props.setting.avatar = `/${res.data.upload.filename}`;
         localStorage.setItem("user_setting", JSON.stringify(props.setting));
       })
-      .catch((err) => {});
+      .catch((err) => {
+        alert("Upload failed!");
+      });
   };
 
   return (
@@ -76,8 +76,12 @@ export default function General(props) {
                 ref={inputFile}
                 accept={".png, .jpg, .jpeg"}
                 onChange={(e) => {
-                  if (e.target.files[0] !== undefined) {
+                  var filetypes = /jpeg|jpg|png/;
+                  var mimetype = filetypes.test(e.target.files[0].type);
+                  if (e.target.files[0] !== undefined && mimetype) {
                     uploadImage(e.target.files[0]);
+                  } else {
+                    alert("File type not accepted!");
                   }
                 }}
               />

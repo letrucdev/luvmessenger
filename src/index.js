@@ -4,14 +4,9 @@ import "./index.css";
 import Login from "./Page/Login";
 import Home from "./Page/Home";
 /* import axios from "axios"; */
-import {
-  BrowserRouter as Router,
-  Route,
-  Routes,
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
-
 
 /* const verifyLogin = () => {
   if (localStorage.getItem("accessToken")) {
@@ -22,14 +17,16 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   /*  localStorage.getItem("account") ? <Home /> : <Login /> */
+  <React.StrictMode>
+    <Router>
+      <Routes>
+        <Route element={<Home />} path="*" />
+        <Route element={<Home />} path="/home" />
+        <Route element={<Login />} path="/login" />
+      </Routes>
+    </Router>
+  </React.StrictMode>
 
-  <Router>
-    <Routes>
-      <Route element={<Home />} path="*" />
-      <Route element={<Home />} path="/home" />
-      <Route element={<Login />} path="/login" />
-    </Routes>
-  </Router>
   /* <App /> */
 );
 

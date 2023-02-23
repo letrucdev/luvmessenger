@@ -145,9 +145,13 @@ export default function Home() {
 
   useEffect(() => {
     if (bodyChatRef.current) {
-      bodyChatRef.current.scrollTop = bodyChatRef.current.scrollHeight;
+      setTimeout(() => {
+        scrolltoBottom();
+      }, 300);
     }
-  }, [bodyChatRef]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [showChat !== false]);
 
   useEffect(() => {
     history.replace("/");
@@ -692,287 +696,283 @@ export default function Home() {
                 </div>
               </div>
             </div>
-
-            <div
-              className={`w-full h-full gap-3 relative ${
-                showChat ? `flex` : `hidden`
-              }`}
-            >
-              <div className="flex-col w-full h-full">
-                {/* Chat Body */}
-                <div className="dark:bg-slate-900 w-full h-[93%] md:min-w-[35rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 sm:rounded-l-none rounded-b-none duration-300">
-                  <div className=" w-full h-20  flex items-center gap-3 justify-between z-50">
-                    <div className="flex items-center gap-3">
-                      <FontAwesomeIcon
-                        icon={faArrowLeft}
-                        fixedWidth
-                        className="text-white text-xl cursor-pointer duration-300 hover:text-indigo-600 sm:hidden"
-                        onClick={() => {
-                          closeChat();
-                        }}
-                      />
-                      <img
-                        alt=""
-                        className=" rounded-full object-cover w-16 h-16"
-                        src={require("./image/giphy.jpg")}
-                      />
-                      <div className="flex flex-col text-white">
-                        <h4 className="leading-none">Lê Trực</h4>
-                        <small className="text-slate-300">Đang hoạt động</small>
-                      </div>
-                    </div>
-
-                    <div className="flex text-white gap-3 text-xl items-center">
-                      <FontAwesomeIcon
-                        icon={faPhone}
-                        fixedWidth
-                        className="cursor-pointer hover:text-indigo-600 duration-300"
-                      />
-
-                      <FontAwesomeIcon
-                        icon={faVideo}
-                        fixedWidth
-                        className="cursor-pointer hover:text-indigo-600 duration-300"
-                      />
-
-                      <FontAwesomeIcon
-                        icon={faBars}
-                        fixedWidth
-                        className="cursor-pointer hover:text-indigo-600 duration-300"
-                        onClick={() => {
-                          showDetail(!detailChat);
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div
-                    className="w-full h-full flex flex-col mt-3 gap-2 overflow-hidden hover:overflow-auto"
-                    onScroll={(e) => {
-                      if (e.currentTarget.scrollTop === 0) {
-                        showScrollButton(true);
-                      } else {
-                        showScrollButton(false);
-                      }
-                    }}
-                    ref={bodyChatRef}
-                  >
-                    {scrollDown ? (
-                      <div className="flex absolute w-full items-center justify-center bottom-0 mb-5 duration-300 transition-all">
-                        <div
-                          className="h-10 w-10 text-white z-30 bg-slate-900 justify-center items-center flex rounded-full self-center hover:cursor-pointer transition-all duration-300 hover:opacity-70 animate-bounce"
-                          onClick={() => scrolltoBottom()}
-                        >
-                          <FontAwesomeIcon icon={faArrowDown} />
+            {showChat ? (
+              <div className={`w-full h-full gap-3 relative flex`}>
+                <div className="flex-col w-full h-full">
+                  {/* Chat Body */}
+                  <div className="dark:bg-slate-900 w-full h-[93%] md:min-w-[35rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 sm:rounded-l-none rounded-b-none duration-300">
+                    <div className=" w-full h-20  flex items-center gap-3 justify-between z-50">
+                      <div className="flex items-center gap-3">
+                        <FontAwesomeIcon
+                          icon={faArrowLeft}
+                          fixedWidth
+                          className="text-white text-xl cursor-pointer duration-300 hover:text-indigo-600 sm:hidden"
+                          onClick={() => {
+                            closeChat();
+                          }}
+                        />
+                        <img
+                          alt=""
+                          className=" rounded-full object-cover w-16 h-16"
+                          src={require("./image/giphy.jpg")}
+                        />
+                        <div className="flex flex-col text-white">
+                          <h4 className="leading-none">Lê Trực</h4>
+                          <small className="text-slate-300">
+                            Đang hoạt động
+                          </small>
                         </div>
                       </div>
-                    ) : null}
-                    <Message type="recived" />
-                    <Message type="recived" />
-                    <Message type="recived" />
-                    <Message type="send" />
-                    <Message type="recived" />
-                  </div>
-                </div>
 
-                {/* Chat Footer */}
-                <div className="dark:bg-slate-900 w-full  h-[7%] dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5 relative rounded-t-none sm:rounded-bl-none duration-300">
-                  <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 duration-300">
-                    <FontAwesomeIcon
-                      icon={faImage}
-                      fixedWidth
-                      className="hover:text-indigo-600 duration-300"
-                    />
-                  </div>
-                  <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl  h-10 w-10  duration-300">
-                    <FontAwesomeIcon
-                      icon={faSmile}
-                      fixedWidth
-                      className="hover:text-indigo-600 duration-300"
-                    />
-                  </div>
-                  <div className="w-full  flex items-center h-full py-1 duration-300">
-                    <input
-                      className="bg-transparent w-full outline-none text-white"
-                      placeholder="Type your message..."
-                    />
-                  </div>
-                  <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10  duration-300">
-                    <FontAwesomeIcon
-                      icon={faPaperPlane}
-                      fixedWidth
-                      className="hover:text-indigo-600 duration-300"
-                    />
-                  </div>
-                </div>
-              </div>
-              {/* Detail chat */}
-              {detailChat ? (
-                <div className="absolute right-0 2xl:relative flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat overflow-y-auto select-none">
-                  <FontAwesomeIcon
-                    icon={faClose}
-                    fixedWidth
-                    className="text-white absolute left-0 p-4 hover:text-red-600 cursor-pointer transition-all duration-300 2xl:hidden"
-                    onClick={() => {
-                      showDetail(!detailChat);
-                    }}
-                  />
-                  <img
-                    src={require("./image/ava.jpg")}
-                    className="rounded-full object-cover w-20 h-20 cursor-pointer"
-                    alt=""
-                  />
-                  <h2 className="text-white font-semibold">Lê Trực</h2>
+                      <div className="flex text-white gap-3 text-xl items-center">
+                        <FontAwesomeIcon
+                          icon={faPhone}
+                          fixedWidth
+                          className="cursor-pointer hover:text-indigo-600 duration-300"
+                        />
 
-                  <div className="flex items-center justify-center gap-9 my-3">
-                    <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
-                      <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
-                        <FontAwesomeIcon icon={fasFaBell} fixedWidth />
+                        <FontAwesomeIcon
+                          icon={faVideo}
+                          fixedWidth
+                          className="cursor-pointer hover:text-indigo-600 duration-300"
+                        />
+
+                        <FontAwesomeIcon
+                          icon={faBars}
+                          fixedWidth
+                          className="cursor-pointer hover:text-indigo-600 duration-300"
+                          onClick={() => {
+                            showDetail(!detailChat);
+                          }}
+                        />
                       </div>
-                      <h2 className="text-sm text-center select-none">
-                        Turn off notify
-                      </h2>
                     </div>
 
-                    <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
-                      <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
-                        <FontAwesomeIcon icon={faPeopleGroup} fixedWidth />
-                      </div>
-                      <h2 className="text-sm text-center select-none">
-                        Create group
-                      </h2>
-                    </div>
-
-                    <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
-                      <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
-                        <FontAwesomeIcon icon={faSearch} fixedWidth />
-                      </div>
-                      <h2 className="text-sm text-center select-none">
-                        Find message
-                      </h2>
-                    </div>
-                  </div>
-
-                  <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
                     <div
-                      className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer select-none"
-                      onClick={() => {
-                        showListImg(!listImg);
+                      className="w-full h-full flex flex-col mt-3 gap-2 overflow-hidden hover:overflow-auto"
+                      onScroll={(e) => {
+                        if (e.currentTarget.scrollTop === 0) {
+                          showScrollButton(true);
+                        } else {
+                          showScrollButton(false);
+                        }
                       }}
+                      ref={bodyChatRef}
                     >
-                      <h2>Image / Video</h2>
+                      {scrollDown ? (
+                        <div className="flex absolute w-full items-center justify-center bottom-0 mb-5 duration-300 transition-all">
+                          <div
+                            className="h-10 w-10 text-white z-30 bg-slate-900 justify-center items-center flex rounded-full self-center hover:cursor-pointer transition-all duration-300 hover:opacity-70 animate-bounce"
+                            onClick={() => scrolltoBottom()}
+                          >
+                            <FontAwesomeIcon icon={faArrowDown} />
+                          </div>
+                        </div>
+                      ) : null}
+                      <Message type="recived" />
+                      <Message type="recived" />
+                      <Message type="recived" />
+                      <Message type="send" />
+                      <Message type="recived" />
+                    </div>
+                  </div>
+                  {/* Chat Footer */}
+                  <div className="dark:bg-slate-900 w-full  h-[7%] dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5 relative rounded-t-none sm:rounded-bl-none duration-300">
+                    <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 duration-300">
                       <FontAwesomeIcon
-                        icon={faCaretDown}
-                        className={`${
-                          listImg ? "" : "-rotate-90"
-                        } duration-300`}
+                        icon={faImage}
+                        fixedWidth
+                        className="hover:text-indigo-600 duration-300"
                       />
                     </div>
-
-                    {listImg ? (
-                      <div className="flex w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
-                        <img
-                          src={require("../../image/bg.jpg")}
-                          className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                          alt=""
-                        />
-                        <img
-                          src={require("../../image/bg.jpg")}
-                          className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                          alt=""
-                        />
-                        <img
-                          src={require("../../image/bg.jpg")}
-                          className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                          alt=""
-                        />
-                        <img
-                          src={require("../../image/bg.jpg")}
-                          className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                          alt=""
-                        />
-                        <img
-                          src={require("../../image/bg.jpg")}
-                          className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                          alt=""
-                        />
-                        <img
-                          src={require("../../image/bg.jpg")}
-                          className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                          alt=""
-                        />
-                        <img
-                          src={require("../../image/bg.jpg")}
-                          className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                          alt=""
-                        />
-                        <img
-                          src={require("../../image/bg.jpg")}
-                          className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                          alt=""
-                        />
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-
-                  <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
-                    <div
-                      className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer select-none"
-                      onClick={() => {
-                        showListFile(!listFile);
-                      }}
-                    >
-                      <h2>File</h2>
+                    <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl  h-10 w-10  duration-300">
                       <FontAwesomeIcon
-                        icon={faCaretDown}
-                        className={`${
-                          listFile ? "" : "-rotate-90"
-                        } duration-300`}
+                        icon={faSmile}
+                        fixedWidth
+                        className="hover:text-indigo-600 duration-300"
                       />
                     </div>
-                    {listFile ? (
-                      <div className="flex flex-col w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
-                        <h2 className="text-slate-600 select-none">
-                          No files shared yet
+                    <div className="w-full  flex items-center h-full py-1 duration-300">
+                      <input
+                        className="bg-transparent w-full outline-none text-white"
+                        placeholder="Type your message..."
+                      />
+                    </div>
+                    <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10  duration-300">
+                      <FontAwesomeIcon
+                        icon={faPaperPlane}
+                        fixedWidth
+                        className="hover:text-indigo-600 duration-300"
+                      />
+                    </div>
+                  </div>
+                </div>
+                {/* Detail chat */}
+                {detailChat ? (
+                  <div className="absolute right-0 2xl:relative flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat overflow-y-auto select-none">
+                    <FontAwesomeIcon
+                      icon={faClose}
+                      fixedWidth
+                      className="text-white absolute left-0 p-4 hover:text-red-600 cursor-pointer transition-all duration-300 2xl:hidden"
+                      onClick={() => {
+                        showDetail(!detailChat);
+                      }}
+                    />
+                    <img
+                      src={require("./image/ava.jpg")}
+                      className="rounded-full object-cover w-20 h-20 cursor-pointer"
+                      alt=""
+                    />
+                    <h2 className="text-white font-semibold">Lê Trực</h2>
+
+                    <div className="flex items-center justify-center gap-9 my-3">
+                      <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
+                        <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
+                          <FontAwesomeIcon icon={fasFaBell} fixedWidth />
+                        </div>
+                        <h2 className="text-sm text-center select-none">
+                          Turn off notify
                         </h2>
                       </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
 
-                  <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
-                    <div className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer group">
-                      <h2 className="group-hover:text-red-600 duration-300 select-none">
-                        Delete this chat
-                      </h2>
+                      <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
+                        <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
+                          <FontAwesomeIcon icon={faPeopleGroup} fixedWidth />
+                        </div>
+                        <h2 className="text-sm text-center select-none">
+                          Create group
+                        </h2>
+                      </div>
+
+                      <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
+                        <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
+                          <FontAwesomeIcon icon={faSearch} fixedWidth />
+                        </div>
+                        <h2 className="text-sm text-center select-none">
+                          Find message
+                        </h2>
+                      </div>
+                    </div>
+
+                    <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
+                      <div
+                        className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer select-none"
+                        onClick={() => {
+                          showListImg(!listImg);
+                        }}
+                      >
+                        <h2>Image / Video</h2>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          className={`${
+                            listImg ? "" : "-rotate-90"
+                          } duration-300`}
+                        />
+                      </div>
+
+                      {listImg ? (
+                        <div className="flex w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
+                          <img
+                            src={require("../../image/bg.jpg")}
+                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                            alt=""
+                          />
+                          <img
+                            src={require("../../image/bg.jpg")}
+                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                            alt=""
+                          />
+                          <img
+                            src={require("../../image/bg.jpg")}
+                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                            alt=""
+                          />
+                          <img
+                            src={require("../../image/bg.jpg")}
+                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                            alt=""
+                          />
+                          <img
+                            src={require("../../image/bg.jpg")}
+                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                            alt=""
+                          />
+                          <img
+                            src={require("../../image/bg.jpg")}
+                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                            alt=""
+                          />
+                          <img
+                            src={require("../../image/bg.jpg")}
+                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                            alt=""
+                          />
+                          <img
+                            src={require("../../image/bg.jpg")}
+                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
+                            alt=""
+                          />
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+
+                    <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
+                      <div
+                        className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer select-none"
+                        onClick={() => {
+                          showListFile(!listFile);
+                        }}
+                      >
+                        <h2>File</h2>
+                        <FontAwesomeIcon
+                          icon={faCaretDown}
+                          className={`${
+                            listFile ? "" : "-rotate-90"
+                          } duration-300`}
+                        />
+                      </div>
+                      {listFile ? (
+                        <div className="flex flex-col w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
+                          <h2 className="text-slate-600 select-none">
+                            No files shared yet
+                          </h2>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+
+                    <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
+                      <div className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer group">
+                        <h2 className="group-hover:text-red-600 duration-300 select-none">
+                          Delete this chat
+                        </h2>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ) : null}
-            </div>
-
-            <div
-              className={`select-none w-full h-full gap-3 relative ${
-                showChat ? `!hidden` : ``
-              } hidden xl:flex duration-300`}
-            >
-              <div className="dark:bg-slate-900 w-full h-full md:min-w-[35rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 sm:rounded-l-none duration-300 justify-center items-center">
-                <div className="flex flex-col justify-center items-center ">
-                  <img
-                    src={require("../../image/chat3d.png")}
-                    alt=""
-                    className="w-96"
-                  />
-                  <p className="font-bold text-transparent text-xl bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-400 text-center">
-                    Free and secure messaging <br /> with RSA end-to-end
-                    encryption technology
-                  </p>
+                ) : null}
+              </div>
+            ) : (
+              <div
+                className={`select-none w-full h-full gap-3 relative hidden xl:flex duration-300`}
+              >
+                <div className="dark:bg-slate-900 w-full h-full md:min-w-[35rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 sm:rounded-l-none duration-300 justify-center items-center">
+                  <div className="flex flex-col justify-center items-center ">
+                    <img
+                      src={require("../../image/chat3d.png")}
+                      alt=""
+                      className="w-96"
+                    />
+                    <p className="font-bold text-transparent text-xl bg-clip-text bg-gradient-to-r from-purple-300 to-indigo-400 text-center">
+                      Free and secure messaging <br /> with RSA end-to-end
+                      encryption technology
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </>
       )}
