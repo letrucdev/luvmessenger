@@ -101,7 +101,7 @@ export default function UpdateUserName(props) {
             className="bg-slate-900 p-4 rounded-2xl cursor-pointer duration-300 hover:text-indigo-600 hover:bg-opacity-50"
             onClick={() => {
               if (
-                props.username !== username &&
+                context.username !== username &&
                 username?.trim() !== "" &&
                 password?.trim() !== ""
               ) {
