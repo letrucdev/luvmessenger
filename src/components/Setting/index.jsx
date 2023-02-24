@@ -1,5 +1,4 @@
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import secureLocalStorage from "react-secure-storage";
 import "./index.css";
 import {
   faGear,
@@ -11,26 +10,14 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import General from "./components/General";
 import Theme from "./components/Theme";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Privacy from "./components/Privacy";
 import Notification from "./components/Notification";
 import Message from "./components/Message";
-/* import UpdateEmail from "../UpdateUser/Email"; */
 
 export default function Modal(props) {
   const [selectMenu, setMenu] = useState("General");
   const [showModal, setModal] = useState();
-
-  const userData = JSON.parse(secureLocalStorage.getItem("user_data"));
-  const userSetting = JSON.parse(localStorage.getItem("user_setting"));
-
-  useEffect(() => {
-    localStorage.setItem(
-      "prev_user_setting",
-      localStorage.getItem("user_setting")
-    );
-  }, []);
-
   return (
     <>
       {showModal}
@@ -136,22 +123,16 @@ export default function Modal(props) {
             </div>
 
             {selectMenu === "General" ? (
-              <General
-                setting={userSetting}
-                userdata={userData}
-                showModal={(e) => setModal(e)}
-              />
+              <General showModal={(e) => setModal(e)} />
             ) : null || selectMenu === "Theme" ? (
-              <Theme setting={userSetting} />
+              <Theme />
             ) : null || selectMenu === "Privacy" ? (
-              <Privacy setting={userSetting} />
+              <Privacy />
             ) : null || selectMenu === "Notifi" ? (
-              <Notification setting={userSetting} />
+              <Notification />
             ) : null || selectMenu === "Message" ? (
-              <Message setting={userSetting} />
+              <Message />
             ) : null}
-
-            {/*  <Theme /> */}
           </div>
         </div>
       </div>

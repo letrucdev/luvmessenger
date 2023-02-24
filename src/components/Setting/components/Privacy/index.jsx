@@ -1,4 +1,8 @@
-export default function Privacy(props) {
+import { useContext } from "react";
+import { AppContext } from "../../../../Context/AppContext";
+
+export default function Privacy() {
+  const context = useContext(AppContext);
   return (
     <div className="w-full h-full flex flex-col gap-3 px-3 overflow-auto privacy">
       <div className="flex-col">
@@ -19,14 +23,13 @@ export default function Privacy(props) {
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
               onClick={(e) => {
                 if (!e.target.checked) {
-                  props.setting.status = 0;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.status = 0;
                 } else {
-                  props.setting.status = 1;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.status = 1;
                 }
+                context.SaveSetting(context.userSetting);
               }}
-              defaultChecked={props.setting.status === 1 ? true : false}
+              defaultChecked={context.userSetting.status === 1 ? true : false}
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>
@@ -49,14 +52,15 @@ export default function Privacy(props) {
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
               onClick={(e) => {
                 if (!e.target.checked) {
-                  props.setting.friendrequest = 0;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.friendrequest = 0;
                 } else {
-                  props.setting.friendrequest = 1;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.friendrequest = 1;
                 }
+                context.SaveSetting(context.userSetting);
               }}
-              defaultChecked={props.setting.friendrequest === 1 ? true : false}
+              defaultChecked={
+                context.userSetting.friendrequest === 1 ? true : false
+              }
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>
@@ -79,14 +83,13 @@ export default function Privacy(props) {
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
               onClick={(e) => {
                 if (!e.target.checked) {
-                  props.setting.autolock = 0;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.autolock = 0;
                 } else {
-                  props.setting.autolock = 1;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.autolock = 1;
                 }
+                context.SaveSetting(context.userSetting);
               }}
-              defaultChecked={props.setting.autolock === 1 ? true : false}
+              defaultChecked={context.userSetting.autolock === 1 ? true : false}
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>

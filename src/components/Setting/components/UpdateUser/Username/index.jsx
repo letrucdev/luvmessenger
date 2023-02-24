@@ -4,16 +4,15 @@ import {
   faSignature,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useContext } from "react";
 import secureLocalStorage from "react-secure-storage";
+import { AppContext } from "../../../../../Context/AppContext";
 import axios from "axios";
-/* import { useNavigate } from "react-router-dom"; */
 
 export default function UpdateUserName(props) {
-  const [username, setUsername] = useState(props.username);
+  const context = useContext(AppContext);
+  const [username, setUsername] = useState(context.username);
   const [password, setPassword] = useState("");
-
-  /*   const navigate = useNavigate(); */
 
   const updateName = () => {
     const token = secureLocalStorage.getItem("accessToken");
@@ -26,13 +25,13 @@ export default function UpdateUserName(props) {
       .put(
         `${process.env.REACT_APP_API_ENDPOINT}/updateUsername`,
         {
-          username: username,
-          password: password,
+          username: username.trim(),
+          password: password.trim(),
         },
         config
       )
       .then((res) => {
-        alert(res.data.result);
+        context.setUsername(username);
         props.exit();
       })
       .catch((err) => props.exit());

@@ -5,7 +5,8 @@ import {
   faEyeSlash,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useContext } from "react";
+import { AppContext } from "../../../../Context/AppContext";
 import axios from "axios";
 import "./index.css";
 import UpdateUserName from "../UpdateUser/Username";
@@ -14,15 +15,13 @@ import UpdateUserEmail from "../UpdateUser/Email";
 export default function General(props) {
   let phoneNumber = "+84123456789";
 
+  const context = useContext(AppContext);
+
   const [eye, setEye] = useState(faEye);
 
   const [phone, phoneHide] = useState(true);
 
   const [myphone, setPhone] = useState();
-
-  const [avatar, setAvatar] = useState(
-    `${process.env.REACT_APP_CDN_URL}/images/avatar/${props.setting.avatar}`
-  );
 
   const inputFile = useRef();
 
@@ -47,11 +46,8 @@ export default function General(props) {
     };
     axios(config)
       .then((res) => {
-        setAvatar(
-          `${process.env.REACT_APP_CDN_URL}/images/avatar/${res.data.upload.filename}`
-        );
-        props.setting.avatar = `/${res.data.upload.filename}`;
-        localStorage.setItem("user_setting", JSON.stringify(props.setting));
+        context.userSetting.avatar = `/${res.data.upload.filename}`;
+        context.SaveSetting(context.userSetting);
       })
       .catch((err) => {
         alert("Upload failed!");
@@ -88,7 +84,7 @@ export default function General(props) {
               <FontAwesomeIcon icon={faCamera} fixedWidth />
             </div>
             <img
-              src={avatar}
+              src={context.avatar}
               alt="Avatar"
               className=" object-cover w-20 h-20 rounded-full"
             />
@@ -96,11 +92,11 @@ export default function General(props) {
 
           <div className="flex-col">
             <h2 className="text-lg font-semibold max-w-xs truncate">
-              {props.userdata.username}
+              {context.username}
             </h2>
             <div className="bg-gradient-to-l flex rounded-xl items-center justify-center w-fit">
               {(function () {
-                switch (props.userdata.account_type) {
+                switch (context.userData.account_type) {
                   case 0:
                     return (
                       <small className="text-slate-200 font-semibold  px-2">
@@ -137,7 +133,7 @@ export default function General(props) {
             <input
               type={"text"}
               className="bg-transparent outline-none border-none focus-within:border-none focus:border-none focus:ring-0 p-0"
-              value={props.userdata.username}
+              value={context.username}
               disabled
             />
           </div>
@@ -146,7 +142,7 @@ export default function General(props) {
             onClick={() => {
               props.showModal(
                 <UpdateUserName
-                  username={props.userdata.username}
+                  username={context.username}
                   exit={() => {
                     props.showModal(null);
                   }}
@@ -169,7 +165,7 @@ export default function General(props) {
             <input
               type={"email"}
               className="bg-transparent outline-none border-none focus-within:border-none focus:border-none focus:ring-0 p-0"
-              value={props.userdata.email}
+              value={context.email}
               disabled
             />
           </div>
@@ -178,7 +174,7 @@ export default function General(props) {
             onClick={() => {
               props.showModal(
                 <UpdateUserEmail
-                  email={props.userdata.email}
+                  email={context.email}
                   exit={() => {
                     props.showModal(null);
                   }}

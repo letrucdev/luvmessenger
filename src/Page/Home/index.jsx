@@ -1,7 +1,13 @@
 import "../Home/home.css";
-import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
+import React, {
+  useState,
+  useRef,
+  useEffect,
+  Suspense,
+  lazy,
+  useContext,
+} from "react";
 import { createBrowserHistory } from "history";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 import {
@@ -31,7 +37,6 @@ import Tippy from "@tippyjs/react/headless";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { library } from "@fortawesome/fontawesome-svg-core";
-import secureLocalStorage from "react-secure-storage";
 
 import {
   faBell as farFaBell,
@@ -45,6 +50,7 @@ import Cloud from "../../components/Cloud";
 import Message from "../../components/Chat/Message";
 import AddFriend from "../../components/Popup/Friend";
 import LoadingUserChat from "../../components/Chat/LoadingUserChat";
+import { AppContext } from "../../Context/AppContext";
 
 const UserChat = lazy(() => import("../../components/Chat/UserChat"));
 const history = createBrowserHistory();
@@ -52,6 +58,7 @@ const history = createBrowserHistory();
 library.add(farFaBell, fasFaBell, farFaMessage);
 
 export default function Home() {
+  const navigate = useNavigate();
   const [userChat, setUserChat] = useState();
   const [menuSelected, setMenuItemSelected] = useState(1);
   const [previewProfile, showPreview] = useState(false);
@@ -63,15 +70,17 @@ export default function Home() {
   const [cloud, showCloud] = useState(false);
   const [scrollDown, showScrollButton] = useState(false);
   const [showChat, setShowChat] = useState(false);
-  const [isLoading, setLoading] = useState(true);
 
-  const [userData, setUserData] = useState({});
+  const [blur, setBlur] = useState(false);
+  /*   const [userData, setUserData] = useState({}); */
+
+  const [mousePosition, setMousePosition] = useState();
 
   const bodyChatRef = useRef(null);
   const listUserChatRef = useRef(null);
   const container = useRef(null);
 
-  const navigate = useNavigate();
+  const context = useContext(AppContext);
 
   const scrolltoBottom = () => {
     bodyChatRef.current?.scrollTo({
@@ -90,59 +99,6 @@ export default function Home() {
     }
   };
 
-  const loadSetting = () => {
-    const settingEncoded = JSON.parse(
-      secureLocalStorage.getItem("user_data")
-    ).setting;
-    const userSetting = atob(settingEncoded);
-    localStorage.setItem("user_setting", userSetting);
-    container.current.style.backgroundImage = `url('${
-      process.env.REACT_APP_CDN_URL
-    }/images/bg${JSON.parse(userSetting).theme}')`;
-  };
-
-  const loadUserData = async () => {
-    const token = secureLocalStorage.getItem("accessToken");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    await axios
-      .get(`${process.env.REACT_APP_API_ENDPOINT}/getUserData`, config)
-      .then(function (response) {
-        secureLocalStorage.setItem("user_data", JSON.stringify(response.data));
-        setUserData(JSON.parse(secureLocalStorage.getItem("user_data")));
-        loadSetting();
-        setLoading(false);
-      })
-      .catch(function (error) {
-        navigate("/login");
-      });
-  };
-
-  const SaveSetting = async () => {
-    const token = secureLocalStorage.getItem("accessToken");
-    const setting = localStorage.getItem("user_setting");
-    const config = {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    };
-    return await axios
-      .put(
-        `${process.env.REACT_APP_API_ENDPOINT}/updateSetting`,
-        { setting: setting },
-        config
-      )
-      .then((res) => {
-        return true;
-      })
-      .catch((err) => {
-        return false;
-      });
-  };
-
   useEffect(() => {
     if (bodyChatRef.current) {
       setTimeout(() => {
@@ -155,32 +111,47 @@ export default function Home() {
 
   useEffect(() => {
     history.replace("/");
-    loadUserData();
+    context.loadUserData();
+    document.addEventListener("visibilitychange", () => {
+      setMousePosition(0);
+    });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    if (context.background) {
+      container.current.style.backgroundImage = `url('${process.env.REACT_APP_CDN_URL}/images/bg${context.background}')`;
+    }
+  }, [context.background]);
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setBlur(true);
+    }, 300_000);
+    return () => {
+      clearTimeout(timeout);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [mousePosition]);
 
   return (
     <div
       className={`dark w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center main`}
       ref={container}
+      onMouseMove={(e) => {
+        if (context.userSetting.autolock !== 0) {
+          setBlur(false);
+          setMousePosition(e.clientX + e.clientY);
+        }
+      }}
     >
-      {isLoading ? (
+      {context.isLoading ? (
         <img alt="" src={require("../../image/loading.gif")} />
       ) : (
         <>
           {setting ? (
             <Setting
               exit={() => {
-                const prevSetting = localStorage.getItem("prev_user_setting");
-                const setting = localStorage.getItem("user_setting");
-                if (prevSetting !== setting) {
-                  SaveSetting().then((res) => {
-                    if (res) {
-                      localStorage.removeItem("prev_user_setting");
-                      navigate(0);
-                    }
-                  });
-                }
                 showSetting(!setting);
               }}
             />
@@ -200,6 +171,10 @@ export default function Home() {
                 showaddFriend(!addFriend);
               }}
             />
+          ) : null}
+
+          {blur ? (
+            <div className="w-full h-full bg-slate-900 bg-opacity-40 backdrop-blur-3xl absolute z-50 duration-300 modalMain"></div>
           ) : null}
 
           <div className="flex items-center p-5 w-full h-full justify-center">
@@ -222,19 +197,14 @@ export default function Home() {
                       <div className="w-full h-[80%]  rounded-b-3xl bg-opacity-90 dark:bg-opacity-90 backdrop-blur-lg flex flex-col items-center">
                         <div className="flex flex-col items-center justify-center bg-slate-900 bg-opacity-40 rounded-full w-24 h-24 -translate-y-12 p-2">
                           <img
-                            src={`${
-                              process.env.REACT_APP_CDN_URL
-                            }/images/avatar${
-                              JSON.parse(localStorage.getItem("user_setting"))
-                                .avatar
-                            }`}
+                            src={`${process.env.REACT_APP_CDN_URL}/images/avatar${context.userSetting.avatar}`}
                             className="rounded-full object-cover w-20 h-20 cursor-pointer"
                             alt=""
                           />
                         </div>
                         <div className="flex flex-col justify-center -translate-y-12 w-[90%]">
                           <h4 className="text-lg mt-1 font-semibold text-center mb-3">
-                            {userData.username}
+                            {context.username}
                           </h4>
                           <div className="flex flex-col justify-self-start text-slate-100 font-medium gap-1">
                             <h5>Contact</h5>
@@ -245,7 +215,7 @@ export default function Home() {
                                 className="text-2xl"
                               />
                               <div className="flex flex-col">
-                                <h6>{userData.email}</h6>
+                                <h6>{context.email}</h6>
                                 <small className="text-slate-300">Email</small>
                               </div>
                             </span>
@@ -273,14 +243,12 @@ export default function Home() {
                         {...attrs}
                         className="h-9 flex items-center text-white  p-3 rounded-3xl bg-gradient-to-r from-purple-800 to-indigo-600  tooltip"
                       >
-                        <p>Lê Trực</p>
+                        <p>{context.username}</p>
                       </div>
                     )}
                   >
                     <img
-                      src={`${process.env.REACT_APP_CDN_URL}/images/avatar${
-                        JSON.parse(localStorage.getItem("user_setting")).avatar
-                      }`}
+                      src={`${process.env.REACT_APP_CDN_URL}/images/avatar${context.userSetting.avatar}`}
                       className="rounded-full object-cover w-14 h-14 my-4 cursor-pointer"
                       alt=""
                       onClick={() => {

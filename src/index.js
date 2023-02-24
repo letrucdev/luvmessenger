@@ -5,6 +5,7 @@ import Login from "./Page/Login";
 import Home from "./Page/Home";
 /* import axios from "axios"; */
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { AppProvider } from "./Context/AppContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -19,11 +20,13 @@ root.render(
   /*  localStorage.getItem("account") ? <Home /> : <Login /> */
   <React.StrictMode>
     <Router>
-      <Routes>
-        <Route element={<Home />} path="*" />
-        <Route element={<Home />} path="/home" />
-        <Route element={<Login />} path="/login" />
-      </Routes>
+      <AppProvider>
+        <Routes>
+          <Route element={<Home />} path="*" />
+          <Route element={<Home />} path="/home" />
+          <Route element={<Login />} path="/login" />
+        </Routes>
+      </AppProvider>
     </Router>
   </React.StrictMode>
 

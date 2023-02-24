@@ -1,4 +1,8 @@
-export default function Notification(props) {
+import { useContext } from "react";
+import { AppContext } from "../../../../Context/AppContext";
+
+export default function Notification() {
+  const context = useContext(AppContext);
   return (
     <div className="w-full h-full flex flex-col gap-3 px-3 overflow-auto notification">
       <div className="flex-col">
@@ -16,14 +20,15 @@ export default function Notification(props) {
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
               onClick={(e) => {
                 if (!e.target.checked) {
-                  props.setting.notification = 0;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.notification = 0;
                 } else {
-                  props.setting.notification = 1;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.notification = 1;
                 }
+                context.SaveSetting(context.userSetting);
               }}
-              defaultChecked={props.setting.notification === 1 ? true : false}
+              defaultChecked={
+                context.userSetting.notification === 1 ? true : false
+              }
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
               <div className="ball rounded-full absolute dark:bg-slate-800  bg-slate-800 w-5 h-5 transition-all duration-300"></div>
@@ -46,15 +51,14 @@ export default function Notification(props) {
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
               onClick={(e) => {
                 if (!e.target.checked) {
-                  props.setting.notification_sounds = 0;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.notification_sounds = 0;
                 } else {
-                  props.setting.notification_sounds = 1;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.notification_sounds = 1;
                 }
+                context.SaveSetting(context.userSetting);
               }}
               defaultChecked={
-                props.setting.notification_sounds === 1 ? true : false
+                context.userSetting.notification_sounds === 1 ? true : false
               }
             />
             <div className="wrapper flex items-center justify-between absolute p-2">
@@ -78,15 +82,16 @@ export default function Notification(props) {
               className="opacity-0 relative inputCheck z-30 w-full cursor-pointer"
               onClick={(e) => {
                 if (!e.target.checked) {
-                  props.setting.hide_notification_content = 0;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.hide_notification_content = 0;
                 } else {
-                  props.setting.hide_notification_content = 1;
-                  localStorage.setItem("user_setting", JSON.stringify(props.setting));
+                  context.userSetting.hide_notification_content = 1;
                 }
+                context.SaveSetting(context.userSetting);
               }}
               defaultChecked={
-                props.setting.hide_notification_content === 1 ? true : false
+                context.userSetting.hide_notification_content === 1
+                  ? true
+                  : false
               }
             />
             <div className="wrapper flex items-center justify-between absolute p-2">

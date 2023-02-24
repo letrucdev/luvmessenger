@@ -1,13 +1,18 @@
 import "./index.css";
-import { useState, useEffect } from "react";
+import { useState, useContext } from "react";
+import { AppContext } from "../../../../Context/AppContext";
 
-export default function Theme(props) {
-  const [currentBackground, setBackground] = useState(`${props.setting.theme}`);
+export default function Theme() {
+  const context = useContext(AppContext);
+  const [currentBackground, setBackground] = useState(
+    `${context.userSetting.theme}`
+  );
 
-  useEffect(() => {
-    props.setting.theme = currentBackground;
-    localStorage.setItem("user_setting", JSON.stringify(props.setting));
-  }, [currentBackground, props.setting]);
+  const ApplyTheme = (theme) => {
+    context.userSetting.theme = theme;
+    context.SaveSetting(context.userSetting);
+  };
+
   return (
     <div className="w-full h-full flex-col gap-3 px-3 overflow-auto theme">
       <div className="flex-col w-full mb-6">
@@ -19,6 +24,7 @@ export default function Theme(props) {
                 className="w-full h-full rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 bg-slate-900 bg-opacity-60 duration-300"
                 onClick={() => {
                   setBackground(`/bg.jpg`);
+                  ApplyTheme(`/bg.jpg`);
                 }}
               >
                 <h2 className="font-semibold text-xl  duration-300">
@@ -35,6 +41,7 @@ export default function Theme(props) {
                 className="w-full h-full rounded-2xl flex items-center justify-center opacity-0 group-hover:opacity-100 bg-slate-900 bg-opacity-60 duration-300"
                 onClick={() => {
                   setBackground(`/bg2.jpg`);
+                  ApplyTheme(`/bg2.jpg`);
                 }}
               >
                 <h2 className="font-semibold text-xl  duration-300">
@@ -73,3 +80,4 @@ export default function Theme(props) {
     </div>
   );
 }
+

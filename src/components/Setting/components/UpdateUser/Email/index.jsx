@@ -1,15 +1,13 @@
-import {
-  faAt,
-  faClose,
-  faLock,
-} from "@fortawesome/free-solid-svg-icons";
+import { faAt, faClose, faLock } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import { AppContext } from "../../../../../Context/AppContext";
 import secureLocalStorage from "react-secure-storage";
 import axios from "axios";
 
 export default function UpdateUserEmail(props) {
-  const [email, setEmail] = useState(props.email);
+  const context = useContext(AppContext);
+  const [email, setEmail] = useState(context.email);
   const [password, setPassword] = useState();
 
   const updateEmail = () => {
@@ -29,7 +27,7 @@ export default function UpdateUserEmail(props) {
         config
       )
       .then((res) => {
-        alert(res.data.result);
+        context.setUseremail(email);
         props.exit();
       })
       .catch((err) => props.exit());
