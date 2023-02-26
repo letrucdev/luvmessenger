@@ -7,7 +7,6 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useState, useEffect, useRef, useContext } from "react";
 import { AppContext } from "../../../../Context/AppContext";
-import axios from "axios";
 import "./index.css";
 import UpdateUserName from "../UpdateUser/Username";
 import UpdateUserEmail from "../UpdateUser/Email";
@@ -35,25 +34,6 @@ export default function General(props) {
     }
   }, [phone, phoneNumber]);
 
-  const uploadImage = (image) => {
-    const formData = new FormData();
-    formData.append("upload_file", image);
-    const config = {
-      method: "post",
-      url: `${process.env.REACT_APP_API_ENDPOINT}/upload`,
-      data: formData,
-      timeout: 5000,
-    };
-    axios(config)
-      .then((res) => {
-        context.userSetting.avatar = `/${res.data.upload.filename}`;
-        context.SaveSetting(context.userSetting);
-      })
-      .catch((err) => {
-        alert("Upload failed!");
-      });
-  };
-
   return (
     <div className="w-full h-full flex flex-col gap-3 px-3 overflow-auto general">
       <div className="flex-col ">
@@ -75,7 +55,7 @@ export default function General(props) {
                   var filetypes = /jpeg|jpg|png/;
                   var mimetype = filetypes.test(e.target.files[0].type);
                   if (e.target.files[0] !== undefined && mimetype) {
-                    uploadImage(e.target.files[0]);
+                    context.uploadImage(e.target.files[0]);
                   } else {
                     alert("File type not accepted!");
                   }

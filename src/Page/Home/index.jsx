@@ -74,7 +74,7 @@ export default function Home() {
   const [blur, setBlur] = useState(false);
   /*   const [userData, setUserData] = useState({}); */
 
-  const [mousePosition, setMousePosition] = useState();
+  const [mousePosition, setMousePosition] = useState(0);
 
   const bodyChatRef = useRef(null);
   const listUserChatRef = useRef(null);
@@ -102,7 +102,7 @@ export default function Home() {
   useEffect(() => {
     if (bodyChatRef.current) {
       setTimeout(() => {
-        scrolltoBottom();
+      /*   scrolltoBottom(); */
       }, 300);
     }
 
@@ -115,6 +115,7 @@ export default function Home() {
     document.addEventListener("visibilitychange", () => {
       setMousePosition(0);
     });
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -125,12 +126,17 @@ export default function Home() {
   }, [context.background]);
 
   useEffect(() => {
-    const timeout = setTimeout(() => {
-      setBlur(true);
-    }, 300_000);
-    return () => {
-      clearTimeout(timeout);
-    };
+    if (
+      context?.userSetting?.autolock !== 0 &&
+      context?.userSetting?.autolock !== undefined
+    ) {
+      const timeout = setTimeout(() => {
+        setBlur(true);
+      }, 600_000);
+      return () => {
+        clearTimeout(timeout);
+      };
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mousePosition]);
 
@@ -139,7 +145,10 @@ export default function Home() {
       className={`dark w-screen h-screen bg-gradient-to-l from-purple-800 to-indigo-600  flex justify-center items-center main`}
       ref={container}
       onMouseMove={(e) => {
-        if (context.userSetting.autolock !== 0) {
+        if (
+          context?.userSetting?.autolock !== 0 &&
+          context?.userSetting?.autolock !== undefined
+        ) {
           setBlur(false);
           setMousePosition(e.clientX + e.clientY);
         }
@@ -665,11 +674,11 @@ export default function Home() {
               </div>
             </div>
             {showChat ? (
-              <div className={`w-full h-full gap-3 relative flex`}>
-                <div className="flex-col w-full h-full">
+              <div className={`w-full h-full gap-3 flex `}>
+                <div className="flex flex-col w-full h-full overflow-hidden">
                   {/* Chat Body */}
-                  <div className="dark:bg-slate-900 w-full h-[93%] md:min-w-[35rem] dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl flex flex-col p-3 sm:rounded-l-none rounded-b-none duration-300">
-                    <div className=" w-full h-20  flex items-center gap-3 justify-between z-50">
+                  <div className=" w-full  h-full md:min-w-[35rem]  rounded-3xl flex flex-col sm:rounded-l-none rounded-b-none duration-300 relative overflow-y-hidden">
+                    <div className=" w-full h-20  flex items-center gap-3 justify-between z-50 p-3 dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-tr-3xl">
                       <div className="flex items-center gap-3">
                         <FontAwesomeIcon
                           icon={faArrowLeft}
@@ -715,9 +724,9 @@ export default function Home() {
                         />
                       </div>
                     </div>
-
                     <div
-                      className="w-full h-full flex flex-col mt-3 gap-2 overflow-hidden hover:overflow-auto"
+                      className="w-full flex flex-col-reverse grow
+                       gap-2 overflow-y-scroll p-3 dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg relative"
                       onScroll={(e) => {
                         if (e.currentTarget.scrollTop === 0) {
                           showScrollButton(true);
@@ -728,7 +737,7 @@ export default function Home() {
                       ref={bodyChatRef}
                     >
                       {scrollDown ? (
-                        <div className="flex absolute w-full items-center justify-center bottom-0 mb-5 duration-300 transition-all">
+                        <div className="flex  items-center bottom-0 mb-5 duration-300 transition-all absolute shrink right-0 left-0 justify-center">
                           <div
                             className="h-10 w-10 text-white z-30 bg-slate-900 justify-center items-center flex rounded-full self-center hover:cursor-pointer transition-all duration-300 hover:opacity-70 animate-bounce"
                             onClick={() => scrolltoBottom()}
@@ -737,41 +746,37 @@ export default function Home() {
                           </div>
                         </div>
                       ) : null}
-                      <Message type="recived" />
-                      <Message type="recived" />
-                      <Message type="recived" />
                       <Message type="send" />
-                      <Message type="recived" />
                     </div>
-                  </div>
-                  {/* Chat Footer */}
-                  <div className="dark:bg-slate-900 w-full  h-[7%] dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5 relative rounded-t-none sm:rounded-bl-none duration-300">
-                    <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 duration-300">
-                      <FontAwesomeIcon
-                        icon={faImage}
-                        fixedWidth
-                        className="hover:text-indigo-600 duration-300"
-                      />
-                    </div>
-                    <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl  h-10 w-10  duration-300">
-                      <FontAwesomeIcon
-                        icon={faSmile}
-                        fixedWidth
-                        className="hover:text-indigo-600 duration-300"
-                      />
-                    </div>
-                    <div className="w-full  flex items-center h-full py-1 duration-300">
-                      <input
-                        className="bg-transparent w-full outline-none text-white"
-                        placeholder="Type your message..."
-                      />
-                    </div>
-                    <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10  duration-300">
-                      <FontAwesomeIcon
-                        icon={faPaperPlane}
-                        fixedWidth
-                        className="hover:text-indigo-600 duration-300"
-                      />
+                    {/* Chat Footer */}
+                    <div className="dark:bg-slate-900 w-full p-2 h-16 grow-0 dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5  rounded-t-none sm:rounded-bl-none duration-300">
+                      <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 duration-300">
+                        <FontAwesomeIcon
+                          icon={faImage}
+                          fixedWidth
+                          className="hover:text-indigo-600 duration-300"
+                        />
+                      </div>
+                      <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl  h-10 w-10  duration-300">
+                        <FontAwesomeIcon
+                          icon={faSmile}
+                          fixedWidth
+                          className="hover:text-indigo-600 duration-300"
+                        />
+                      </div>
+                      <div className="w-full  flex items-center h-full py-1 duration-300">
+                        <input
+                          className="bg-transparent w-full outline-none text-white"
+                          placeholder="Type your message..."
+                        />
+                      </div>
+                      <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10  duration-300">
+                        <FontAwesomeIcon
+                          icon={faPaperPlane}
+                          fixedWidth
+                          className="hover:text-indigo-600 duration-300"
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>

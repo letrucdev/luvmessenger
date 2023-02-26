@@ -9,15 +9,17 @@ import { AppProvider } from "./Context/AppContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
-/* const verifyLogin = () => {
-  if (localStorage.getItem("accessToken")) {
-    return true;
-  }
-  return false;
-}; */
+console.log("%cLUV MESSENGER", "color: #818cf8; font-size: 50px;");
+console.log(
+  "%cDự án được phát triển bởi Lê Trực",
+  "color: #a5b4fc; font-size: 25px;"
+);
+console.log(
+  "%cSử dụng ReactJs, Tailwindcss cho Frontend và NodeJS cho Backend",
+  "color: #c7d2fe; font-size: 20px;"
+);
 
 root.render(
-  /*  localStorage.getItem("account") ? <Home /> : <Login /> */
   <React.StrictMode>
     <Router>
       <AppProvider>

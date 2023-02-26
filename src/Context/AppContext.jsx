@@ -80,6 +80,29 @@ export const AppProvider = ({ children }) => {
       });
   };
 
+  const uploadImage = (image) => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const formData = new FormData();
+    formData.append("upload_file", image);
+    const config = {
+      method: "post",
+      url: `${process.env.REACT_APP_API_ENDPOINT}/upload`,
+      data: formData,
+      timeout: 10000,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    axios(config)
+      .then((res) => {
+        userSetting.avatar = `/${res.data.upload.filedir}`;
+        SaveSetting(userSetting);
+      })
+      .catch((err) => {
+        alert("Upload failed!");
+      });
+  };
+
   const value = {
     userSetting,
     userData,
@@ -91,6 +114,7 @@ export const AppProvider = ({ children }) => {
     setUseremail,
     loadUserData,
     SaveSetting,
+    uploadImage,
     isLoading,
   };
 
