@@ -51,6 +51,7 @@ import Message from "../../components/Chat/Message";
 import AddFriend from "../../components/Popup/Friend";
 import LoadingUserChat from "../../components/Chat/LoadingUserChat";
 import { AppContext } from "../../Context/AppContext";
+import UpdateUserAvatar from "../../components/Setting/components/UpdateUser/Avatar";
 
 const UserChat = lazy(() => import("../../components/Chat/UserChat"));
 const history = createBrowserHistory();
@@ -102,7 +103,7 @@ export default function Home() {
   useEffect(() => {
     if (bodyChatRef.current) {
       setTimeout(() => {
-      /*   scrolltoBottom(); */
+        /*   scrolltoBottom(); */
       }, 300);
     }
 
@@ -158,6 +159,10 @@ export default function Home() {
         <img alt="" src={require("../../image/loading.gif")} />
       ) : (
         <>
+          {context.avatar === null || context.avatar === undefined ? (
+            <UpdateUserAvatar />
+          ) : null}
+
           {setting ? (
             <Setting
               exit={() => {

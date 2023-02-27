@@ -12,7 +12,7 @@ export const AppProvider = ({ children }) => {
   const [userData, setUserData] = useState();
   const [username, setUsername] = useState();
   const [email, setUseremail] = useState();
-  const [avatar, setAvatar] = useState();
+  const [avatar, setAvatar] = useState(null);
 
   const navigate = useNavigate();
 
@@ -26,15 +26,17 @@ export const AppProvider = ({ children }) => {
   const loadSetting = () => {
     const settingEncoded = userData.setting;
     const userSettings = atob(settingEncoded);
+    if (JSON.parse(userSettings).avatar !== "") {
+      setAvatar(
+        `${process.env.REACT_APP_CDN_URL}/images/avatar${
+          JSON.parse(userSettings).avatar
+        }`
+      );
+    }
     setUsername(userData.username);
     setUseremail(userData.email);
     setUserSetting(JSON.parse(userSettings));
     setBackground(JSON.parse(userSettings).theme);
-    setAvatar(
-      `${process.env.REACT_APP_CDN_URL}/images/avatar${
-        JSON.parse(userSettings).avatar
-      }`
-    );
     setLoading(false);
   };
 
