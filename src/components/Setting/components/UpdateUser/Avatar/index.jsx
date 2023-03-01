@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import unknowAvatar from "../../../../../image/stranger.png";
 import { useState, useRef, useContext } from "react";
 import { AppContext } from "../../../../../Context/AppContext";
+import { useNavigate } from "react-router-dom";
 
 export default function UpdateUserAvatar(props) {
   const [avatar, setAvatar] = useState(unknowAvatar);
@@ -11,6 +12,7 @@ export default function UpdateUserAvatar(props) {
   const inputFile = useRef();
 
   const context = useContext(AppContext);
+  const navigate = useNavigate();
 
   return (
     <div className="w-screen h-screen bg-slate-900 dark:bg-opacity-20 backdrop-blur-lg absolute z-50 flex items-center justify-center modalMain">
@@ -70,9 +72,13 @@ export default function UpdateUserAvatar(props) {
         <div className="flex justify-end w-full gap-2 text-white">
           <button
             className="bg-slate-900 p-4 rounded-2xl cursor-pointer duration-300 hover:text-indigo-600 hover:bg-opacity-50"
-            onClick={() => {
+            onClick={async () => {
               if (avatarUpload !== null) {
-                context.uploadImage(avatarUpload);
+                const upload = await context.uploadImage(avatarUpload);
+                if (upload) {
+                  context.showUpdateProfile(false);
+                } else {
+                }
               }
             }}
           >

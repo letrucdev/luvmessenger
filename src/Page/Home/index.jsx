@@ -159,10 +159,7 @@ export default function Home() {
         <img alt="" src={require("../../image/loading.gif")} />
       ) : (
         <>
-          {context.avatar === null || context.avatar === undefined ? (
-            <UpdateUserAvatar />
-          ) : null}
-
+          {context.updateProfile ? <UpdateUserAvatar /> : null}
           {setting ? (
             <Setting
               exit={() => {
@@ -679,11 +676,11 @@ export default function Home() {
               </div>
             </div>
             {showChat ? (
-              <div className={`w-full h-full gap-3 flex `}>
+              <div className={`w-full h-full gap-3 flex relative`}>
                 <div className="flex flex-col w-full h-full overflow-hidden">
                   {/* Chat Body */}
                   <div className=" w-full  h-full md:min-w-[35rem]  rounded-3xl flex flex-col sm:rounded-l-none rounded-b-none duration-300 relative overflow-y-hidden">
-                    <div className=" w-full h-20  flex items-center gap-3 justify-between z-50 p-3 dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-tr-3xl">
+                    <div className=" w-full h-20  flex items-center gap-3 justify-between z-20 p-3 dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-tr-3xl">
                       <div className="flex items-center gap-3">
                         <FontAwesomeIcon
                           icon={faArrowLeft}
@@ -731,9 +728,9 @@ export default function Home() {
                     </div>
                     <div
                       className="w-full flex flex-col-reverse grow
-                       gap-2 overflow-y-scroll p-3 dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg relative"
+                       gap-2 overflow-hidden hover:overflow-y-auto p-3 dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg relative"
                       onScroll={(e) => {
-                        if (e.currentTarget.scrollTop === 0) {
+                        if (e.currentTarget.scrollTop < -250) {
                           showScrollButton(true);
                         } else {
                           showScrollButton(false);
@@ -741,18 +738,21 @@ export default function Home() {
                       }}
                       ref={bodyChatRef}
                     >
-                      {scrollDown ? (
-                        <div className="flex  items-center bottom-0 mb-5 duration-300 transition-all absolute shrink right-0 left-0 justify-center">
-                          <div
-                            className="h-10 w-10 text-white z-30 bg-slate-900 justify-center items-center flex rounded-full self-center hover:cursor-pointer transition-all duration-300 hover:opacity-70 animate-bounce"
-                            onClick={() => scrolltoBottom()}
-                          >
-                            <FontAwesomeIcon icon={faArrowDown} />
-                          </div>
-                        </div>
-                      ) : null}
+                      <Message type="send" />
+                      <Message type="recived" />
+                      <Message type="send" />
                       <Message type="send" />
                     </div>
+                    {scrollDown ? (
+                      <div className="flex  items-center bottom-10 mb-5 duration-300 transition-all absolute shrink right-0 left-0 justify-center">
+                        <div
+                          className="h-10 w-10 text-white z-30 bg-slate-900 justify-center items-center flex rounded-full self-center hover:cursor-pointer transition-all duration-300 hover:opacity-70 animate-bounce"
+                          onClick={() => scrolltoBottom()}
+                        >
+                          <FontAwesomeIcon icon={faArrowDown} />
+                        </div>
+                      </div>
+                    ) : null}
                     {/* Chat Footer */}
                     <div className="dark:bg-slate-900 w-full p-2 h-16 grow-0 dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5  rounded-t-none sm:rounded-bl-none duration-300">
                       <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 duration-300">
@@ -787,7 +787,7 @@ export default function Home() {
                 </div>
                 {/* Detail chat */}
                 {detailChat ? (
-                  <div className="absolute right-0 2xl:relative flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat overflow-y-auto select-none">
+                  <div className="absolute right-0 2xl:relative flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat overflow-y-auto select-none z-30">
                     <FontAwesomeIcon
                       icon={faClose}
                       fixedWidth

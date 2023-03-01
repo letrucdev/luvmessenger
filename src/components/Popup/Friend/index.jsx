@@ -1,10 +1,49 @@
-import { faUser, faUserPlus } from "@fortawesome/free-solid-svg-icons";
+import {
+  faUser,
+  faUserCheck,
+  faUserPlus,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState } from "react";
-import avatar from "../../../Page/Home/image/ava.jpg";
+import { useState, useRef, useContext } from "react";
+import { AppContext } from "../../../Context/AppContext";
+import secureLocalStorage from "react-secure-storage";
+
+import axios from "axios";
 
 export default function AddFriend(props) {
-  const [result] = useState("null");
+  const [result, setResult] = useState(null);
+  const [isSearch, setIsSearch] = useState(false);
+  const userSearch = useRef();
+  const context = useContext(AppContext);
+
+  const searchUser = async () => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const config = {
+      method: "post",
+      url: `${process.env.REACT_APP_API_ENDPOINT}/searchUser`,
+      data: {
+        username: userSearch.current.value.trim(),
+      },
+      timeout: 10000,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+    };
+    await axios(config)
+      .then(async (res) => {
+        if (res.data.length > 0) {
+          setResult(res.data);
+        } else {
+          setResult(null);
+        }
+      })
+      .catch((err) => {
+        alert(err);
+      });
+    setIsSearch(false);
+  };
+
   return (
     <div className="w-screen h-screen bg-slate-900 dark:bg-opacity-20 backdrop-blur-lg absolute z-50 flex items-center justify-center modalMain">
       <div className="flex bg-slate-900 rounded-3xl text-white w-[25rem] h-[35rem] bg-opacity-60 select-none">
@@ -16,6 +55,7 @@ export default function AddFriend(props) {
               className="text-slate-400 group-focus-within:text-white duration-300"
             />
             <input
+              ref={userSearch}
               className="bg-transparent w-full outline-none mx-3 "
               placeholder="Search..."
             />
@@ -25,204 +65,73 @@ export default function AddFriend(props) {
           </div>
           <div className="h-full w-full overflow-auto flex flex-col gap-2">
             {result !== null ? (
-              <>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">I Luv U Bae 💞💞</p>
+              result.map((element, index) => {
+                return (
+                  <div
+                    key={index}
+                    className="flex w-full h-16 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer"
+                  >
+                    <img
+                      src={`${process.env.REACT_APP_CDN_URL}/images/avatar${
+                        JSON.parse(atob(element.setting)).avatar
+                      }`}
+                      className="w-12 h-12 rounded-full p-1"
+                      alt="avatar"
+                    />
+                    <div className="flex text-white flex-col flex-1">
+                      <p>{element.username}</p>
+                      <div className="bg-gradient-to-l flex rounded-xl items-center justify-center w-fit">
+                        {(function () {
+                          switch (element.account_type) {
+                            case 0:
+                              return (
+                                <small className="text-slate-200 font-semibold px-2">
+                                  🥈 Silver
+                                </small>
+                              );
+                            case 1:
+                              return (
+                                <small className="text-amber-300 font-semibold leading-5 px-2">
+                                  🪙 Gold
+                                </small>
+                              );
+                            case 2:
+                              return (
+                                <small className="text-cyan-200 font-semibold leading-5 px-2">
+                                  💎 Diamond
+                                </small>
+                              );
+                            default:
+                              return (
+                                <small className="text-slate-200 font-semibold px-2">
+                                  🥈 Silver
+                                </small>
+                              );
+                          }
+                        })()}
+                      </div>
+                    </div>
+                    {context.friendList.some(
+                      (user) => user.friend_id === element.id
+                    ) ? (
+                      <FontAwesomeIcon
+                        icon={faUserCheck}
+                        className="text-slate-500 duration-300 text-lg"
+                        fixedWidth
+                      />
+                    ) : (
+                      <FontAwesomeIcon
+                        icon={faUserPlus}
+                        className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
+                        fixedWidth
+                        onClick={() => {
+                          alert(element.id);
+                        }}
+                      />
+                    )}
                   </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-                <div className="flex w-full h-14 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer">
-                  <img
-                    src={avatar}
-                    className="w-12 h-12 rounded-full p-1"
-                    alt="avatar"
-                  />
-                  <div className="flex text-white flex-col flex-1">
-                    <p>Lê Trực</p>
-                    <p className="text-slate-500 text-sm">
-                      Đẳng cấp là duy trì
-                    </p>
-                  </div>
-                  <FontAwesomeIcon
-                    icon={faUserPlus}
-                    className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                    fixedWidth
-                  />
-                </div>
-              </>
+                );
+              })
             ) : (
               <div className="self-center text-slate-500 font-light mt-5">
                 <p>There is no result</p>
@@ -238,7 +147,16 @@ export default function AddFriend(props) {
             >
               Cancel
             </button>
-            <button className="bg-slate-900 p-4 rounded-2xl cursor-pointer duration-300 hover:text-indigo-600 hover:bg-opacity-50">
+            <button
+              disabled={isSearch}
+              className="bg-slate-900 p-4 rounded-2xl cursor-pointer duration-300 hover:text-indigo-600 hover:bg-opacity-50 disabled:opacity-20 disabled:cursor-wait"
+              onClick={() => {
+                if (userSearch.current.value.trim() !== "") {
+                  setIsSearch(true);
+                  searchUser();
+                }
+              }}
+            >
               Search
             </button>
           </div>

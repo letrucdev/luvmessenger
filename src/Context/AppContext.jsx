@@ -13,6 +13,8 @@ export const AppProvider = ({ children }) => {
   const [username, setUsername] = useState();
   const [email, setUseremail] = useState();
   const [avatar, setAvatar] = useState(null);
+  const [updateProfile, showUpdateProfile] = useState(false);
+  const [friendList, setFriendList] = useState();
 
   const navigate = useNavigate();
 
@@ -32,12 +34,14 @@ export const AppProvider = ({ children }) => {
           JSON.parse(userSettings).avatar
         }`
       );
+    } else {
+      showUpdateProfile(true);
     }
     setUsername(userData.username);
     setUseremail(userData.email);
     setUserSetting(JSON.parse(userSettings));
     setBackground(JSON.parse(userSettings).theme);
-    setLoading(false);
+    loadFriendList();
   };
 
   const loadUserData = async () => {
@@ -51,6 +55,24 @@ export const AppProvider = ({ children }) => {
       .get(`${process.env.REACT_APP_API_ENDPOINT}/getUserData`, config)
       .then(function (response) {
         setUserData(response.data);
+      })
+      .catch(function (error) {
+        navigate("/login");
+      });
+  };
+
+  const loadFriendList = async () => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/getFriendList`, config)
+      .then(function (response) {
+        setFriendList(response.data);
+        setLoading(false);
       })
       .catch(function (error) {
         navigate("/login");
@@ -82,7 +104,7 @@ export const AppProvider = ({ children }) => {
       });
   };
 
-  const uploadImage = (image) => {
+  const uploadImage = async (image) => {
     const token = secureLocalStorage.getItem("accessToken");
     const formData = new FormData();
     formData.append("upload_file", image);
@@ -95,13 +117,15 @@ export const AppProvider = ({ children }) => {
         Authorization: `Bearer ${token}`,
       },
     };
-    axios(config)
-      .then((res) => {
+    return await axios(config)
+      .then(async (res) => {
         userSetting.avatar = `/${res.data.upload.filedir}`;
-        SaveSetting(userSetting);
+        await SaveSetting(userSetting);
+        return true;
       })
       .catch((err) => {
         alert("Upload failed!");
+        return false;
       });
   };
 
@@ -109,8 +133,11 @@ export const AppProvider = ({ children }) => {
     userSetting,
     userData,
     username,
+    friendList,
     email,
     avatar,
+    showUpdateProfile,
+    updateProfile,
     background,
     setUsername,
     setUseremail,
