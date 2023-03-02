@@ -1,20 +1,15 @@
-import {
-  faUser,
-  faUserCheck,
-  faUserPlus,
-} from "@fortawesome/free-solid-svg-icons";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { useState, useRef, useContext } from "react";
-import { AppContext } from "../../../Context/AppContext";
+import { useState, useRef } from "react";
 import secureLocalStorage from "react-secure-storage";
 
 import axios from "axios";
+import UserSearch from "./Components/UserSearch";
 
 export default function AddFriend(props) {
   const [result, setResult] = useState(null);
   const [isSearch, setIsSearch] = useState(false);
   const userSearch = useRef();
-  const context = useContext(AppContext);
 
   const searchUser = async () => {
     const token = secureLocalStorage.getItem("accessToken");
@@ -66,71 +61,7 @@ export default function AddFriend(props) {
           <div className="h-full w-full overflow-auto flex flex-col gap-2">
             {result !== null ? (
               result.map((element, index) => {
-                return (
-                  <div
-                    key={index}
-                    className="flex w-full h-16 gap-2 items-center  rounded-3xl p-2 duration-300 hover:bg-slate-900 hover:bg-opacity-50 cursor-pointer"
-                  >
-                    <img
-                      src={`${process.env.REACT_APP_CDN_URL}/images/avatar${
-                        JSON.parse(atob(element.setting)).avatar
-                      }`}
-                      className="w-12 h-12 rounded-full p-1"
-                      alt="avatar"
-                    />
-                    <div className="flex text-white flex-col flex-1">
-                      <p>{element.username}</p>
-                      <div className="bg-gradient-to-l flex rounded-xl items-center justify-center w-fit">
-                        {(function () {
-                          switch (element.account_type) {
-                            case 0:
-                              return (
-                                <small className="text-slate-200 font-semibold px-2">
-                                  🥈 Silver
-                                </small>
-                              );
-                            case 1:
-                              return (
-                                <small className="text-amber-300 font-semibold leading-5 px-2">
-                                  🪙 Gold
-                                </small>
-                              );
-                            case 2:
-                              return (
-                                <small className="text-cyan-200 font-semibold leading-5 px-2">
-                                  💎 Diamond
-                                </small>
-                              );
-                            default:
-                              return (
-                                <small className="text-slate-200 font-semibold px-2">
-                                  🥈 Silver
-                                </small>
-                              );
-                          }
-                        })()}
-                      </div>
-                    </div>
-                    {context.friendList.some(
-                      (user) => user.friend_id === element.id
-                    ) ? (
-                      <FontAwesomeIcon
-                        icon={faUserCheck}
-                        className="text-slate-500 duration-300 text-lg"
-                        fixedWidth
-                      />
-                    ) : (
-                      <FontAwesomeIcon
-                        icon={faUserPlus}
-                        className="text-slate-500 duration-300 cursor-pointer hover:text-slate-100 text-lg"
-                        fixedWidth
-                        onClick={() => {
-                          alert(element.id);
-                        }}
-                      />
-                    )}
-                  </div>
-                );
+                return <UserSearch element={element} key={index} />;
               })
             ) : (
               <div className="self-center text-slate-500 font-light mt-5">

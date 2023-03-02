@@ -53,6 +53,11 @@ import LoadingUserChat from "../../components/Chat/LoadingUserChat";
 import { AppContext } from "../../Context/AppContext";
 import UpdateUserAvatar from "../../components/Setting/components/UpdateUser/Avatar";
 
+import TimeAgo from "javascript-time-ago";
+import en from "javascript-time-ago/locale/en.json";
+
+import ReactTimeAgo from "react-time-ago";
+
 const UserChat = lazy(() => import("../../components/Chat/UserChat"));
 const history = createBrowserHistory();
 
@@ -113,6 +118,7 @@ export default function Home() {
   useEffect(() => {
     history.replace("/");
     context.loadUserData();
+    TimeAgo.addDefaultLocale(en);
     document.addEventListener("visibilitychange", () => {
       setMousePosition(0);
     });
@@ -296,175 +302,161 @@ export default function Home() {
                         Notification
                       </h2>
                       <div className="flex-col hover:overflow-auto overflow-hidden  max-w-[28rem] w-96 max-h-80">
-                        <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
-                          <div className="flex min-w-[4rem] h-16 justify-end">
-                            <img
-                              src={require("./image/ava.jpg")}
-                              className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
-                              alt=""
-                            />
-                            <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
-                              <FontAwesomeIcon
-                                icon={faMessage}
-                                className="text-xs rounded-full text-indigo-500"
-                                fixedWidth
-                              />
+                        {context.notification.map((element, index) => {
+                          return (
+                            <div
+                              key={index}
+                              className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative"
+                            >
+                              {(function () {
+                                switch (element.type) {
+                                  case 0:
+                                    return (
+                                      <React.Fragment>
+                                        <div className="flex min-w-[4rem] w-16 h-16 justify-end">
+                                          <img
+                                            src={`${process.env.REACT_APP_CDN_URL}/images/avatar/${element.image}`}
+                                            className="rounded-full object-cover min-w-[4rem] w-16 h-16 cursor-pointer "
+                                            alt=""
+                                          />
+                                          <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
+                                            <FontAwesomeIcon
+                                              icon={faUserPlus}
+                                              className="text-xs rounded-full text-indigo-500"
+                                              fixedWidth
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="flex-col overflow-hidden ">
+                                          <h2 className=" line-clamp-3 leading-tight">
+                                            You have new friend request from{" "}
+                                            {element.from_user}
+                                          </h2>
+                                          <div className="flex gap-2 my-2">
+                                            <button
+                                              className="bg-gradient-to-l from-purple-800 to-indigo-600 p-2 rounded-lg font-semibold hover:bg-gradient-to-r duration-300 hover:opacity-80"
+                                              onClick={() => {
+                                                context.acceptRequest(
+                                                  element.from_user_id,
+                                                  element.from_user,
+                                                  element.id
+                                                );
+                                              }}
+                                            >
+                                              Accept
+                                            </button>
+                                            <button
+                                              className="duration-300 hover:text-red-500"
+                                              onClick={() => {
+                                                context.deleteNotification(
+                                                  element.id
+                                                );
+                                              }}
+                                            >
+                                              Decliend
+                                            </button>
+                                          </div>
+                                          <small className="text-indigo-400">
+                                            <ReactTimeAgo
+                                              date={element.at}
+                                              locale="en-US"
+                                            />
+                                          </small>
+                                        </div>
+                                      </React.Fragment>
+                                    );
+                                  case 1:
+                                    return (
+                                      <React.Fragment>
+                                        <div className="flex justify-center items-center gap-2">
+                                          <div className="flex min-w-[4rem] w-16 h-16 justify-end">
+                                            <img
+                                              src={`${process.env.REACT_APP_CDN_URL}/images/avatar/${element.image}`}
+                                              className="rounded-full object-cover min-w-[4rem] w-16 h-16 cursor-pointer "
+                                              alt=""
+                                            />
+                                            <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
+                                              <FontAwesomeIcon
+                                                icon={faUserPlus}
+                                                className="text-xs rounded-full text-indigo-500"
+                                                fixedWidth
+                                              />
+                                            </div>
+                                          </div>
+                                          <div className="flex-col overflow-hidden">
+                                            <h2 className=" line-clamp-3 leading-tight">
+                                              {element.from_user} accepted your
+                                              request
+                                            </h2>
+                                            <small className="text-indigo-400">
+                                              <ReactTimeAgo
+                                                date={element.at}
+                                                locale="en-US"
+                                              />
+                                            </small>
+                                          </div>
+                                        </div>
+                                      </React.Fragment>
+                                    );
+                                  default:
+                                    return (
+                                      <React.Fragment>
+                                        <div className="flex min-w-[4rem] w-16 h-16 justify-end">
+                                          <img
+                                            src={`${process.env.REACT_APP_CDN_URL}/images/avatar/${element.image}`}
+                                            className="rounded-full object-cover min-w-[4rem] w-16 h-16 cursor-pointer "
+                                            alt=""
+                                          />
+                                          <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
+                                            <FontAwesomeIcon
+                                              icon={faUserPlus}
+                                              className="text-xs rounded-full text-indigo-500"
+                                              fixedWidth
+                                            />
+                                          </div>
+                                        </div>
+                                        <div className="flex-col overflow-hidden ">
+                                          <h2 className=" line-clamp-3 leading-tight">
+                                            {element.content}
+                                          </h2>
+                                          <small className="text-indigo-400">
+                                            <ReactTimeAgo
+                                              date={element.at}
+                                              locale="en-US"
+                                            />
+                                          </small>
+                                        </div>
+                                      </React.Fragment>
+                                    );
+                                }
+                              })()}
                             </div>
-                          </div>
-
-                          <div className="flex-col overflow-hidden ">
-                            <h2 className=" line-clamp-3 leading-tight">
-                              <b>Lê Trực</b> sent you a new message
-                            </h2>
-                            <small className="text-indigo-400">
-                              30 minutes ago
-                            </small>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
-                          <div className="flex min-w-[4rem] h-16 justify-end">
-                            <img
-                              src={require("./image/ava.jpg")}
-                              className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
-                              alt=""
-                            />
-                            <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
-                              <FontAwesomeIcon
-                                icon={faMessage}
-                                className="text-xs rounded-full text-indigo-500"
-                                fixedWidth
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex-col overflow-hidden ">
-                            <h2 className=" line-clamp-3 leading-tight">
-                              <b>Lê Trực</b> sent you a new message
-                            </h2>
-                            <small className="text-indigo-400">
-                              30 minutes ago
-                            </small>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
-                          <div className="flex min-w-[4rem] h-16 justify-end">
-                            <img
-                              src={require("./image/ava.jpg")}
-                              className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
-                              alt=""
-                            />
-                            <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
-                              <FontAwesomeIcon
-                                icon={faMessage}
-                                className="text-xs rounded-full text-indigo-500"
-                                fixedWidth
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex-col overflow-hidden ">
-                            <h2 className=" line-clamp-3 leading-tight">
-                              <b>Lê Trực</b> sent you a new message
-                            </h2>
-                            <small className="text-indigo-400">
-                              30 minutes ago
-                            </small>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
-                          <div className="flex min-w-[4rem] h-16 justify-end">
-                            <img
-                              src={require("./image/ava.jpg")}
-                              className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
-                              alt=""
-                            />
-                            <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
-                              <FontAwesomeIcon
-                                icon={faMessage}
-                                className="text-xs rounded-full text-indigo-500"
-                                fixedWidth
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex-col overflow-hidden ">
-                            <h2 className=" line-clamp-3 leading-tight">
-                              <b>Lê Trực</b> sent you a new message
-                            </h2>
-                            <small className="text-indigo-400">
-                              30 minutes ago
-                            </small>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
-                          <div className="flex min-w-[4rem] h-16 justify-end">
-                            <img
-                              src={require("./image/ava.jpg")}
-                              className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
-                              alt=""
-                            />
-                            <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
-                              <FontAwesomeIcon
-                                icon={faMessage}
-                                className="text-xs rounded-full text-indigo-500"
-                                fixedWidth
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex-col overflow-hidden ">
-                            <h2 className=" line-clamp-3 leading-tight">
-                              <b>Lê Trực</b> sent you a new message
-                            </h2>
-                            <small className="text-indigo-400">
-                              30 minutes ago
-                            </small>
-                          </div>
-                        </div>
-
-                        <div className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative">
-                          <div className="flex min-w-[4rem] h-16 justify-end">
-                            <img
-                              src={require("./image/ava.jpg")}
-                              className="rounded-full object-cover min-w-[4rem] h-16 cursor-pointer "
-                              alt=""
-                            />
-                            <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
-                              <FontAwesomeIcon
-                                icon={faMessage}
-                                className="text-xs rounded-full text-indigo-500"
-                                fixedWidth
-                              />
-                            </div>
-                          </div>
-
-                          <div className="flex-col overflow-hidden ">
-                            <h2 className=" line-clamp-3 leading-tight">
-                              <b>Lê Trực</b> sent you a new message
-                            </h2>
-                            <small className="text-indigo-400">
-                              30 minutes ago
-                            </small>
-                          </div>
-                        </div>
+                          );
+                        })}
                       </div>
                     </div>
                   )}
                 >
-                  <NavItem
-                    Class={
-                      menuSelected === 2 ? "bg-slate-900 bg-opacity-50" : ""
-                    }
-                    id={2}
-                    icon={farFaBell}
-                    Click={(e) => {
-                      setMenuItemSelected(e);
-                    }}
-                  />
+                  <div className="flex relative w-full items-center justify-center select-none">
+                    <div
+                      className={`absolute w-4 h-4 bg-indigo-600 rounded-full text-center justify-center items-center text-xs right-5 top-2 ${
+                        context.countNotification > 0 ? "flex" : "hidden"
+                      }`}
+                    >
+                      {context.countNotification}
+                    </div>
+                    <NavItem
+                      Class={
+                        menuSelected === 2 ? "bg-slate-900 bg-opacity-50" : ""
+                      }
+                      id={2}
+                      icon={farFaBell}
+                      Click={(e) => {
+                        context.readNotification();
+                        setMenuItemSelected(e);
+                      }}
+                    />
+                  </div>
                 </Tippy>
 
                 <NavItem

@@ -1,4 +1,5 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
+import io from "socket.io-client";
 import secureLocalStorage from "react-secure-storage";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -15,15 +16,54 @@ export const AppProvider = ({ children }) => {
   const [avatar, setAvatar] = useState(null);
   const [updateProfile, showUpdateProfile] = useState(false);
   const [friendList, setFriendList] = useState();
+  const [notification, setNotification] = useState([]);
+  const [countNotification, setCountNotification] = useState(0);
+
+  const socketRef = useRef();
 
   const navigate = useNavigate();
 
+  const initSocket = async () => {
+    socketRef.current = io("http://localhost:3333");
+    socketRef.current.emit("add_user_online", {
+      user_id: userData.id,
+      username: userData.username,
+    });
+    socketRef.current.on("connect", () => {
+      /*  alert("OK") */
+    });
+    socketRef.current.on("server_msg", (data) => {
+      alert(data);
+    });
+    socketRef.current.on("accepted_request", (data) => {
+      loadNotification();
+      loadFriendList();
+    });
+    socketRef.current.on("new_notification", (data) => {
+      loadNotification();
+    });
+    socketRef.current.on("is_sent_request", (data) => {
+      alert("This user sent you a friend request");
+    });
+
+    socketRef.current.on("is_read_notification", (data) => {
+      setCountNotification(0);
+    });
+  };
+
   useEffect(() => {
     if (userData) {
+      initSocket();
+      loadNotification();
       loadSetting();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [userData]);
+
+  useEffect(() => {
+    const count = notification.filter((obj) => obj.isRead === 0).length;
+    setCountNotification(count);
+  }, [notification]);
 
   const loadSetting = () => {
     const settingEncoded = userData.setting;
@@ -79,6 +119,27 @@ export const AppProvider = ({ children }) => {
       });
   };
 
+  const loadNotification = async () => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/getNotification`, config)
+      .then(function (response) {
+        setNotification(response.data.notification);
+      })
+      .catch(function (error) {
+        navigate("/login");
+      });
+  };
+
+  const readNotification = async () => {
+    socketRef.current.emit("read_notification", { userId: userData.id });
+  };
+
   const SaveSetting = async (setting) => {
     const token = secureLocalStorage.getItem("accessToken");
     const config = {
@@ -129,13 +190,85 @@ export const AppProvider = ({ children }) => {
       });
   };
 
+  const addFriend = async (to_user_id) => {
+    const settingEncoded = userData.setting;
+    const userSettings = atob(settingEncoded);
+    socketRef.current.emit("add_friend", {
+      to_user_id: to_user_id,
+      from_user_id: userData.id,
+      user_avatar: JSON.parse(userSettings).avatar,
+      from_user: userData.username,
+    });
+  };
+
+  const deleteNotification = async (notifiId) => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await axios
+      .delete(
+        `${process.env.REACT_APP_API_ENDPOINT}/deleteNotification/${notifiId}`,
+        config
+      )
+      .then((res) => {
+        /* return true; */
+        loadNotification();
+      })
+      .catch((err) => {
+        return false;
+      });
+  };
+
+  const acceptRequest = async (friendId, username, notifiId) => {
+    const settingEncoded = userData.setting;
+    const userSettings = atob(settingEncoded);
+    const token = secureLocalStorage.getItem("accessToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios
+      .post(
+        `${process.env.REACT_APP_API_ENDPOINT}/acceptFriend`,
+        { friendId: friendId, username: username, notifiId: notifiId },
+        config
+      )
+      .then((res) => {
+        if (res?.data?.accept) {
+          loadNotification();
+          socketRef.current.emit("accept_request", {
+            to_user_id: res?.data?.friend_id,
+            from_user_id: res?.data?.from_user_id,
+            from_user_name: userData.username,
+            from_user_avatar: JSON.parse(userSettings).avatar,
+          });
+        }
+
+        /* alert(res.data); */
+      })
+      .catch((err) => {
+        alert("Failed");
+      });
+  };
+
   const value = {
     userSetting,
     userData,
+    addFriend,
     username,
     friendList,
+    acceptRequest,
     email,
     avatar,
+    notification,
+    setCountNotification,
+    countNotification,
+    readNotification,
+    deleteNotification,
     showUpdateProfile,
     updateProfile,
     background,

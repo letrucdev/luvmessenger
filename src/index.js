@@ -20,7 +20,6 @@ console.log(
 );
 
 root.render(
-  <React.StrictMode>
     <Router>
       <AppProvider>
         <Routes>
@@ -30,7 +29,6 @@ root.render(
         </Routes>
       </AppProvider>
     </Router>
-  </React.StrictMode>
 
   /* <App /> */
 );
