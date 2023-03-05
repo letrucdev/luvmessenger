@@ -28,7 +28,7 @@ export default function Message(props) {
             </div>
           )}
         >
-          <div className="w-fit max-w-md rounded-3xl rounded-bl-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center message">
+          <div className="w-fit max-w-md rounded-3xl rounded-bl-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center">
             {linkRegex.test(props.content) ? (
               <div className="flex flex-col gap-2 p-4">
                 <a
@@ -67,7 +67,7 @@ export default function Message(props) {
             </div>
           )}
         >
-          <div className="w-fit max-w-md rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center self-end message">
+          <div className="w-fit max-w-md rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center self-end ">
             {linkRegex.test(props.content) ? (
               <div className="flex flex-col gap-2 p-4">
                 <a
