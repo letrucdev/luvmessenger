@@ -71,9 +71,35 @@ export default function General(props) {
           </div>
 
           <div className="flex-col">
-            <h2 className="text-lg font-semibold max-w-xs truncate">
-              {context.username}
-            </h2>
+            {(function () {
+              switch (context.userData.account_type) {
+                case 0:
+                  return (
+                    <h2 className="text-lg font-semibold max-w-xs truncate text-transparent bg-clip-text bg-gradient-to-bl from-white to-slate-400">
+                      {context.username}
+                    </h2>
+                  );
+                case 1:
+                  return (
+                    <h2 className="text-lg font-semibold max-w-xs truncate text-transparent bg-clip-text bg-gradient-to-bl from-amber-500 to-orange-100">
+                      {context.username}
+                    </h2>
+                  );
+                case 2:
+                  return (
+                    <h2 className="text-lg font-semibold max-w-xs truncate text-transparent bg-clip-text bg-gradient-to-br from-cyan-100 to-cyan-400">
+                      {context.username}
+                    </h2>
+                  );
+                default:
+                  return (
+                    <h2 className="text-lg font-semibold max-w-xs truncate text-transparent bg-clip-text bg-gradient-to-bl from-white to-slate-400">
+                      {context.username}
+                    </h2>
+                  );
+              }
+            })()}
+           
             <div className="bg-gradient-to-l flex rounded-xl items-center justify-center w-fit">
               {(function () {
                 switch (context.userData.account_type) {
@@ -110,12 +136,7 @@ export default function General(props) {
         <div className="w-full bg-slate-800 p-4 rounded-xl bg-opacity-50 flex items-center mt-4 justify-between">
           <div className="flex-col">
             <h2 className="font-semibold mb-1 text-lg">Username</h2>
-            <input
-              type={"text"}
-              className="bg-transparent outline-none border-none focus-within:border-none focus:border-none focus:ring-0 p-0"
-              value={context.username}
-              disabled
-            />
+            <p className="truncate">{context.username}</p>
           </div>
           <div
             className="bg-slate-900 rounded-xl bg-opacity-75 hover:bg-opacity-30 duration-300 "
@@ -142,12 +163,7 @@ export default function General(props) {
         <div className="w-full bg-slate-800 p-4 rounded-xl bg-opacity-50 flex justify-between items-center mt-4">
           <div className="flex-col">
             <h2 className="font-semibold mb-1 text-lg">Email</h2>
-            <input
-              type={"email"}
-              className="bg-transparent outline-none border-none focus-within:border-none focus:border-none focus:ring-0 p-0"
-              value={context.email}
-              disabled
-            />
+            <p className="truncate">{context.email}</p>
           </div>
           <div
             className="bg-slate-900 rounded-xl bg-opacity-75 hover:bg-opacity-30 duration-300"

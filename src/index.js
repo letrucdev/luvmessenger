@@ -20,15 +20,27 @@ console.log(
 );
 
 root.render(
-    <Router>
-      <AppProvider>
-        <Routes>
-          <Route element={<Home />} path="*" />
-          <Route element={<Home />} path="/home" />
-          <Route element={<Login />} path="/login" />
-        </Routes>
-      </AppProvider>
-    </Router>
+  <Router>
+    <Routes>
+      <Route
+        element={
+          <AppProvider>
+            <Home />
+          </AppProvider>
+        }
+        path="*"
+      />
+      <Route
+        element={
+          <AppProvider>
+            <Home />
+          </AppProvider>
+        }
+        path="/home"
+      />
+      <Route element={<Login />} path="/login" />
+    </Routes>
+  </Router>
 
   /* <App /> */
 );

@@ -15,16 +15,20 @@ export const AppProvider = ({ children }) => {
   const [email, setUseremail] = useState();
   const [avatar, setAvatar] = useState(null);
   const [updateProfile, showUpdateProfile] = useState(false);
-  const [friendList, setFriendList] = useState();
+  const [friendList, setFriendList] = useState([]);
   const [notification, setNotification] = useState([]);
   const [countNotification, setCountNotification] = useState(0);
+  const [userChat, setUserChat] = useState({});
+  const [historyChat, setHistoryChat] = useState([]);
+  const [showChat, setShowChat] = useState(false);
+  const [listMessage, setListMessage] = useState([]);
 
   const socketRef = useRef();
 
   const navigate = useNavigate();
 
-  const initSocket = async () => {
-    socketRef.current = io("http://localhost:3333");
+  const initSocket = () => {
+    socketRef.current = io(process.env.REACT_APP_SOCKET_SERVER);
     socketRef.current.emit("add_user_online", {
       user_id: userData.id,
       username: userData.username,
@@ -36,7 +40,6 @@ export const AppProvider = ({ children }) => {
       alert(data);
     });
     socketRef.current.on("accepted_request", (data) => {
-      loadNotification();
       loadFriendList();
     });
     socketRef.current.on("new_notification", (data) => {
@@ -48,6 +51,15 @@ export const AppProvider = ({ children }) => {
 
     socketRef.current.on("is_read_notification", (data) => {
       setCountNotification(0);
+    });
+
+    socketRef.current.on("return_message", (data) => {
+      setListMessage((prevArray) => [...prevArray, data]);
+      getHistoryChat();
+    });
+
+    socketRef.current.on("new_history_chat", (data) => {
+      getHistoryChat();
     });
   };
 
@@ -65,6 +77,50 @@ export const AppProvider = ({ children }) => {
     setCountNotification(count);
   }, [notification]);
 
+  useEffect(() => {
+    if (Object.keys(userChat).length > 0) {
+      getChat(userChat.id);
+      setShowChat(true);
+    }
+    /*  alert(JSON.stringify(userChat)); */
+  }, [userChat]);
+
+  useEffect(() => {
+    if (!showChat) {
+      setListMessage([]);
+      setUserChat({});
+    }
+  }, [showChat]);
+
+  useEffect(() => {
+    if (socketRef.current) {
+      socketRef.current.on("new_message_from_user", (data) => {
+        if (data.sent_id === userChat.id) {
+          setListMessage((prevArray) => [...prevArray, data]);
+        }
+      });
+      return () => {
+        socketRef.current.off("new_message_from_user");
+      };
+    }
+  }, [userChat]);
+
+  const ClearData = () => {
+    /*     socketRef.current.off("return_message");
+    socketRef.current.off("new_history_chat");
+    socketRef.current.off("is_read_notification");
+    socketRef.current.off("is_sent_request");
+    socketRef.current.off("new_notification");
+    socketRef.current.off("accepted_request"); */
+    /*  socketRef.current.disconnect();
+    setShowChat(false);
+    setUserChat({});
+    setListMessage([]);
+    setHistoryChat([]);
+    setUserData(); */
+    socketRef.current.disconnect();
+  };
+
   const loadSetting = () => {
     const settingEncoded = userData.setting;
     const userSettings = atob(settingEncoded);
@@ -81,6 +137,7 @@ export const AppProvider = ({ children }) => {
     setUseremail(userData.email);
     setUserSetting(JSON.parse(userSettings));
     setBackground(JSON.parse(userSettings).theme);
+    getHistoryChat();
     loadFriendList();
   };
 
@@ -138,6 +195,55 @@ export const AppProvider = ({ children }) => {
 
   const readNotification = async () => {
     socketRef.current.emit("read_notification", { userId: userData.id });
+  };
+
+  const getHistoryChat = async () => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/getHistoryChat`, config)
+      .then(function (response) {
+        setHistoryChat(response.data.history_chat);
+      })
+      .catch(function (error) {
+        /*  navigate("/login"); */
+      });
+  };
+
+  const getChat = async (recivedId) => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios
+      .get(`${process.env.REACT_APP_API_ENDPOINT}/getChat/${recivedId}`, config)
+      .then(function (response) {
+        setListMessage(response.data.list_message);
+      })
+      .catch(function (error) {
+        /*  navigate("/login"); */
+      });
+  };
+
+  const ReadMessage = (user_chat_id) => {
+    socketRef.current.emit("read_message", {
+      user_id: userData.id,
+      user_chat_id: user_chat_id,
+    });
+  };
+
+  const sendMessage = (to_user_id, content) => {
+    socketRef.current.emit("send_private_message", {
+      from_user_id: userData.id,
+      to_user_id: to_user_id,
+      content: content,
+    });
   };
 
   const SaveSetting = async (setting) => {
@@ -201,6 +307,28 @@ export const AppProvider = ({ children }) => {
     });
   };
 
+  const unFriend = async (friend_id) => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    await axios
+      .delete(
+        `${process.env.REACT_APP_API_ENDPOINT}/unFriend/${friend_id}`,
+        config
+      )
+      .then((res) => {
+        if (res.data.unfriend > 0) {
+          loadFriendList();
+        }
+      })
+      .catch((err) => {
+        return false;
+      });
+  };
+
   const deleteNotification = async (notifiId) => {
     const token = secureLocalStorage.getItem("accessToken");
     const config = {
@@ -259,9 +387,10 @@ export const AppProvider = ({ children }) => {
     userSetting,
     userData,
     addFriend,
-    username,
     friendList,
+    unFriend,
     acceptRequest,
+    username,
     email,
     avatar,
     notification,
@@ -269,6 +398,17 @@ export const AppProvider = ({ children }) => {
     countNotification,
     readNotification,
     deleteNotification,
+    getChat,
+    getHistoryChat,
+    setHistoryChat,
+    historyChat,
+    setUserChat,
+    userChat,
+    showChat,
+    setShowChat,
+    listMessage,
+    ReadMessage,
+    sendMessage,
     showUpdateProfile,
     updateProfile,
     background,
@@ -278,6 +418,7 @@ export const AppProvider = ({ children }) => {
     SaveSetting,
     uploadImage,
     isLoading,
+    ClearData,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

@@ -69,7 +69,7 @@ export default function RegisterUI(props) {
           className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
         />
         <input
-          maxLength={25}
+          maxLength={35}
           type={"email"}
           placeholder="Email"
           className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"

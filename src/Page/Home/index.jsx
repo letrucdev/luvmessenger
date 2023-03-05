@@ -1,12 +1,5 @@
 import "../Home/home.css";
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  Suspense,
-  lazy,
-  useContext,
-} from "react";
+import React, { useState, useRef, useEffect, useContext } from "react";
 import { createBrowserHistory } from "history";
 import { useNavigate } from "react-router-dom";
 
@@ -22,7 +15,6 @@ import {
   faVideo,
   faCloud,
   faTools,
-  faMessage,
   faPeopleGroup,
   faEnvelope,
   faBell as fasFaBell,
@@ -49,33 +41,28 @@ import Setting from "../../components/Setting";
 import Cloud from "../../components/Cloud";
 import Message from "../../components/Chat/Message";
 import AddFriend from "../../components/Popup/Friend";
-import LoadingUserChat from "../../components/Chat/LoadingUserChat";
 import { AppContext } from "../../Context/AppContext";
 import UpdateUserAvatar from "../../components/Setting/components/UpdateUser/Avatar";
 
+import FriendsList from "../../components/FriendsList";
+import Notification from "../../components/Notification";
+
 import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
-
-import ReactTimeAgo from "react-time-ago";
-
-const UserChat = lazy(() => import("../../components/Chat/UserChat"));
+import HistoryChat from "../../components/HistoryChat";
+import BodyChat from "../../components/Chat/BodyChat";
 const history = createBrowserHistory();
 
 library.add(farFaBell, fasFaBell, farFaMessage);
 
 export default function Home() {
   const navigate = useNavigate();
-  const [userChat, setUserChat] = useState();
   const [menuSelected, setMenuItemSelected] = useState(1);
   const [previewProfile, showPreview] = useState(false);
-  const [detailChat, showDetail] = useState(false);
-  const [listImg, showListImg] = useState(false);
-  const [listFile, showListFile] = useState(false);
   const [setting, showSetting] = useState(false);
   const [addFriend, showaddFriend] = useState(false);
   const [cloud, showCloud] = useState(false);
   const [scrollDown, showScrollButton] = useState(false);
-  const [showChat, setShowChat] = useState(false);
 
   const [blur, setBlur] = useState(false);
   /*   const [userData, setUserData] = useState({}); */
@@ -88,40 +75,32 @@ export default function Home() {
 
   const context = useContext(AppContext);
 
-  const scrolltoBottom = () => {
-    bodyChatRef.current?.scrollTo({
-      behavior: "smooth",
-      top: bodyChatRef.current?.scrollHeight,
-    });
-  };
-
   const closeChat = () => {
     const styless = window
       .getComputedStyle(listUserChatRef.current)
       .getPropertyValue("display");
     if (styless === "none") {
-      setUserChat(0);
-      setShowChat(!showChat);
+      context.setShowChat(!context.showChat);
     }
   };
 
-  useEffect(() => {
+  /*  useEffect(() => {
     if (bodyChatRef.current) {
       setTimeout(() => {
-        /*   scrolltoBottom(); */
+        
       }, 300);
     }
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showChat !== false]);
+  }, [showChat !== false]); */
 
   useEffect(() => {
     history.replace("/");
     context.loadUserData();
-    TimeAgo.addDefaultLocale(en);
     document.addEventListener("visibilitychange", () => {
       setMousePosition(0);
     });
+    TimeAgo.addDefaultLocale(en);
 
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -164,7 +143,7 @@ export default function Home() {
       {context.isLoading ? (
         <img alt="" src={require("../../image/loading.gif")} />
       ) : (
-        <>
+        <React.Fragment>
           {context.updateProfile ? <UpdateUserAvatar /> : null}
           {setting ? (
             <Setting
@@ -293,149 +272,7 @@ export default function Home() {
                   appendTo={document.body}
                   interactive="true"
                   placement={"right-start"}
-                  render={(attrs) => (
-                    <div
-                      className="p-3 flex-col text-white bg-slate-900 rounded-3xl bg-opacity-60 backdrop-blur-lg notification hidden sm:flex"
-                      {...attrs}
-                    >
-                      <h2 className="text-2xl font-semibold mb-2 px-2">
-                        Notification
-                      </h2>
-                      <div className="flex-col hover:overflow-auto overflow-hidden  max-w-[28rem] w-96 max-h-80">
-                        {context.notification.map((element, index) => {
-                          return (
-                            <div
-                              key={index}
-                              className="flex gap-2 px-2 w-full mt-2 hover:bg-slate-900 py-2 rounded-xl hover:bg-opacity-40 duration-300 cursor-pointer relative"
-                            >
-                              {(function () {
-                                switch (element.type) {
-                                  case 0:
-                                    return (
-                                      <React.Fragment>
-                                        <div className="flex min-w-[4rem] w-16 h-16 justify-end">
-                                          <img
-                                            src={`${process.env.REACT_APP_CDN_URL}/images/avatar/${element.image}`}
-                                            className="rounded-full object-cover min-w-[4rem] w-16 h-16 cursor-pointer "
-                                            alt=""
-                                          />
-                                          <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
-                                            <FontAwesomeIcon
-                                              icon={faUserPlus}
-                                              className="text-xs rounded-full text-indigo-500"
-                                              fixedWidth
-                                            />
-                                          </div>
-                                        </div>
-                                        <div className="flex-col overflow-hidden ">
-                                          <h2 className=" line-clamp-3 leading-tight">
-                                            You have new friend request from{" "}
-                                            {element.from_user}
-                                          </h2>
-                                          <div className="flex gap-2 my-2">
-                                            <button
-                                              className="bg-gradient-to-l from-purple-800 to-indigo-600 p-2 rounded-lg font-semibold hover:bg-gradient-to-r duration-300 hover:opacity-80"
-                                              onClick={() => {
-                                                context.acceptRequest(
-                                                  element.from_user_id,
-                                                  element.from_user,
-                                                  element.id
-                                                );
-                                              }}
-                                            >
-                                              Accept
-                                            </button>
-                                            <button
-                                              className="duration-300 hover:text-red-500"
-                                              onClick={() => {
-                                                context.deleteNotification(
-                                                  element.id
-                                                );
-                                              }}
-                                            >
-                                              Decliend
-                                            </button>
-                                          </div>
-                                          <small className="text-indigo-400">
-                                            <ReactTimeAgo
-                                              date={element.at}
-                                              locale="en-US"
-                                            />
-                                          </small>
-                                        </div>
-                                      </React.Fragment>
-                                    );
-                                  case 1:
-                                    return (
-                                      <React.Fragment>
-                                        <div className="flex justify-center items-center gap-2">
-                                          <div className="flex min-w-[4rem] w-16 h-16 justify-end">
-                                            <img
-                                              src={`${process.env.REACT_APP_CDN_URL}/images/avatar/${element.image}`}
-                                              className="rounded-full object-cover min-w-[4rem] w-16 h-16 cursor-pointer "
-                                              alt=""
-                                            />
-                                            <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
-                                              <FontAwesomeIcon
-                                                icon={faUserPlus}
-                                                className="text-xs rounded-full text-indigo-500"
-                                                fixedWidth
-                                              />
-                                            </div>
-                                          </div>
-                                          <div className="flex-col overflow-hidden">
-                                            <h2 className=" line-clamp-3 leading-tight">
-                                              {element.from_user} accepted your
-                                              request
-                                            </h2>
-                                            <small className="text-indigo-400">
-                                              <ReactTimeAgo
-                                                date={element.at}
-                                                locale="en-US"
-                                              />
-                                            </small>
-                                          </div>
-                                        </div>
-                                      </React.Fragment>
-                                    );
-                                  default:
-                                    return (
-                                      <React.Fragment>
-                                        <div className="flex min-w-[4rem] w-16 h-16 justify-end">
-                                          <img
-                                            src={`${process.env.REACT_APP_CDN_URL}/images/avatar/${element.image}`}
-                                            className="rounded-full object-cover min-w-[4rem] w-16 h-16 cursor-pointer "
-                                            alt=""
-                                          />
-                                          <div className="self-end z-30 bg-slate-900 text-center w-6 h-6 rounded-full flex items-center justify-center bg-opacity-70 backdrop-blur-lg absolute">
-                                            <FontAwesomeIcon
-                                              icon={faUserPlus}
-                                              className="text-xs rounded-full text-indigo-500"
-                                              fixedWidth
-                                            />
-                                          </div>
-                                        </div>
-                                        <div className="flex-col overflow-hidden ">
-                                          <h2 className=" line-clamp-3 leading-tight">
-                                            {element.content}
-                                          </h2>
-                                          <small className="text-indigo-400">
-                                            <ReactTimeAgo
-                                              date={element.at}
-                                              locale="en-US"
-                                            />
-                                          </small>
-                                        </div>
-                                      </React.Fragment>
-                                    );
-                                }
-                              })()}
-                            </div>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  )}
+                  render={() => <Notification />}
                 >
                   <div className="flex relative w-full items-center justify-center select-none">
                     <div
@@ -459,14 +296,27 @@ export default function Home() {
                   </div>
                 </Tippy>
 
-                <NavItem
-                  Class={menuSelected === 3 ? "bg-slate-900 bg-opacity-50" : ""}
-                  id={3}
-                  icon={farFaAddressBook}
-                  Click={(e) => {
-                    setMenuItemSelected(e);
+                <Tippy
+                  onClickOutside={() => {
+                    setMenuItemSelected(1);
                   }}
-                />
+                  visible={menuSelected === 3 ? true : false}
+                  appendTo={document.body}
+                  interactive="true"
+                  placement={"right-start"}
+                  render={() => <FriendsList />}
+                >
+                  <NavItem
+                    Class={
+                      menuSelected === 3 ? "bg-slate-900 bg-opacity-50" : ""
+                    }
+                    id={3}
+                    icon={farFaAddressBook}
+                    Click={(e) => {
+                      setMenuItemSelected(e);
+                    }}
+                  />
+                </Tippy>
               </div>
 
               {/* bottom nav */}
@@ -554,6 +404,7 @@ export default function Home() {
                   <div
                     className="w-full h-14 flex items-center justify-center hover:bg-slate-900 rounded-bl-3xl duration-500"
                     onClick={() => {
+                      context.ClearData();
                       navigate("/login");
                     }}
                   >
@@ -569,7 +420,7 @@ export default function Home() {
 
             <div
               className={`duration-300 flex-col w-full h-full xl:flex xl:w-96 ${
-                showChat ? `hidden` : `flex`
+                context.showChat ? `hidden` : `flex`
               }`}
               ref={listUserChatRef}
             >
@@ -623,18 +474,7 @@ export default function Home() {
                 </div>
 
                 {/* List User Message */}
-                <div className="flex flex-col mt-3 w-full h-full gap-2 overflow-hidden hover:overflow-auto relative select-none">
-                  <Suspense fallback={<LoadingUserChat />}>
-                    <UserChat
-                      class={userChat === 1 ? "bg-slate-900" : ""}
-                      id={1}
-                      Click={(e) => {
-                        setShowChat(true);
-                        setUserChat(e);
-                      }}
-                    />
-                  </Suspense>
-                </div>
+                <HistoryChat />
 
                 <div className="flex self-end w-full  bg-slate-800 bg-opacity-10 backdrop-blur-xl rounded-3xl mt-5 justify-between px-8 sm:hidden items-center">
                   <FontAwesomeIcon
@@ -667,263 +507,8 @@ export default function Home() {
                 </div>
               </div>
             </div>
-            {showChat ? (
-              <div className={`w-full h-full gap-3 flex relative`}>
-                <div className="flex flex-col w-full h-full overflow-hidden">
-                  {/* Chat Body */}
-                  <div className=" w-full  h-full md:min-w-[35rem]  rounded-3xl flex flex-col sm:rounded-l-none rounded-b-none duration-300 relative overflow-y-hidden">
-                    <div className=" w-full h-20  flex items-center gap-3 justify-between z-20 p-3 dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-tr-3xl">
-                      <div className="flex items-center gap-3">
-                        <FontAwesomeIcon
-                          icon={faArrowLeft}
-                          fixedWidth
-                          className="text-white text-xl cursor-pointer duration-300 hover:text-indigo-600 sm:hidden"
-                          onClick={() => {
-                            closeChat();
-                          }}
-                        />
-                        <img
-                          alt=""
-                          className=" rounded-full object-cover w-16 h-16"
-                          src={require("./image/giphy.jpg")}
-                        />
-                        <div className="flex flex-col text-white">
-                          <h4 className="leading-none">Lê Trực</h4>
-                          <small className="text-slate-300">
-                            Đang hoạt động
-                          </small>
-                        </div>
-                      </div>
-
-                      <div className="flex text-white gap-3 text-xl items-center">
-                        <FontAwesomeIcon
-                          icon={faPhone}
-                          fixedWidth
-                          className="cursor-pointer hover:text-indigo-600 duration-300"
-                        />
-
-                        <FontAwesomeIcon
-                          icon={faVideo}
-                          fixedWidth
-                          className="cursor-pointer hover:text-indigo-600 duration-300"
-                        />
-
-                        <FontAwesomeIcon
-                          icon={faBars}
-                          fixedWidth
-                          className="cursor-pointer hover:text-indigo-600 duration-300"
-                          onClick={() => {
-                            showDetail(!detailChat);
-                          }}
-                        />
-                      </div>
-                    </div>
-                    <div
-                      className="w-full flex flex-col-reverse grow
-                       gap-2 overflow-hidden hover:overflow-y-auto p-3 dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg relative"
-                      onScroll={(e) => {
-                        if (e.currentTarget.scrollTop < -250) {
-                          showScrollButton(true);
-                        } else {
-                          showScrollButton(false);
-                        }
-                      }}
-                      ref={bodyChatRef}
-                    >
-                      <Message type="send" />
-                      <Message type="recived" />
-                      <Message type="send" />
-                      <Message type="send" />
-                    </div>
-                    {scrollDown ? (
-                      <div className="flex  items-center bottom-10 mb-5 duration-300 transition-all absolute shrink right-0 left-0 justify-center">
-                        <div
-                          className="h-10 w-10 text-white z-30 bg-slate-900 justify-center items-center flex rounded-full self-center hover:cursor-pointer transition-all duration-300 hover:opacity-70 animate-bounce"
-                          onClick={() => scrolltoBottom()}
-                        >
-                          <FontAwesomeIcon icon={faArrowDown} />
-                        </div>
-                      </div>
-                    ) : null}
-                    {/* Chat Footer */}
-                    <div className="dark:bg-slate-900 w-full p-2 h-16 grow-0 dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5  rounded-t-none sm:rounded-bl-none duration-300">
-                      <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 duration-300">
-                        <FontAwesomeIcon
-                          icon={faImage}
-                          fixedWidth
-                          className="hover:text-indigo-600 duration-300"
-                        />
-                      </div>
-                      <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl  h-10 w-10  duration-300">
-                        <FontAwesomeIcon
-                          icon={faSmile}
-                          fixedWidth
-                          className="hover:text-indigo-600 duration-300"
-                        />
-                      </div>
-                      <div className="w-full  flex items-center h-full py-1 duration-300">
-                        <input
-                          className="bg-transparent w-full outline-none text-white"
-                          placeholder="Type your message..."
-                        />
-                      </div>
-                      <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10  duration-300">
-                        <FontAwesomeIcon
-                          icon={faPaperPlane}
-                          fixedWidth
-                          className="hover:text-indigo-600 duration-300"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                {/* Detail chat */}
-                {detailChat ? (
-                  <div className="absolute right-0 2xl:relative flex flex-col h-full w-96 min-w-[24rem] dark:bg-slate-900 dark:bg-opacity-60 dark:backdrop-blur-lg rounded-3xl p-3 items-center gap-2 detailChat overflow-y-auto select-none z-30">
-                    <FontAwesomeIcon
-                      icon={faClose}
-                      fixedWidth
-                      className="text-white absolute left-0 p-4 hover:text-red-600 cursor-pointer transition-all duration-300 2xl:hidden"
-                      onClick={() => {
-                        showDetail(!detailChat);
-                      }}
-                    />
-                    <img
-                      src={require("./image/ava.jpg")}
-                      className="rounded-full object-cover w-20 h-20 cursor-pointer"
-                      alt=""
-                    />
-                    <h2 className="text-white font-semibold">Lê Trực</h2>
-
-                    <div className="flex items-center justify-center gap-9 my-3">
-                      <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
-                        <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
-                          <FontAwesomeIcon icon={fasFaBell} fixedWidth />
-                        </div>
-                        <h2 className="text-sm text-center select-none">
-                          Turn off notify
-                        </h2>
-                      </div>
-
-                      <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
-                        <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
-                          <FontAwesomeIcon icon={faPeopleGroup} fixedWidth />
-                        </div>
-                        <h2 className="text-sm text-center select-none">
-                          Create group
-                        </h2>
-                      </div>
-
-                      <div className="flex flex-col text-white items-center justify-center w-14 cursor-pointer group">
-                        <div className="flex text-white text-lg bg-slate-900 w-9 h-9 rounded-full items-center justify-center mb-2 group-hover:bg-slate-800 duration-300">
-                          <FontAwesomeIcon icon={faSearch} fixedWidth />
-                        </div>
-                        <h2 className="text-sm text-center select-none">
-                          Find message
-                        </h2>
-                      </div>
-                    </div>
-
-                    <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
-                      <div
-                        className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer select-none"
-                        onClick={() => {
-                          showListImg(!listImg);
-                        }}
-                      >
-                        <h2>Image / Video</h2>
-                        <FontAwesomeIcon
-                          icon={faCaretDown}
-                          className={`${
-                            listImg ? "" : "-rotate-90"
-                          } duration-300`}
-                        />
-                      </div>
-
-                      {listImg ? (
-                        <div className="flex w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
-                          <img
-                            src={require("../../image/bg.jpg")}
-                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                            alt=""
-                          />
-                          <img
-                            src={require("../../image/bg.jpg")}
-                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                            alt=""
-                          />
-                          <img
-                            src={require("../../image/bg.jpg")}
-                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                            alt=""
-                          />
-                          <img
-                            src={require("../../image/bg.jpg")}
-                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                            alt=""
-                          />
-                          <img
-                            src={require("../../image/bg.jpg")}
-                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                            alt=""
-                          />
-                          <img
-                            src={require("../../image/bg.jpg")}
-                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                            alt=""
-                          />
-                          <img
-                            src={require("../../image/bg.jpg")}
-                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                            alt=""
-                          />
-                          <img
-                            src={require("../../image/bg.jpg")}
-                            className="object-cover w-16 h-16 rounded-xl cursor-pointer"
-                            alt=""
-                          />
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-
-                    <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
-                      <div
-                        className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer select-none"
-                        onClick={() => {
-                          showListFile(!listFile);
-                        }}
-                      >
-                        <h2>File</h2>
-                        <FontAwesomeIcon
-                          icon={faCaretDown}
-                          className={`${
-                            listFile ? "" : "-rotate-90"
-                          } duration-300`}
-                        />
-                      </div>
-                      {listFile ? (
-                        <div className="flex flex-col w-full bg-slate-900 bg-opacity-40 rounded-xl rounded-t-none flex-wrap p-4 gap-6">
-                          <h2 className="text-slate-600 select-none">
-                            No files shared yet
-                          </h2>
-                        </div>
-                      ) : (
-                        ""
-                      )}
-                    </div>
-
-                    <div className="flex flex-col w-full bg-slate-900 rounded-xl bg-opacity-50">
-                      <div className="w-full p-4 rounded-xl flex justify-between items-center text-white cursor-pointer group">
-                        <h2 className="group-hover:text-red-600 duration-300 select-none">
-                          Delete this chat
-                        </h2>
-                      </div>
-                    </div>
-                  </div>
-                ) : null}
-              </div>
+            {context.showChat ? (
+              <BodyChat />
             ) : (
               <div
                 className={`select-none w-full h-full gap-3 relative hidden xl:flex duration-300`}
@@ -944,7 +529,7 @@ export default function Home() {
               </div>
             )}
           </div>
-        </>
+        </React.Fragment>
       )}
     </div>
   );
