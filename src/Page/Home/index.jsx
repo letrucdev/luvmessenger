@@ -5,23 +5,14 @@ import { useNavigate } from "react-router-dom";
 
 import {
   faGear,
-  faImage,
-  faSmile,
-  faPaperPlane,
   faSearch,
-  faArrowDown,
-  faBars,
   faPhone,
-  faVideo,
   faCloud,
   faTools,
   faPeopleGroup,
   faEnvelope,
   faBell as fasFaBell,
   faUserPlus,
-  faCaretDown,
-  faClose,
-  faArrowLeft,
   faSignOut,
 } from "@fortawesome/free-solid-svg-icons";
 
@@ -39,7 +30,6 @@ import {
 import NavItem from "../../components/Nav/NavItem";
 import Setting from "../../components/Setting";
 import Cloud from "../../components/Cloud";
-import Message from "../../components/Chat/Message";
 import AddFriend from "../../components/Popup/Friend";
 import { AppContext } from "../../Context/AppContext";
 import UpdateUserAvatar from "../../components/Setting/components/UpdateUser/Avatar";
@@ -51,6 +41,7 @@ import TimeAgo from "javascript-time-ago";
 import en from "javascript-time-ago/locale/en.json";
 import HistoryChat from "../../components/HistoryChat";
 import BodyChat from "../../components/Chat/BodyChat";
+
 const history = createBrowserHistory();
 
 library.add(farFaBell, fasFaBell, farFaMessage);
@@ -62,14 +53,12 @@ export default function Home() {
   const [setting, showSetting] = useState(false);
   const [addFriend, showaddFriend] = useState(false);
   const [cloud, showCloud] = useState(false);
-  const [scrollDown, showScrollButton] = useState(false);
 
   const [blur, setBlur] = useState(false);
   /*   const [userData, setUserData] = useState({}); */
 
   const [mousePosition, setMousePosition] = useState(0);
 
-  const bodyChatRef = useRef(null);
   const listUserChatRef = useRef(null);
   const container = useRef(null);
 
@@ -136,7 +125,7 @@ export default function Home() {
           context?.userSetting?.autolock !== undefined
         ) {
           setBlur(false);
-          setMousePosition(e.clientX + e.clientY);
+          setMousePosition(e.clientX);
         }
       }}
     >

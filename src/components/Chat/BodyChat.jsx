@@ -15,7 +15,7 @@ import {
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useRef, useContext } from "react";
-import EmojiPicker, { Theme, EmojiStyle  } from "emoji-picker-react";
+import EmojiPicker, { Theme, EmojiStyle } from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AppContext } from "../../Context/AppContext";
 import Message from "./Message";
@@ -36,6 +36,15 @@ export default function BodyChat() {
       behavior: "smooth",
       top: bodyChatRef.current?.scrollHeight,
     });
+  };
+
+  const handleSendMessage = () => {
+    if (inputChat.current.value.trim() !== "") {
+      context.sendMessage(context.userChat.id, inputChat.current.value.trim());
+      inputChat.current.value = "";
+    } else {
+      inputChat.current.focus();
+    }
   };
 
   return (
@@ -173,6 +182,11 @@ export default function BodyChat() {
                 onFocus={() => {
                   context.ReadMessage(context.userChat.id);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    handleSendMessage();
+                  }
+                }}
               />
             </div>
             <div className="flex items-center justify-center rounded-2xl cursor-pointer text-xl h-10 w-10  duration-300">
@@ -181,15 +195,7 @@ export default function BodyChat() {
                 fixedWidth
                 className="hover:text-indigo-600 duration-300"
                 onClick={() => {
-                  if (inputChat.current.value.trim() !== "") {
-                    context.sendMessage(
-                      context.userChat.id,
-                      inputChat.current.value.trim()
-                    );
-                    inputChat.current.value = "";
-                  } else {
-                    inputChat.current.focus();
-                  }
+                  handleSendMessage();
                 }}
               />
             </div>
