@@ -1,7 +1,6 @@
 import {
   faArrowDown,
   faArrowLeft,
-  faBaby,
   faBars,
   faBell,
   faCaretDown,

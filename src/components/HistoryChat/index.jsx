@@ -1,14 +1,7 @@
 import LoadingUserChat from "../Chat/LoadingUserChat";
-import React, {
-  useState,
-  useRef,
-  useEffect,
-  Suspense,
-  lazy,
-  useContext,
-} from "react";
+import React, { Suspense, lazy, useContext } from "react";
 import { AppContext } from "../../Context/AppContext";
-const UserChat = lazy(() => import("../../components/Chat/UserChat"));
+const UserChat = lazy(() => import("../../components/HistoryChat/UserChat"));
 
 export default function HistoryChat() {
   const context = useContext(AppContext);
