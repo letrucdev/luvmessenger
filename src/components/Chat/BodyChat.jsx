@@ -11,9 +11,10 @@ import {
   faPhone,
   faSearch,
   faSmile,
+  faTrash,
   faVideo,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, useRef, useContext } from "react";
+import { useState, useRef, useContext, useEffect } from "react";
 import EmojiPicker, { Theme, EmojiStyle } from "emoji-picker-react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { AppContext } from "../../Context/AppContext";
@@ -25,8 +26,19 @@ export default function BodyChat() {
   const [listFile, showListFile] = useState(false);
   const [listImg, showListImg] = useState(false);
   const [isShowEmoji, setShowEmoji] = useState(false);
+  const [isShowListImg, setShowListImg] = useState(false);
+  const [listFileSend, setListFileSend] = useState([]);
   const bodyChatRef = useRef(null);
   const inputChat = useRef(null);
+  const inputFile = useRef(null);
+
+  useEffect(() => {
+    if (listFileSend.length > 0) {
+      setShowListImg(true);
+    } else {
+      setShowListImg(false);
+    }
+  }, [listFileSend]);
 
   const context = useContext(AppContext);
 
@@ -141,11 +153,74 @@ export default function BodyChat() {
           ) : null}
           {/* Chat Footer */}
           <div className="dark:bg-slate-900 w-full p-2 h-16 grow-0 dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5  rounded-t-none sm:rounded-bl-none duration-300">
+            {isShowListImg ? (
+              <div className="flex dark:bg-slate-900 absolute bottom-16 rounded-3xl dark:bg-opacity-75 dark:backdrop-blur-lg p-4">
+                <div className="flex overflow-x-auto gap-4 max-w-md py-2">
+                  {listFileSend.map((element, index) => {
+                    return (
+                      <div
+                        className="flex justify-center items-center rounded-3xl min-w-fit h-48 cursor-pointer  group relative"
+                        key={index}
+                      >
+                        <div className="w-full h-full absolute z-10 rounded-3xl flex items-center justify-center bg-slate-900 bg-opacity-0 group-hover:bg-opacity-40 duration-300">
+                          <FontAwesomeIcon
+                            fixedWidth
+                            className="text-3xl opacity-0 group-hover:opacity-100 duration-300 hover:text-red-500"
+                            icon={faTrash}
+                            onClick={() => {
+                              const newListImg = [...listFileSend];
+                              newListImg.splice(index, 1);
+                              setListFileSend(newListImg);
+                            }}
+                          />
+                        </div>
+                        <img
+                          src={URL.createObjectURL(element)}
+                          alt=""
+                          className="rounded-3xl w-48 h-48 object-cover"
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            ) : null}
             <div className="flex items-center justify-center  rounded-2xl cursor-pointer text-xl h-10 w-10 duration-300">
+              <input
+                multiple={true}
+                type={"file"}
+                className="hidden"
+                ref={inputFile}
+                accept={".png, .jpg, .jpeg"}
+                onChange={(e) => {
+                  const files = e.currentTarget.files;
+                  for (let i = 0; i < files.length; i++) {
+                    setListFileSend((prevState) => [
+                      ...prevState,
+                      files.item(i),
+                    ]);
+                    /* console.log(files.item(i)); */
+                  }
+
+                  /* 
+                  for (let i = 0; i < files.length; i++) {
+                    console.log(files.item(i));
+                  } get item from multi file input */
+                  /* if (e.target.files[0] !== undefined && mimetype) {
+                    context.uploadImage(e.target.files[0]);
+                  } else {
+                    alert("File type not accepted!");
+                  } */
+                }}
+              />
               <FontAwesomeIcon
                 icon={faImage}
                 fixedWidth
                 className="hover:text-indigo-600 duration-300"
+                onClick={() => {
+                  inputFile.current.click();
+                  /* setShowListImg(!isShowListImg); */
+                }}
               />
             </div>
             {isShowEmoji ? (

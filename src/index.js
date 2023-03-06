@@ -11,7 +11,7 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 console.log("%cLUV MESSENGER", "color: #818cf8; font-size: 50px;");
 console.log(
-  "%cDự án được phát triển bởi Lê Trực",
+  "%cDự án được phát triển bởi Linh Sofia",
   "color: #a5b4fc; font-size: 25px;"
 );
 console.log(

@@ -47,11 +47,16 @@ export default function General(props) {
               }}
             >
               <input
+                multiple={false}
                 type={"file"}
                 className="hidden"
                 ref={inputFile}
                 accept={".png, .jpg, .jpeg"}
                 onChange={(e) => {
+                  /* const files = e.currentTarget.files;
+                  for (let i = 0; i < files.length; i++) {
+                    console.log(files.item(i));
+                  } get item from multi file input */
                   var filetypes = /jpeg|jpg|png/;
                   var mimetype = filetypes.test(e.target.files[0].type);
                   if (e.target.files[0] !== undefined && mimetype) {
@@ -99,7 +104,7 @@ export default function General(props) {
                   );
               }
             })()}
-           
+
             <div className="bg-gradient-to-l flex rounded-xl items-center justify-center w-fit">
               {(function () {
                 switch (context.userData.account_type) {
