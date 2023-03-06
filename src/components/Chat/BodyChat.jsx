@@ -36,6 +36,7 @@ export default function BodyChat() {
     if (listFileSend.length > 0) {
       setShowListImg(true);
     } else {
+      inputFile.current.value = "";
       setShowListImg(false);
     }
   }, [listFileSend]);
@@ -51,8 +52,24 @@ export default function BodyChat() {
 
   const handleSendMessage = () => {
     if (inputChat.current.value.trim() !== "") {
-      context.sendMessage(context.userChat.id, inputChat.current.value.trim());
+      context.sendMessage(
+        context.userChat.id,
+        inputChat.current.value.trim(),
+        listFileSend
+      );
       inputChat.current.value = "";
+      setListFileSend([]);
+    } else if (
+      inputChat.current.value.trim() === "" &&
+      listFileSend.length > 0
+    ) {
+      context.sendMessage(
+        context.userChat.id,
+        inputChat.current.value.trim(),
+        listFileSend
+      );
+      inputChat.current.value = "";
+      setListFileSend([]);
     } else {
       inputChat.current.focus();
     }
@@ -132,6 +149,7 @@ export default function BodyChat() {
                   <Message
                     key={index}
                     content={element.content}
+                    file={element.file}
                     type={`${
                       element.sent_id !== context.userData.id
                         ? "recived"
@@ -152,9 +170,9 @@ export default function BodyChat() {
             </div>
           ) : null}
           {/* Chat Footer */}
-          <div className="dark:bg-slate-900 w-full p-2 h-16 grow-0 dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5  rounded-t-none sm:rounded-bl-none duration-300">
+          <div className="dark:bg-slate-900 w-full p-2 h-16  grow-0 dark:bg-opacity-75 dark:backdrop-blur-lg rounded-3xl flex items-center text-white gap-2 px-5  rounded-t-none sm:rounded-bl-none duration-300">
             {isShowListImg ? (
-              <div className="flex dark:bg-slate-900 absolute bottom-16 rounded-3xl dark:bg-opacity-75 dark:backdrop-blur-lg p-4">
+              <div className="flex dark:bg-slate-900 absolute bottom-16 rounded-3xl dark:bg-opacity-40 dark:backdrop-blur-lg p-4 select-none">
                 <div className="flex overflow-x-auto gap-4 max-w-md py-2">
                   {listFileSend.map((element, index) => {
                     return (
@@ -191,7 +209,7 @@ export default function BodyChat() {
                 type={"file"}
                 className="hidden"
                 ref={inputFile}
-                accept={".png, .jpg, .jpeg"}
+                accept={".png, .jpg, .jpeg, .gif"}
                 onChange={(e) => {
                   const files = e.currentTarget.files;
                   for (let i = 0; i < files.length; i++) {
@@ -199,18 +217,7 @@ export default function BodyChat() {
                       ...prevState,
                       files.item(i),
                     ]);
-                    /* console.log(files.item(i)); */
                   }
-
-                  /* 
-                  for (let i = 0; i < files.length; i++) {
-                    console.log(files.item(i));
-                  } get item from multi file input */
-                  /* if (e.target.files[0] !== undefined && mimetype) {
-                    context.uploadImage(e.target.files[0]);
-                  } else {
-                    alert("File type not accepted!");
-                  } */
                 }}
               />
               <FontAwesomeIcon

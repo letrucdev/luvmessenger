@@ -238,12 +238,54 @@ export const AppProvider = ({ children }) => {
     });
   };
 
-  const sendMessage = (to_user_id, content) => {
-    socketRef.current.emit("send_private_message", {
+  const sendMessage = (to_user_id, content, files) => {
+    if (files.length > 0) {
+      uploadFiles(files)
+        .then((result) => {
+          result.forEach((element, index) => {
+            if (index >= 1) {
+              socketRef.current.emit("send_private_message", {
+                from_user_id: userData.id,
+                to_user_id: to_user_id,
+                content: "",
+                files: `/${userData.id}/${element.filename}`,
+              });
+            } else {
+              socketRef.current.emit("send_private_message", {
+                from_user_id: userData.id,
+                to_user_id: to_user_id,
+                content: content,
+                files: `/${userData.id}/${element.filename}`,
+              });
+            }
+          });
+        })
+        .catch((err) => {
+          throw err;
+        });
+    } else {
+      socketRef.current.emit("send_private_message", {
+        from_user_id: userData.id,
+        to_user_id: to_user_id,
+        content: content,
+        files: "",
+      });
+    }
+  };
+
+  const sendImages = (to_user_id, images) => {
+    if (images.length > 0) {
+      socketRef.current.emit("send_private_message_images", {
+        from_user_id: userData.id,
+        to_user_id: to_user_id,
+        images: images,
+      });
+    }
+    /*   socketRef.current.emit("send_private_message", {
       from_user_id: userData.id,
       to_user_id: to_user_id,
       content: content,
-    });
+    }); */
   };
 
   const SaveSetting = async (setting) => {
@@ -268,6 +310,33 @@ export const AppProvider = ({ children }) => {
       })
       .catch((err) => {
         alert("Failed");
+      });
+  };
+
+  const uploadFiles = async (files) => {
+    const token = secureLocalStorage.getItem("accessToken");
+    const formData = new FormData();
+    files.forEach((element) => {
+      formData.append("upload_files", element);
+    });
+    const config = {
+      method: "post",
+      url: `${process.env.REACT_APP_API_ENDPOINT}/uploadMultiFiles`,
+      data: formData,
+      timeout: 10000,
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    return await axios(config)
+      .then(async (res) => {
+        /*         userSetting.avatar = `/${res.data.upload.filedir}`; */
+        /*         await SaveSetting(userSetting); */
+        return res.data.upload.files;
+      })
+      .catch((err) => {
+        alert("Upload failed!");
+        return false;
       });
   };
 
@@ -409,6 +478,7 @@ export const AppProvider = ({ children }) => {
     listMessage,
     ReadMessage,
     sendMessage,
+    sendImages,
     showUpdateProfile,
     updateProfile,
     background,
