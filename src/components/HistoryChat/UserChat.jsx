@@ -31,22 +31,22 @@ export default function UserChat(props) {
         <h5 className="leading-none truncate">{props.user_chat_name}</h5>
         <div className="flex items-center gap-2 overflow-hidden w-60">
           <small className="text-slate-300 font-normal truncate">
-            {JSON.parse(props.last_message).from_user_id === props.id
-              ? `${props.user_chat_name}: ${
-                  JSON.parse(props.last_message).content
+            {JSON.parse(props?.last_message).from_user_id === props.id
+              ? `${props?.user_chat_name}: ${
+                  JSON.parse(props?.last_message).content
                 }`
-              : `You: ${JSON.parse(props.last_message).content}`}
+              : `You: ${JSON.parse(props?.last_message).content}`}
           </small>
           <ReactTimeAgo
             className="text-sm text-slate-500"
-            date={props.at}
+            date={props?.at}
             locale="en-US"
           />
         </div>
       </div>
       <div
         className={`w-3 h-3 rounded-full bg-indigo-500 absolute right-2 duration-300 ${
-          props.isRead === 0 ? "block" : "hidden"
+          props?.isRead === 0 ? "block" : "hidden"
         }`}
       ></div>
     </div>

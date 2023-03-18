@@ -281,11 +281,6 @@ export const AppProvider = ({ children }) => {
         images: images,
       });
     }
-    /*   socketRef.current.emit("send_private_message", {
-      from_user_id: userData.id,
-      to_user_id: to_user_id,
-      content: content,
-    }); */
   };
 
   const SaveSetting = async (setting) => {

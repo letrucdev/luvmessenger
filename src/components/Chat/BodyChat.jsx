@@ -144,10 +144,10 @@ export default function BodyChat() {
           <Message type="send" /> */}
             {context.listMessage
               .sort((a, b) => b.id - a.id)
-              .map((element, index) => {
+              .map((element) => {
                 return (
                   <Message
-                    key={index}
+                    key={element.id}
                     content={element.content}
                     file={element.file}
                     type={`${

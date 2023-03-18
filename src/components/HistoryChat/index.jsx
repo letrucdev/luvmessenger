@@ -7,11 +7,11 @@ export default function HistoryChat() {
   const context = useContext(AppContext);
   return (
     <div className="flex flex-col mt-3 w-full h-full gap-2 overflow-hidden hover:overflow-auto relative select-none truncate text-ellipsis">
-      {context.historyChat.map((element, index) => {
+      {context.historyChat.map((element) => {
         return (
-          <Suspense fallback={<LoadingUserChat />} key={index}>
+          <Suspense fallback={<LoadingUserChat />} key={element.id}>
             <UserChat
-              key={index}
+              key={element.id}
               id={element.user_chat_id}
               last_message={element.last_message}
               user_chat_name={element.username}
