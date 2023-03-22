@@ -6,7 +6,7 @@ import {
 } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyA3F_f_35oZvagpkb9im5ZdD7gArWCCA0I",
+  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
   authDomain: "luvmessenger-46dab.firebaseapp.com",
   projectId: "luvmessenger-46dab",
   storageBucket: "luvmessenger-46dab.appspot.com",

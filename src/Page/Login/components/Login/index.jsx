@@ -84,6 +84,7 @@ export default function LoginUI(props) {
           name: locdau(user.displayName),
           email: user.email,
         });
+        console.log(user.photoURL);
       })
       .catch((error) => {
         /*       const errorCode = error.code;
