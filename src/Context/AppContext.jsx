@@ -48,16 +48,13 @@ export const AppProvider = ({ children }) => {
     socketRef.current.on("is_sent_request", (data) => {
       alert("This user sent you a friend request");
     });
-
     socketRef.current.on("is_read_notification", (data) => {
       setCountNotification(0);
     });
-
     socketRef.current.on("return_message", (data) => {
       setListMessage((prevArray) => [...prevArray, data]);
       getHistoryChat();
     });
-
     socketRef.current.on("new_history_chat", (data) => {
       getHistoryChat();
     });

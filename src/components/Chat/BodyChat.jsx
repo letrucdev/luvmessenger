@@ -58,7 +58,6 @@ export default function BodyChat() {
         listFileSend
       );
       inputChat.current.value = "";
-      setListFileSend([]);
     } else if (
       inputChat.current.value.trim() === "" &&
       listFileSend.length > 0
@@ -69,10 +68,10 @@ export default function BodyChat() {
         listFileSend
       );
       inputChat.current.value = "";
-      setListFileSend([]);
     } else {
       inputChat.current.focus();
     }
+    setListFileSend([]);
   };
 
   return (
@@ -138,10 +137,6 @@ export default function BodyChat() {
             }}
             ref={bodyChatRef}
           >
-            {/* 
-          <Message type="recived" />
-          <Message type="send" />
-          <Message type="send" /> */}
             {context.listMessage
               .sort((a, b) => b.id - a.id)
               .map((element) => {

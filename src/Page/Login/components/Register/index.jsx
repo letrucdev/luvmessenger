@@ -9,6 +9,7 @@ import {
 
 import { useState } from "react";
 import axios from "axios";
+import { useValidator as Validator } from "../../../../Hooks/useValidator";
 
 export default function RegisterUI(props) {
   const [email, setEmail] = useState("");
@@ -59,50 +60,56 @@ export default function RegisterUI(props) {
   };
 
   return (
-    <div className="flex flex-1 flex-col items-center justify-center dark:text-white registerForm">
+    <div className="flex flex-1 flex-col items-center justify-center dark:text-white registerForm ">
       <h1 className="font-bold text-2xl mb-6 text-black dark:text-white">
         SIGN UP
       </h1>
-      <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-2 w-3/4 flex items-center group  backdrop-blur-xl">
+      <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl m-2 w-3/4 flex items-center group  backdrop-blur-xl z-40">
         <FontAwesomeIcon
           icon={faEnvelope}
           className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
         />
-        <input
-          maxLength={35}
-          type={"email"}
-          placeholder="Email"
-          className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
-          onChange={(e) => setEmail(e.target.value)}
-        />
+        <Validator>
+          <input
+            maxLength={35}
+            type={"email"}
+            placeholder="Email"
+            className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
+            onChange={(e) => setEmail(e.target.value)}
+          />
+        </Validator>
       </div>
 
-      <div className="flex w-3/4 gap-2">
+      <div className="flex w-3/4 gap-2 z-30">
         <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl  w-3/4 flex items-center group  backdrop-blur-xl">
           <FontAwesomeIcon
             icon={faUser}
             className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
           />
-          <input
-            type={"text"}
-            maxLength={25}
-            placeholder="Account"
-            className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
-            onChange={(e) => setAccount(e.target.value)}
-          />
+          <Validator>
+            <input
+              type={"text"}
+              maxLength={25}
+              placeholder="Account"
+              className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
+              onChange={(e) => setAccount(e.target.value)}
+            />
+          </Validator>
         </div>
         <div className="wrap-input p-3 bg-slate-200 dark:bg-slate-800 rounded-3xl  w-3/4 flex items-center group  backdrop-blur-xl">
           <FontAwesomeIcon
             icon={faSignature}
             className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
           />
-          <input
-            type={"text"}
-            maxLength={25}
-            placeholder="Your name"
-            className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
-            onChange={(e) => setUsername(e.target.value)}
-          />
+          <Validator>
+            <input
+              type={"text"}
+              maxLength={25}
+              placeholder="Your name"
+              className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
+              onChange={(e) => setUsername(e.target.value)}
+            />
+          </Validator>
         </div>
       </div>
 
@@ -111,12 +118,14 @@ export default function RegisterUI(props) {
           icon={faLock}
           className="ml-3 text-slate-600 group-focus-within:text-white duration-300"
         />
-        <input
-          type={"password"}
-          placeholder="Password"
-          className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
-          onChange={(e) => setPassword(e.target.value)}
-        />
+        <Validator>
+          <input
+            type={"password"}
+            placeholder="Password"
+            className="border-none outline-none bg-transparent px-4 w-full focus:ring-0"
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </Validator>
       </div>
       <div className="wrap-button mt-6 font-bold w-3/4 text-white ">
         <button

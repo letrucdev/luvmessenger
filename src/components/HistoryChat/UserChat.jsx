@@ -1,9 +1,9 @@
-import { useContext } from "react";
+import { useContext, memo } from "react";
 import { AppContext } from "../../Context/AppContext";
 import ReactTimeAgo from "react-time-ago";
 /* import { useState } from "react"; */
 
-export default function UserChat(props) {
+export default memo(function UserChat(props) {
   const context = useContext(AppContext);
   return (
     <div
@@ -51,4 +51,4 @@ export default function UserChat(props) {
       ></div>
     </div>
   );
-}
+});

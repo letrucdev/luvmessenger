@@ -11,13 +11,23 @@ const root = ReactDOM.createRoot(document.getElementById("root"));
 
 console.log("%cLUV MESSENGER", "color: #818cf8; font-size: 50px;");
 console.log(
-  "%cDự án được phát triển bởi Linh Sofia",
+  "%cDự án được phát triển bởi Lê Trực",
   "color: #a5b4fc; font-size: 25px;"
 );
 console.log(
   "%cSử dụng ReactJs, Tailwindcss cho Frontend và NodeJS cho Backend",
   "color: #c7d2fe; font-size: 20px;"
 );
+
+/* document.addEventListener("keydown", (e) => {
+  if (e.which === 123 || e.getModifierState("Control")) {
+    e.preventDefault();
+  }
+});
+
+document.addEventListener("contextmenu", (e) => {
+  e.preventDefault();
+}); */
 
 root.render(
   <Router>

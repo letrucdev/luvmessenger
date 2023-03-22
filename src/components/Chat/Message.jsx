@@ -42,7 +42,7 @@ export default function Message(props) {
               </div>
             ) : (
               <p className=" break-all p-4 w-fit max-w-[15rem] md:w-auto md:max-w-sm">
-                {props.content !== "" ? props.content : null}
+                {props.content !== "" ? props.content : ""}
                 {props.file !== "" ? (
                   <a
                     href={`${process.env.REACT_APP_CDN_URL}/images/${props.file}`}
@@ -81,7 +81,7 @@ export default function Message(props) {
             </div>
           )}
         >
-          <div className="w-fit max-w-md rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center self-end ">
+          <div className="w-fit max-w-md rounded-3xl rounded-br-none bg-slate-900 dark:bg-opacity-50 backdrop-blur-lg text-white flex items-center self-end">
             {linkRegex.test(props.content) ? (
               <div className="flex flex-col gap-2 p-4">
                 <a
@@ -95,7 +95,7 @@ export default function Message(props) {
               </div>
             ) : (
               <p className=" break-all p-4 w-fit max-w-[15rem] md:w-auto md:max-w-sm">
-                {props.content !== "" ? props.content : null}
+                {props.content !== "" ? props.content : ""}
                 {props.file !== "" ? (
                   <a
                     href={`${process.env.REACT_APP_CDN_URL}/images/${props.file}`}
