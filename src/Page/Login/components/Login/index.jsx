@@ -55,14 +55,18 @@ export default function LoginUI(props) {
     await signInWithPopup(auth, providerFacebook)
       .then((result) => {
         const user = result.user;
-        const credential = FacebookAuthProvider.credentialFromResult(result);
-        const accessToken = credential.accessToken;
+        /*         const credential = FacebookAuthProvider.credentialFromResult(result);
+        const accessToken = credential.accessToken; */
 
+        /*  console.log(user); */
         console.table({
-          phone: user.phoneNumber,
+          uid: user.uid,
           name: locdau(user.displayName),
           email: user.email,
+          phone: user.phoneNumber,
+          avatarUrl: user.photoURL,
         });
+        console.log(user);
       })
       .catch((error) => {
         const errorCode = error.code;
@@ -80,11 +84,12 @@ export default function LoginUI(props) {
         const token = credential.accessToken; */
         const user = result.user;
         console.table({
-          phone: user.phoneNumber,
+          uid: user.uid,
           name: locdau(user.displayName),
           email: user.email,
+          phone: user.phoneNumber,
+          avatarUrl: user.photoURL,
         });
-        console.log(user.photoURL);
       })
       .catch((error) => {
         /*       const errorCode = error.code;
