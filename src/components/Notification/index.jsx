@@ -38,7 +38,7 @@ export default function Notification() {
                           </div>
                           <div className="flex-col overflow-hidden ">
                             <h2 className=" line-clamp-3 leading-tight">
-                              You have new friend request from{" "}
+                              You have new friend request from
                               {element.from_user}
                             </h2>
                             <div className="flex gap-2 my-2">
@@ -65,11 +65,7 @@ export default function Notification() {
                             </div>
                             <small className="text-indigo-400">
                               <ReactTimeAgo
-                                date={
-                                  element.at !== undefined
-                                    ? Date.parse(element.at)
-                                    : 0
-                                }
+                                date={Date.parse(element?.at)}
                                 locale="en-US"
                               />
                             </small>
@@ -100,7 +96,7 @@ export default function Notification() {
                               </h2>
                               <small className="text-indigo-400">
                                 <ReactTimeAgo
-                                  date={element.at}
+                                  date={element?.at}
                                   locale="en-US"
                                 />
                               </small>
@@ -130,7 +126,7 @@ export default function Notification() {
                               {element.content}
                             </h2>
                             <small className="text-indigo-400">
-                              <ReactTimeAgo date={element.at} locale="en-US" />
+                              <ReactTimeAgo date={element?.at} locale="en-US" />
                             </small>
                           </div>
                         </React.Fragment>
@@ -141,7 +137,9 @@ export default function Notification() {
             );
           })
         ) : (
-          <p className="px-2 text-slate-500 font-light">There is no notification</p>
+          <p className="px-2 text-slate-500 font-light">
+            There is no notification
+          </p>
         )}
       </div>
     </div>

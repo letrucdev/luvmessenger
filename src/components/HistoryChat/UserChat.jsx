@@ -19,9 +19,9 @@ export default memo(function UserChat(props) {
         context.ReadMessage(props.id);
       }}
     >
-      {context.userChat.id === props.id ? (
+      {context.userChat.id === props.id && (
         <div className="bg-indigo-500 w-1 h-7 rounded-3xl relative -left-2 transition-all duration-500"></div>
-      ) : null}
+      )}
       <img
         className="object-cover w-14 h-14 rounded-full relative -left-1"
         alt=""

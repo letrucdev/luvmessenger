@@ -34,6 +34,16 @@ export default function General(props) {
     }
   }, [phone, phoneNumber]);
 
+  const onFileChange = (e) => {
+    var filetypes = /jpeg|jpg|png/;
+    var mimetype = filetypes.test(e.target.files[0].type);
+    if (e.target.files[0] !== undefined && mimetype) {
+      context.uploadImage(e.target.files[0]);
+    } else {
+      alert("File type not accepted!");
+    }
+  };
+
   return (
     <div className="w-full h-full flex flex-col gap-3 px-3 overflow-auto general">
       <div className="flex-col ">
@@ -52,19 +62,7 @@ export default function General(props) {
                 className="hidden"
                 ref={inputFile}
                 accept={".png, .jpg, .jpeg"}
-                onChange={(e) => {
-                  /* const files = e.currentTarget.files;
-                  for (let i = 0; i < files.length; i++) {
-                    console.log(files.item(i));
-                  } get item from multi file input */
-                  var filetypes = /jpeg|jpg|png/;
-                  var mimetype = filetypes.test(e.target.files[0].type);
-                  if (e.target.files[0] !== undefined && mimetype) {
-                    context.uploadImage(e.target.files[0]);
-                  } else {
-                    alert("File type not accepted!");
-                  }
-                }}
+                onChange={onFileChange}
               />
               <FontAwesomeIcon icon={faCamera} fixedWidth />
             </div>
@@ -78,12 +76,6 @@ export default function General(props) {
           <div className="flex-col">
             {(function () {
               switch (context.userData.account_type) {
-                case 0:
-                  return (
-                    <h2 className="text-lg font-semibold max-w-xs truncate text-transparent bg-clip-text bg-gradient-to-bl from-white to-slate-400">
-                      {context.username}
-                    </h2>
-                  );
                 case 1:
                   return (
                     <h2 className="text-lg font-semibold max-w-xs truncate text-transparent bg-clip-text bg-gradient-to-bl from-amber-500 to-orange-100">
@@ -108,12 +100,6 @@ export default function General(props) {
             <div className="bg-gradient-to-l flex rounded-xl items-center justify-center w-fit">
               {(function () {
                 switch (context.userData.account_type) {
-                  case 0:
-                    return (
-                      <small className="text-slate-200 font-semibold  px-2">
-                        🥈 Silver
-                      </small>
-                    );
                   case 1:
                     return (
                       <small className="text-amber-300 font-semibold leading-5 px-2">

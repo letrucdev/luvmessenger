@@ -29,12 +29,6 @@ export default function FriendsList() {
                     <div className="bg-gradient-to-l from-purple-800 to-indigo-600 flex rounded-xl items-center justify-center w-fit">
                       {(function () {
                         switch (element.account_type) {
-                          case 0:
-                            return (
-                              <small className="text-slate-200 font-semibold px-2">
-                                🥈 Silver
-                              </small>
-                            );
                           case 1:
                             return (
                               <small className="text-amber-300 font-semibold leading-5 px-2">
