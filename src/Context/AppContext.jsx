@@ -37,7 +37,7 @@ export const AppProvider = ({ children }) => {
       /*  alert("OK") */
     });
     socketRef.current.on("server_msg", (data) => {
-      alert(data);
+     /*  alert(data); */
     });
     socketRef.current.on("accepted_request", (data) => {
       loadFriendList();
